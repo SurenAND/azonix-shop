@@ -1,40 +1,76 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center">"Azonix" E-Commerce Website</h1>
+<h3 align="center">Maktab109 Final Project - Ashkan Zojaji</h3>
+<p align="center">Project (e-commerce) created with React js and Tailwind with real backend<p>
+  
+</br><h2></h2></br>
+<ul><li>
+ Azonix is an online shop for digital accessories and has the following features:
+ <li>Responsive</li>
+ <li>It has an admin panel</li>
+ <li>Made with NextJs</li>
+ <li>It has a real backend </li>
+</ul>
+</br><h2></h2></br>
+<strong>Pages Photos</strong>
+</br>
 
-## Getting Started
+<!-- ![1]()
+![2]()
+![3]()
+![4]()
+![5]()
+![login]() -->
 
-First, run the development server:
+<strong>Admin Panel</strong>
+</br>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<!-- ![panel admin 1]()
+![panel admin 2]()
+![panel admin 3]() -->
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+</br><h2></h2></br>
+<strong>Project Phase 1 : </strong>
+</br>
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<ul>
+  <li>Create repository</li>
+  <li>Create project folder structure</li>
+  <li>Install required libraries and packages</li>
+  <li>Create layouts</li>
+  <li>Create routes</li>
+  <li>Create component structure and map</li>
+</ul>
+<h2></h2>
+<strong>Project Phase 2 : </strong>
+</br>
+<ul>
+  <li>Create header of website</li>
+  <li>Create footer of website</li>
+  <li>Create login and register page</li>
+  <li>Complete DB file structure</li>
+  <li>Create management page includes all products , price-quantity and orders pages</li>
+  <li>Create tables by pagination, filtering and sorting ability</li>
+</ul>
+<h2></h2>
+<strong>Project Phase 3 : </strong>
+</br>
+<ul>
+  <li>Create modal to add and edit products</li>
+  <li>Create modal to delete products</li>
+  <li>Edit quantity and price of products</li>
+  <li>Create product card component</li>
+  <li>Create landing page</li>
+  <li>Create category page</li>
+  <li>Create product detail page</li>
+</ul>
+<h2></h2>
+<strong>Project Phase 4 : </strong>
+</br>
+<ul>
+  <li>Add product to basket</li>
+  <li>Create basket page and show product in it</li>
+  <li>Create checkout form</li>
+  <li>The payment process by going to another server then back to payment result page</li>
+  <li>Order detail modal in admin page</li>
+  <li>Change the status of the order</li>
+</ul>

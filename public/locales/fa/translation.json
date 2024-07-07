@@ -1,0 +1,16 @@
+{
+  "dashboard": "داشبورد",
+  "products-management": "مدیریت محصولات",
+  "orders-management": "مدیریت سفارشات",
+  "user-management": "مدیریت کاربران",
+  "all-rights-reserved": "تمامی حقوق برای اشکان زجاجی محفوظ است | ۱۴۰۳",
+  "inventory": "محصولات",
+  "add-product": "افزودن محصول",
+  "edit-product": "ویرایش محصول",
+  "delete-product": "حذف محصول",
+  "orders": "سفارشات",
+  "admin-manager": "مدیریت ادمین",
+  "users": "کاربران",
+  "hi": "سلام",
+  "welcome-to-your-dashboard": "به داشبورد خوش آمدید"
+}

@@ -1,0 +1,16 @@
+{
+  "dashboard": "Dashboard",
+  "products-management": "Products Management",
+  "orders-management": "Orders Management",
+  "user-management": "User Management",
+  "all-rights-reserved": "All Right reserved by Ashkan Zojaji | 2024",
+  "inventory": "Inventory",
+  "add-product": "Add Product",
+  "edit-product": "Edit Product",
+  "delete-product": "Delete Product",
+  "orders": "Orders",
+  "admin-manager": "Admin Manager",
+  "users": "Users",
+  "hi": "Hi",
+  "welcome-to-your-dashboard": "Welcome to your dashboard"
+}

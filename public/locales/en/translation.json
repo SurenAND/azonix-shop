@@ -1,4 +1,5 @@
 {
+  "company-name": "Azonix",
   "dashboard": "Dashboard",
   "products-management": "Products Management",
   "orders-management": "Orders Management",
@@ -12,5 +13,21 @@
   "admin-manager": "Admin Manager",
   "users": "Users",
   "hi": "Hi",
-  "welcome-to-your-dashboard": "Welcome to your dashboard"
+  "welcome-to-your-dashboard": "Welcome to your dashboard",
+  "home": "Home",
+  "shop": "Shop",
+  "about": "About",
+  "blogs": "Blogs",
+  "profile": "Profile",
+  "quick-links": "Quick Links",
+  "login": "Login",
+  "logout": "Logout",
+  "search-for-products": "Search for products...",
+  "more-projects": "More Projects",
+  "important-links": "Important Links",
+  "address": "Address",
+  "company-address": "Mashhad, Iran",
+  "company-phone": "+98 9388484231",
+  "company-info": "Azonix is an Iranian store about any technology that you want to buy. We provide you the best prices and the best quality products.",
+  "made-by": "Made with 💖 by Ashkan Zojaji"
 }

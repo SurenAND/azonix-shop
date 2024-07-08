@@ -23,6 +23,9 @@ const config: Config = {
           sm: "3rem",
         },
       },
+      boxShadow: {
+        ax1: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+      },
     },
   },
   plugins: [],

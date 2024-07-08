@@ -8,6 +8,7 @@ function DashboardTemplate() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
   return (
     isClient && (
       <div className="flex justify-center items-center my-6">

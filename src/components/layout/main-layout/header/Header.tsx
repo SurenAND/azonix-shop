@@ -97,7 +97,9 @@ export default function Header() {
 
             {/* Login Button section */}
             <button className="relative p-3">
-              <IoMdLogIn className="text-2xl text-gray-600 dark:text-gray-400" />
+              <Link href={MainRoutes.REGISTER}>
+                <IoMdLogIn className="text-2xl text-gray-600 dark:text-gray-400" />
+              </Link>
               <div className="w-4 h-4 text-gray-600 dark:text-gray-400 absolute bottom-2 end-0 text-sm">
                 {t("login")}
               </div>

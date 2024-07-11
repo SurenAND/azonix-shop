@@ -37,5 +37,19 @@
   "legal-notice": "Legal Notice",
   "balance": "Balance",
   "currency": "$",
-  "welcome-to-your-profile": "Welcome to your profile"
+  "welcome-to-your-profile": "Welcome to your profile",
+  "use-username-password": "or use your username password",
+  "username": "Username",
+  "password": "Password",
+  "forget-password": "Forget Your Password?",
+  "use-details-for-registration": "or use your details for registration",
+  "firstname": "Firstname",
+  "lastname": "Lastname",
+  "phone-number": "Phone Number",
+  "signup": "SignUp",
+  "create-account": "Create Account",
+  "signup-toggle-title": "Welcome Back!",
+  "signup-toggle-description": "Enter your personal details to use all of site features",
+  "login-toggle-title": "Hello, Friend!",
+  "login-toggle-description": "Register with your personal details to use all of site features"
 }

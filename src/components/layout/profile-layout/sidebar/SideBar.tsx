@@ -65,7 +65,7 @@ const UserSidebar = () => {
                   : ""
               }`}
             >
-              {"Profile"}
+              {t("profile")}
             </span>
           </button>
         </div>

@@ -16,6 +16,7 @@ const authInit = {
   username: "",
   role: "",
   userId: "",
+  firstname: "",
 };
 
 function authReducer(
@@ -39,11 +40,15 @@ function authReducer(
       setCookie("refreshToken", action.payload.refreshToken, {
         expires: expireDate,
       });
+      setCookie("firstname", action.payload.firstname, {
+        expires: expireDate,
+      });
       return {
         isLogin: true,
         username: action.payload.username,
         role: action.payload.role,
         userId: action.payload._id,
+        firstname: action.payload.firstname,
       };
     case AuthReducerAction.LOGOUT:
       deleteCookie("role");
@@ -51,11 +56,13 @@ function authReducer(
       deleteCookie("accessToken");
       deleteCookie("refreshToken");
       deleteCookie("_id");
+      deleteCookie("firstname");
       return {
         isLogin: false,
         username: "",
         role: "",
         userId: "",
+        firstname: "",
       };
     default:
       return state;
@@ -81,6 +88,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
     const _id = getCookie("_id") ?? "";
     const accessToken = getCookie("accessToken") ?? "";
     const refreshToken = getCookie("refreshToken") ?? "";
+    const firstname = getCookie("firstname") ?? "";
     if (!!accessToken) {
       dispatch({
         type: AuthReducerAction.SET_USER,
@@ -90,6 +98,7 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
           _id,
           accessToken,
           refreshToken,
+          firstname,
         },
       });
     }

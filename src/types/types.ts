@@ -5,6 +5,7 @@ export type AuthStateType = {
   username: string;
   role: string;
   userId: string;
+  firstname: string;
 };
 
 export type AuthReducerActionType =
@@ -16,6 +17,7 @@ export type AuthReducerActionType =
         _id: string;
         accessToken: string;
         refreshToken: string;
+        firstname: string;
       };
     }
   | {

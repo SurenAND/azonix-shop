@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import IrFlag from "@/src/assets/images/languages/fa.png";
 import UsFlag from "@/src/assets/images/languages/en.png";
 import { useTranslation } from "react-i18next";
+import { useUserContext } from "@/src/context/authContext";
 
 const lngs: Record<"en" | "fa", { flag: StaticImageData }> = {
   en: { flag: UsFlag },
@@ -18,6 +19,8 @@ const lngs: Record<"en" | "fa", { flag: StaticImageData }> = {
 export default function Header() {
   const { push: pushRouter } = useRouter();
   const { i18n } = useTranslation();
+  const { state } = useUserContext();
+
   return (
     <div className="flex items-center justify-between md:justify-normal gap-10 p-6 bg-white w-full">
       <Link href={MainRoutes.HOME}>
@@ -70,8 +73,8 @@ export default function Header() {
             </div>
           </button>
         </button>
-        <div className="bg-axBlue rounded-full w-10 h-10 flex items-center justify-center text-axWhite font-bold text-xl">
-          {stringAvatar("Ashkan")}
+        <div className="bg-axBlue rounded-full w-10 h-10 flex items-center justify-center text-axWhite font-bold uppercase text-xl">
+          {stringAvatar(`${state.username}`)}
         </div>
       </div>
     </div>

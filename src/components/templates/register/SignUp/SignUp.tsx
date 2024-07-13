@@ -1,15 +1,5 @@
-import { useEffect, useState } from "react";
-import { AuthReducerAction } from "@/src/types/enums";
-import { FaGooglePlusG, FaLinkedinIn } from "react-icons/fa6";
-import { FaFacebookF, FaGithub } from "react-icons/fa";
-import { toast } from "sonner";
-import { useRouter } from "next/router";
-import { useUserContext } from "@/src/context/authContext";
-import { MainRoutes } from "@/src/constant/routes";
-import MyIconBtn from "@/src/components/shared/icon-button/IconButton";
+import { useState } from "react";
 import MyInput from "@/src/components/shared/input/Input";
-import { NewUserType } from "@/src/types/types";
-import { setCookie } from "cookies-next";
 import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useSignup } from "@/src/api/auth/auth.queries";
@@ -24,7 +14,7 @@ export default function SignUpTemplate({ active }: { active: boolean }) {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { mutate: signupMutate } = useSignup();
 
@@ -35,8 +25,12 @@ export default function SignUpTemplate({ active }: { active: boolean }) {
 
   return (
     <div
-      className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 z-2 ${
-        active ? "translate-x-full" : "translate-x-0"
+      className={`absolute top-0 h-full transition-all duration-600 ease-in-out start-0 w-full sm:w-1/2 z-2 ${
+        active
+          ? i18n.dir() === "ltr"
+            ? "sm:translate-x-full"
+            : "sm:-translate-x-full"
+          : "sm:translate-x-0"
       }`}
     >
       <form
@@ -52,7 +46,7 @@ export default function SignUpTemplate({ active }: { active: boolean }) {
           name="firstname"
           register={register}
           required={true}
-          pattern={/^[a-zA-Z].{4,}$/}
+          pattern={/^[a-zA-Z\u0600-\u06FF].{4,}$/}
         />
         {/* firstname error message */}
         <p
@@ -68,7 +62,7 @@ export default function SignUpTemplate({ active }: { active: boolean }) {
           name="lastname"
           register={register}
           required={true}
-          pattern={/^[a-zA-Z].{4,}$/}
+          pattern={/^[a-zA-Z\u0600-\u06FF].{4,}$/}
         />
         {/* lastname error message */}
         <p

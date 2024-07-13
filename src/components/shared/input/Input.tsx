@@ -24,7 +24,7 @@ export default function MyInput({
         autoComplete="off"
         {...register(name, { required, pattern: pattern })}
       />
-      <div className="absolute right-3 top-3 text-gray-500 cursor-pointer">
+      <div className="absolute end-3 top-3 text-gray-500 cursor-pointer">
         {icon}
       </div>
     </div>

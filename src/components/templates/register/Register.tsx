@@ -23,9 +23,19 @@ export default function RegisterTemplate() {
   const searchParams = useSearchParams().get("view");
   const isSignUp = searchParams === "signup";
 
+  const handleClick = () => {
+    if (active) {
+      setActive(false);
+      pushRouter(`${MainRoutes.REGISTER}?view=login`);
+    } else {
+      setActive(true);
+      pushRouter(`${MainRoutes.REGISTER}?view=signup`);
+    }
+  };
+
   // change direction of the layout based on the language
   const [dir, setDir] = useState("ltr");
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   useEffect(() => {
     setDir(i18n.dir());
   }, [i18n.resolvedLanguage]);
@@ -43,7 +53,7 @@ export default function RegisterTemplate() {
   return (
     <>
       <main
-        className="flex flex-col justify-center items-center h-screen bg-gradient-to-r from-[#e2e2e2] to-[#c9d6ff] gap-4 select-none"
+        className="flex flex-col justify-center items-center h-screen bg-gradient-to-r from-[#e2e2e2] to-[#c9d6ff] gap-4 select-none p-5"
         dir={dir}
       >
         <div className="relative overflow-hidden max-w-full w-[1000px] min-h-[600px] bg-white rounded-3xl shadow-lg">
@@ -59,6 +69,23 @@ export default function RegisterTemplate() {
           <ToggleRegister setActive={setActive} active={active} />
         </div>
         <div className="flex items-center gap-4" dir="ltr">
+          <div className="sm:hidden text-axLightPurple">
+            {active ? (
+              <button
+                className="text-xs text-white py-2 px-7 rounded-lg font-semibold tracking-wide uppercase mt-2 bg-axLightPurple"
+                onClick={handleClick}
+              >
+                To {t("login")}
+              </button>
+            ) : (
+              <button
+                className="text-xs text-white py-2 px-7 rounded-lg font-semibold tracking-wide uppercase mt-2 bg-axLightPurple"
+                onClick={handleClick}
+              >
+                To {t("signup")}
+              </button>
+            )}
+          </div>
           {Object.keys(lngs).map((lng) => {
             return (
               <button

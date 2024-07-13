@@ -23,7 +23,7 @@ export default function LogInTemplate({ active }: { active: boolean }) {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { mutate: loginMutate } = useLogin();
 
@@ -34,8 +34,12 @@ export default function LogInTemplate({ active }: { active: boolean }) {
 
   return (
     <div
-      className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 z-2 ${
-        active ? "translate-x-full" : "translate-x-0"
+      className={`absolute top-0 h-full transition-all duration-600 ease-in-out start-0 w-full sm:w-1/2 z-2 ${
+        active
+          ? i18n.dir() === "ltr"
+            ? "sm:-translate-x-full"
+            : "sm:translate-x-full"
+          : "sm:translate-x-0"
       }`}
     >
       <form

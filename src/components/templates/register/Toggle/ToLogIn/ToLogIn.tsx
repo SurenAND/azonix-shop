@@ -10,7 +10,7 @@ export default function ToLogIn({
   active: boolean;
 }) {
   const { push: pushRouter } = useRouter();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleClick = () => {
     setActive(false);
@@ -19,15 +19,19 @@ export default function ToLogIn({
 
   return (
     <div
-      className={`absolute h-full px-6 text-center top-0 right-0 ${
-        active ? "translate-x-0" : "-translate-x-full"
+      className={`absolute h-full px-6 text-center top-0 end-0 ${
+        active
+          ? "translate-x-0"
+          : i18n.dir() === "ltr"
+          ? "-translate-x-full"
+          : "translate-x-full"
       } transition-all duration-600 ease-in-out flex flex-col justify-center items-center gap-20`}
     >
       <h4 className={`font-bold text-5xl ${active ? "block" : "hidden"}`}>
-        {t("signup-toggle-title")}
+        {t("login-toggle-title")}
       </h4>
       <p className={`text-lg ${active ? "block" : "hidden"}`}>
-        {t("signup-toggle-description")}
+        {t("login-toggle-description")}
       </p>
       <button
         onClick={handleClick}

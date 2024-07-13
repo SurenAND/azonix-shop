@@ -16,19 +16,23 @@ export default function ToSignUp({
     pushRouter(`${MainRoutes.REGISTER}?view=signup`);
   };
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <div
-      className={`absolute h-full px-6 text-center top-0 right-0 ${
-        active ? "translate-x-full" : "translate-x-0"
+      className={`absolute h-full px-6 text-center top-0 end-0 ${
+        active
+          ? i18n.dir() === "ltr"
+            ? "translate-x-full"
+            : "-translate-x-full"
+          : "translate-x-0"
       } transition-all duration-600 ease-in-out flex flex-col justify-center items-center gap-20`}
     >
       <h4 className={`font-bold text-5xl ${active ? "hidden" : "block"}`}>
-        {t("login-toggle-title")}
+        {t("signup-toggle-title")}
       </h4>
       <p className={`text-lg ${active ? "hidden" : "block"}`}>
-        {t("login-toggle-description")}
+        {t("signup-toggle-description")}
       </p>
       <button
         onClick={handleClick}

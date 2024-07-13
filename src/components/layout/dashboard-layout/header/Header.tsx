@@ -10,6 +10,7 @@ import Logo from "@/src/assets/images/logo.webp";
 import IrFlag from "@/src/assets/images/languages/fa.png";
 import UsFlag from "@/src/assets/images/languages/en.png";
 import { useTranslation } from "react-i18next";
+import DarkMode from "@/src/components/shared/dark-mode/DarkMode";
 
 const lngs: Record<"en" | "fa", { flag: StaticImageData }> = {
   en: { flag: UsFlag },
@@ -23,13 +24,13 @@ export default function Header({
 }) {
   const { i18n } = useTranslation();
   return (
-    <div className="flex items-center justify-between md:justify-normal gap-10 p-6 w-full">
+    <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 flex items-center justify-between md:justify-normal gap-10 p-6 w-full">
       <div className="flex items-center gap-4">
         <Link href={MainRoutes.HOME}>
           <Image src={Logo} alt="shop" width={144} height={144} />
         </Link>
         <button
-          className="bg-axWhite rounded-lg transition-all duration-200 ease-in-out text-axLightPurple hover:bg-axDarkPurple hover:text-white w-10 h-10 flex items-center justify-center"
+          className="bg-axWhite dark:bg-axDarkPurple rounded-lg transition-all duration-200 ease-in-out text-axLightPurple dark:text-axWhite hover:bg-axDarkPurple dark:hover:bg-axLightPurple hover:text-white w-10 h-10 flex items-center justify-center"
           onClick={() => toggleSidebar((prev) => !prev)}
         >
           <IoMenu className="w-6 h-6" />
@@ -47,6 +48,12 @@ export default function Header({
           />
         </div>
       </div>
+
+      {/* Dark Mode section */}
+      <div>
+        <DarkMode />
+      </div>
+
       <div className="flex items-center gap-4">
         {Object.keys(lngs).map((lng) => {
           return (
@@ -64,7 +71,7 @@ export default function Header({
             </button>
           );
         })}
-        <button className="bg-axWhite rounded-lg transition-all duration-200 ease-in-out text-axLightPurple hover:bg-axDarkPurple hover:text-axWhite w-10 h-10 flex items-center justify-center">
+        <button className="bg-axWhite dark:bg-axDarkPurple rounded-lg transition-all duration-200 ease-in-out text-axLightPurple dark:text-axWhite hover:bg-axDarkPurple dark:hover:bg-axLightPurple hover:text-white w-10 h-10 flex items-center justify-center">
           <MdNotificationsNone className="w-6 h-6" />
         </button>
         <div className="bg-axBlue rounded-full w-10 h-10 flex items-center justify-center text-axWhite font-bold text-xl">

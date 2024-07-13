@@ -10,7 +10,7 @@ import { IoMdSearch } from "react-icons/io";
 import { useTranslation } from "react-i18next";
 import { FaCaretDown, FaCartShopping } from "react-icons/fa6";
 import { IoMdLogIn } from "react-icons/io";
-import DarkMode from "@/src/components/layout/main-layout/header/dark-mode/DarkMode";
+import DarkMode from "@/src/components/shared/dark-mode/DarkMode";
 import IrFlag from "@/src/assets/images/languages/fa.png";
 import UsFlag from "@/src/assets/images/languages/en.png";
 import { useUserContext } from "@/src/context/authContext";

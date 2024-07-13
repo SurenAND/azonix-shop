@@ -10,6 +10,7 @@ import IrFlag from "@/src/assets/images/languages/fa.png";
 import UsFlag from "@/src/assets/images/languages/en.png";
 import { useTranslation } from "react-i18next";
 import { useUserContext } from "@/src/context/authContext";
+import DarkMode from "@/src/components/shared/dark-mode/DarkMode";
 
 const lngs: Record<"en" | "fa", { flag: StaticImageData }> = {
   en: { flag: UsFlag },
@@ -22,7 +23,7 @@ export default function Header() {
   const { state } = useUserContext();
 
   return (
-    <div className="flex items-center justify-between md:justify-normal gap-10 p-6 bg-white w-full">
+    <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 flex items-center justify-between md:justify-normal gap-10 p-6 w-full">
       <Link href={MainRoutes.HOME}>
         <Image src={Logo} alt="shop" width={144} height={144} />
       </Link>
@@ -38,7 +39,12 @@ export default function Header() {
           />
         </div>
       </div>
-      <div className="flex items-center gap-2">
+
+      {/* Dark Mode section */}
+      <div>
+        <DarkMode />
+      </div>
+      <div className="flex items-center gap-5">
         <div className="flex items-center gap-4">
           {Object.keys(lngs).map((lng) => {
             return (
@@ -57,17 +63,17 @@ export default function Header() {
             );
           })}
         </div>
-        <button className="bg-axWhite rounded-lg transition-all duration-200 ease-in-out text-axLightPurple hover:bg-axDarkPurple hover:text-white w-10 h-10 flex items-center justify-center">
-          <MdFavoriteBorder className="text-xl text-gray-600 dark:text-gray-400" />
+        <button className="bg-axWhite dark:bg-axDarkPurple rounded-lg transition-all duration-200 ease-in-out text-axLightPurple dark:text-axWhite hover:bg-axDarkPurple dark:hover:bg-axLightPurple hover:text-white w-10 h-10 flex items-center justify-center">
+          <MdFavoriteBorder className="text-xl" />
         </button>
         <button
-          className="bg-axWhite rounded-lg transition-all duration-200 ease-in-out text-axLightPurple hover:bg-axDarkPurple hover:text-white w-10 h-10 flex items-center justify-center"
+          className="bg-axWhite dark:bg-axDarkPurple rounded-lg transition-all duration-200 ease-in-out text-axLightPurple dark:text-axWhite hover:bg-axDarkPurple dark:hover:bg-axLightPurple hover:text-white w-10 h-10 flex items-center justify-center"
           onClick={() => {
             pushRouter(MainRoutes.CART);
           }}
         >
           <button className="relative p-3">
-            <MdOutlineLocalMall className="text-xl text-gray-600 dark:text-gray-400" />
+            <MdOutlineLocalMall className="text-xl" />
             <div className="w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 end-0 flex items-center justify-center text-xs">
               4
             </div>

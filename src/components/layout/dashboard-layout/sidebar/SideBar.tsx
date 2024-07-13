@@ -12,7 +12,7 @@ export default function Sidebar({ open }: { open: boolean }) {
   const { i18n } = useTranslation();
   return (
     <div
-      className={`shrink-0 h-auto py-5 px-2 bg-white transition-transform transform ${
+      className={`bg-white dark:bg-gray-900 dark:text-white duration-200 shrink-0 h-auto py-5 px-2 transition-transform transform ${
         open
           ? "translate-x-0"
           : i18n.dir() === "ltr"

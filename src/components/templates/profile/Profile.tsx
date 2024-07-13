@@ -15,7 +15,7 @@ const ProfileTemplate = () => {
 
   return (
     isClient && (
-      <div className="flex justify-center items-center md:w-3/5 w-full rounded-lg overflow-y-auto shadow-ax1 bg-white z-50 max-md:h-full">
+      <div className="flex justify-center items-center md:w-3/5 w-full rounded-lg overflow-y-auto shadow-ax1 bg-white dark:bg-gray-400 z-50 max-md:h-full">
         {/* profile main section */}
         <div className="flex flex-col items-center justify-center h-full space-y-2">
           <h3 className="text-7xl font-black uppercase">

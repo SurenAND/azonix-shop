@@ -20,7 +20,7 @@ const UserSidebar = () => {
           i18n.dir() === "ltr"
             ? "md:bg-gradient-to-tr bg-gradient-to-br rounded-tl-lg md:rounded-bl-2xl rounded-tr-lg md:rounded-tr-none"
             : "md:bg-gradient-to-tl bg-gradient-to-bl rounded-tr-lg md:rounded-br-2xl rounded-tl-lg md:rounded-tl-none"
-        } from-20% from-white to-gray-200 p-5`}
+        } from-20% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700 p-5`}
       >
         <div className="bg-axDarkPurple rounded-full w-[70px] h-[70px] flex items-center justify-center text-axWhite font-bold uppercase text-xl">
           {stringAvatar(`${state.username}`)}
@@ -38,9 +38,9 @@ const UserSidebar = () => {
           } ${
             pathname === MainRoutes.PROFILE && !activePage
               ? i18n.dir() === "ltr"
-                ? "bg-gradient-to-r from-70% from-white to-gray-200 border-l-4 border-axLightPurple"
-                : "bg-gradient-to-l from-70% from-white to-gray-200 border-r-4 border-axLightPurple"
-              : "bg-gradient-to-r from-20% from-white to-gray-200"
+                ? "bg-gradient-to-r from-70% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700 border-l-4 border-axLightPurple"
+                : "bg-gradient-to-l from-70% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700 border-r-4 border-axLightPurple"
+              : "bg-gradient-to-r from-20% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700"
           }`}
         >
           <button
@@ -81,9 +81,9 @@ const UserSidebar = () => {
             } ${
               activePage === data.view
                 ? i18n.dir() === "ltr"
-                  ? "bg-gradient-to-r from-70% from-white to-gray-200 border-l-4 border-axLightPurple"
-                  : "bg-gradient-to-l from-70% from-white to-gray-200 border-r-4 border-axLightPurple"
-                : "bg-gradient-to-r from-20% from-white to-gray-200"
+                  ? "bg-gradient-to-r from-70% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700 border-l-4 border-axLightPurple"
+                  : "bg-gradient-to-l from-70% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700 border-r-4 border-axLightPurple"
+                : "bg-gradient-to-r from-20% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700"
             }`}
           >
             <button

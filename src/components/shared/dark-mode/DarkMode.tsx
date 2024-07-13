@@ -1,20 +1,29 @@
 import { useEffect, useState } from "react";
 
 const DarkMode = () => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("theme") || "light";
+    }
+    return "light";
+  });
 
   // access to html element
-  const htmlEl = document.documentElement;
+  const htmlEl =
+    typeof document !== "undefined" ? document.documentElement : null;
 
   // set theme to localStorage and html element
+
   useEffect(() => {
-    localStorage.setItem("theme", theme);
-    if (theme === "dark") {
-      htmlEl.classList.add("dark");
-    } else {
-      htmlEl.classList.remove("dark");
+    if (typeof window !== "undefined" && htmlEl) {
+      localStorage.setItem("theme", theme);
+      if (theme === "dark") {
+        htmlEl.classList.add("dark");
+      } else {
+        htmlEl.classList.remove("dark");
+      }
     }
-  });
+  }, [theme, htmlEl]);
 
   return (
     <label className="inline-flex items-center relative">
@@ -25,7 +34,7 @@ const DarkMode = () => {
         onChange={() => setTheme(theme === "dark" ? "light" : "dark")}
         checked={theme === "dark"}
       />
-      <div className="relative w-[70px] h-[35px] bg-gray-300 peer-checked:bg-zinc-5000 rounded-full after:absolute after:content-[''] after:w-[27px] after:h-[27px] after:bg-gradient-to-r from-orange-500 to-yellow-400 peer-checked:after:from-zinc-9000 peer-checked:after:to-zinc-900 after:rounded-full after:top-[4px] after:start-[4px] active:after:w-[35px] peer-checked:after:start-[63px] peer-checked:after:translate-x-[-100%] shadow-sm duration-300 after:duration-300 after:shadow-md"></div>
+      <div className="relative w-[70px] h-[35px] bg-gray-300 peer-checked:bg-zinc-5000 rounded-full after:absolute after:content-[''] after:w-[27px] after:h-[27px] after:bg-gradient-to-r from-orange-500 dark:from-blue-500 to-yellow-400 dark:to-blue-400 peer-checked:after:from-zinc-9000 peer-checked:after:to-zinc-900 after:rounded-full after:top-[4px] after:start-[4px] active:after:w-[35px] peer-checked:after:start-[63px] peer-checked:after:translate-x-[-100%] shadow-sm duration-300 after:duration-300 after:shadow-md"></div>
       <svg
         height="0"
         width="100"

@@ -43,7 +43,7 @@ export default function RegisterTemplate() {
   return (
     <>
       <main
-        className="flex flex-col justify-center items-center h-screen bg-gradient-to-r from-[#e2e2e2] to-[#c9d6ff] gap-4"
+        className="flex flex-col justify-center items-center h-screen bg-gradient-to-r from-[#e2e2e2] to-[#c9d6ff] gap-4 select-none"
         dir={dir}
       >
         <div className="relative overflow-hidden max-w-full w-[1000px] min-h-[600px] bg-white rounded-3xl shadow-lg">

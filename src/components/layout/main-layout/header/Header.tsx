@@ -13,6 +13,8 @@ import { IoMdLogIn } from "react-icons/io";
 import DarkMode from "@/src/components/layout/main-layout/header/dark-mode/DarkMode";
 import IrFlag from "@/src/assets/images/languages/fa.png";
 import UsFlag from "@/src/assets/images/languages/en.png";
+import { useUserContext } from "@/src/context/authContext";
+import { useLogout } from "@/src/api/auth/auth.queries";
 
 const lngs: Record<"en" | "fa", { flag: StaticImageData }> = {
   en: { flag: UsFlag },
@@ -21,6 +23,13 @@ const lngs: Record<"en" | "fa", { flag: StaticImageData }> = {
 
 export default function Header() {
   const { t, i18n } = useTranslation();
+  const { state } = useUserContext();
+  const { mutate: logout } = useLogout();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
       <div className="py-4">
@@ -44,37 +53,46 @@ export default function Header() {
                   </li>
                 ))}
                 {/* Dropdown */}
-                <li className="relative cursor-pointer group">
-                  <Link
-                    href="#"
-                    className="flex items-center gap-[2px] font-semibold text-gray-500 dark:hover:text-white py-2"
-                  >
-                    {t("quick-links")}
-                    <span>
-                      <FaCaretDown className="group-hover:rotate-180 duration-300" />
-                    </span>
-                  </Link>
-                  {/* Dropdown Menu */}
-                  <div className="absolute z-[999] hidden group-hover:block w-[200px] rounded-md bg-axGray dark:bg-gray-700 p-2 dark:text-white">
-                    <ul className="space-y-2">
-                      {DropdownLinks.map((data) => (
-                        <li key={data.id}>
-                          <Link
-                            href={data.link}
-                            className="text-gray-500 dark:text-gray-400 dark:hover:text-white duration-200 inline-block w-full p-2 hover:bg-primary/20 rounded-md font-semibold"
+                {state.isLogin && (
+                  <li className="relative cursor-pointer group">
+                    <Link
+                      href="#"
+                      className="flex items-center gap-[2px] font-semibold text-gray-500 dark:hover:text-white py-2"
+                    >
+                      {t("quick-links")}
+                      <span>
+                        <FaCaretDown className="group-hover:rotate-180 duration-300" />
+                      </span>
+                    </Link>
+                    {/* Dropdown Menu */}
+                    <div className="absolute z-[999] hidden group-hover:block w-[200px] rounded-md bg-axGray dark:bg-gray-700 p-2 dark:text-white">
+                      <ul className="space-y-2">
+                        {DropdownLinks.map((data) => (
+                          <li
+                            key={data.id}
+                            className={`${
+                              data.roleToAccess.includes(state.role)
+                                ? "flex"
+                                : "hidden"
+                            }`}
                           >
-                            {t(data.name)}
-                          </Link>
+                            <Link
+                              href={data.link}
+                              className="text-gray-500 dark:text-gray-400 dark:hover:text-white duration-200 inline-block w-full p-2 hover:bg-primary/20 rounded-md font-semibold"
+                            >
+                              {t(data.name)}
+                            </Link>
+                          </li>
+                        ))}
+                        <li onClick={handleLogout}>
+                          <span className="text-gray-500 dark:text-gray-400 dark:hover:text-white duration-200 inline-block w-full p-2 hover:bg-primary/20 rounded-md font-semibold">
+                            {t("logout")}
+                          </span>
                         </li>
-                      ))}
-                      <li>
-                        <span className="text-gray-500 dark:text-gray-400 dark:hover:text-white duration-200 inline-block w-full p-2 hover:bg-primary/20 rounded-md font-semibold">
-                          {t("logout")}
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
+                      </ul>
+                    </div>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
@@ -96,14 +114,16 @@ export default function Header() {
             </div>
 
             {/* Login Button section */}
-            <button className="relative p-3">
-              <Link href={MainRoutes.REGISTER}>
-                <IoMdLogIn className="text-2xl text-gray-600 dark:text-gray-400" />
-              </Link>
-              <div className="w-4 h-4 text-gray-600 dark:text-gray-400 absolute bottom-2 end-0 text-sm">
-                {t("login")}
-              </div>
-            </button>
+            {!state.isLogin && (
+              <button className="relative p-3">
+                <Link href={MainRoutes.REGISTER}>
+                  <IoMdLogIn className="text-2xl text-gray-600 dark:text-gray-400" />
+                </Link>
+                <div className="w-4 h-4 text-gray-600 dark:text-gray-400 absolute bottom-2 end-0 text-sm">
+                  {t("login")}
+                </div>
+              </button>
+            )}
 
             {/* Order Button section */}
             <button className="relative p-3">

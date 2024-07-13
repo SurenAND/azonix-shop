@@ -51,5 +51,11 @@
   "signup-toggle-title": "Welcome Back!",
   "signup-toggle-description": "Enter your personal details to use all of site features",
   "login-toggle-title": "Hello, Friend!",
-  "login-toggle-description": "Register with your personal details to use all of site features"
+  "login-toggle-description": "Register with your personal details to use all of site features",
+  "username-input-error": "Username must be between 4 and 15 characters in length!",
+  "password-input-error": "Password must be more than 6 characters in length with one uppercase and one lowercase letter!",
+  "phone-number-input-error": "Phone number is required!",
+  "firstname-input-error": "Firstname is required!",
+  "lastname-input-error": "Lastname is required!",
+  "address-input-error": "Address is required!"
 }

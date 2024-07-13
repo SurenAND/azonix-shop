@@ -1,43 +1,35 @@
-import { useEffect, useState } from "react";
 import { FaGooglePlusG, FaLinkedinIn } from "react-icons/fa6";
 import { FaFacebookF, FaGithub } from "react-icons/fa";
-import { toast } from "sonner";
-import { useRouter } from "next/router";
-import { useUserContext } from "@/src/context/authContext";
-import { MainRoutes } from "@/src/constant/routes";
-import { setCookie } from "cookies-next";
-import { AuthReducerAction } from "@/src/types/enums";
 import MyIconBtn from "@/src/components/shared/icon-button/IconButton";
 import MyInput from "@/src/components/shared/input/Input";
 import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useLogin } from "@/src/api/auth/auth.queries";
+import { useState } from "react";
+import { TbEyeClosed } from "react-icons/tb";
+import { CgEye } from "react-icons/cg";
+import Link from "next/link";
+
+interface LoginFormValues {
+  username: string;
+  password: string;
+}
 
 export default function LogInTemplate({ active }: { active: boolean }) {
-  const { register, handleSubmit } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const { t } = useTranslation();
 
-  // const { push: pushRouter } = useRouter();
-  // const { state, dispatch } = useUserContext();
-
-  // useEffect(() => {
-  //   state.isLogin && pushRouter(MainRoutes.HOME);
-  // }, [state.isLogin]);
+  const { mutate: loginMutate } = useLogin();
 
   const handleLogin = (data: FieldValues) => {
-    console.log(data);
-    //   if (username && password) {
-    //     getUserData(username, password).then(({ token, data: { user } }) => {
-    //       if (user) {
-    //         setCookie("username", user.username);
-    //         setCookie("accessToken", token.accessToken);
-    //         dispatch({
-    //           type: AuthReducerAction.LOGIN,
-    //           payload: { ...user, accessToken: token.accessToken },
-    //         });
-    //         pushRouter(MainRoutes.HOME);
-    //       } else toast.warning("User Not Found Please Sign Up!");
-    //     });
-    //   } else toast.error("Please enter valid Username and Password!");
+    const loginData = data as LoginFormValues;
+    loginMutate(loginData);
   };
 
   return (
@@ -74,20 +66,49 @@ export default function LogInTemplate({ active }: { active: boolean }) {
           name="username"
           register={register}
           required={true}
+          pattern={/^.{4,15}$/}
         />
+        {/* username error message */}
+        <p
+          className={`text-rose-400 text-xs w-2/3 text-center ${
+            errors.username ? "visible" : "invisible"
+          }`}
+        >
+          {t("username-input-error")}
+        </p>
         <MyInput
-          type="password"
+          type={`${showPassword ? "text" : "password"}`}
           placeholder={t("password")}
           name="password"
           register={register}
           required={true}
+          pattern={/^(?=.*\d)(?=.*[a-z]).{6,}$/}
+          icon={
+            showPassword ? (
+              <CgEye onClick={() => setShowPassword(false)} />
+            ) : (
+              <TbEyeClosed onClick={() => setShowPassword(true)} />
+            )
+          }
         />
-        <a href="" className="text-gray-800 text-xs no-underline my-4 block">
+        {/* password error message */}
+        <p
+          className={`text-rose-400 text-xs w-3/4 text-center ${
+            errors.password ? "visible" : "invisible"
+          }`}
+        >
+          {t("password-input-error")}
+        </p>
+
+        <Link
+          href="/#"
+          className="text-gray-800 text-xs no-underline my-4 block"
+        >
           {t("forget-password")}
-        </a>
+        </Link>
         <button
           type="submit"
-          className="bg-axLightPurple text-white text-xs py-2 px-11 rounded-lg font-semibold tracking-wide uppercase mt-2 hover:bg-axDarkPurple"
+          className="bg-axLightPurple text-white text-xs py-4 px-14 rounded-lg font-semibold tracking-wide uppercase mt-2 hover:bg-axDarkPurple"
         >
           {t("login")}
         </button>

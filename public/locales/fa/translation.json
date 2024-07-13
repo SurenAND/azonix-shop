@@ -51,5 +51,11 @@
   "signup-toggle-title": "خوش آمدید!",
   "signup-toggle-description": "اطلاعات شخصی خود را وارد کنید تا از همه امکانات سایت استفاده کنید",
   "login-toggle-title": "سلام رفیق!",
-  "login-toggle-description": "برای استفاده از تمامی امکانات سایت، با مشخصات شخصی خود ثبت نام کنید"
+  "login-toggle-description": "برای استفاده از تمامی امکانات سایت، با مشخصات شخصی خود ثبت نام کنید",
+  "username-input-error": "نام کاربری باید بین 4 تا 15 کاراکتر باشد!",
+  "password-input-error": "گذرواژه باید بین 6 تا 15 کاراکتر با یک حرف بزرگ و یک حرف کوچک باشد!",
+  "phone-number-input-error": "شماره تلفن لازم است!",
+  "firstname-input-error": "نام الزامی است!",
+  "lastname-input-error": "نام خانوادگی الزامی است!",
+  "address-input-error": "آدرس الزامی است!"
 }

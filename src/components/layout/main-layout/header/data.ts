@@ -1,4 +1,5 @@
 import { MainRoutes } from "@/src/constant/routes";
+import { access } from "fs";
 
 export const MenuLinks = [
   {
@@ -28,10 +29,12 @@ export const DropdownLinks = [
     id: 1,
     name: "dashboard",
     link: MainRoutes.DASHBOARD,
+    roleToAccess: ["ADMIN"],
   },
   {
     id: 2,
     name: "profile",
     link: MainRoutes.PROFILE,
+    roleToAccess: ["ADMIN", "USER"],
   },
 ];

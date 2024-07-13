@@ -5,11 +5,13 @@ import { useTranslation } from "react-i18next";
 import { MainRoutes } from "@/src/constant/routes";
 import { IoPersonSharp } from "react-icons/io5";
 import { UserSideBarItems } from "@/src/components/layout/profile-layout/sidebar/data";
+import { useUserContext } from "@/src/context/authContext";
 
 const UserSidebar = () => {
   const activePage: string | null = useSearchParams().get("view");
   const { pathname, push: pushRouter } = useRouter();
   const { t, i18n } = useTranslation();
+  const { state } = useUserContext();
 
   return (
     <div className="flex flex-row items-end md:items-stretch md:flex-col">
@@ -20,10 +22,10 @@ const UserSidebar = () => {
             : "md:bg-gradient-to-tl bg-gradient-to-bl rounded-tr-lg md:rounded-br-2xl rounded-tl-lg md:rounded-tl-none"
         } from-20% from-white to-gray-200 p-5`}
       >
-        <div className="bg-axDarkPurple rounded-full w-[70px] h-[70px] flex items-center justify-center text-axWhite font-bold text-xl">
-          {stringAvatar("Ashkan")}
+        <div className="bg-axDarkPurple rounded-full w-[70px] h-[70px] flex items-center justify-center text-axWhite font-bold uppercase text-xl">
+          {stringAvatar(`${state.username}`)}
         </div>
-        <h4 className="text-2xl">{"Ashkan"}</h4>
+        <h4 className="text-2xl">{`${state.username}`}</h4>
         <h6 className="text-xl">{`38.00${t("currency")}`}</h6>
         <p className="text-sm">{t("balance")}</p>
       </div>

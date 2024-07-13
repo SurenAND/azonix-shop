@@ -1,3 +1,4 @@
+import { useUserContext } from "@/src/context/authContext";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -5,6 +6,8 @@ const ProfileTemplate = () => {
   const { t } = useTranslation();
 
   const [isClient, setIsClient] = useState(false);
+
+  const { state } = useUserContext();
 
   useEffect(() => {
     setIsClient(true);
@@ -16,7 +19,7 @@ const ProfileTemplate = () => {
         {/* profile main section */}
         <div className="flex flex-col items-center justify-center h-full space-y-2">
           <h3 className="text-7xl font-black uppercase">
-            {t("hi") + ", Ashkan"}
+            {t("hi") + `, ${state.firstname}`}
           </h3>
           <h4 className="text-6xl capitalize text-center">
             {t("welcome-to-your-profile")}

@@ -1,0 +1,95 @@
+import { ProductType } from "@/src/api/product/product.type";
+import { useTranslation } from "react-i18next";
+import { MdDelete, MdEdit } from "react-icons/md";
+
+type ProductsTableProps = {
+  list: ProductType[];
+  onFilteredList: (e: string) => void;
+};
+
+export const ProductsTable = ({ list, onFilteredList }: ProductsTableProps) => {
+  const { t } = useTranslation();
+
+  const setDeleteProductModal = (id: string) => {
+    //   dispatch(setShowModal(true));
+    //   dispatch(setModalName("deleteModal"));
+    //   dispatch(getId(id));
+  };
+
+  const setEditProductModal = (id: string) => {
+    //   dispatch(setShowModal(true));
+    //   dispatch(setModalName("addEditProduct"));
+    //   dispatch(getId(id));
+  };
+
+  return (
+    <table className="border border-collapse rounded w-full text-center">
+      <thead className="select-none">
+        <tr className="bg-gray-500 text-white dark:text-black flex flex-col mb-4 sm:table-row">
+          <th className="border text-md w-full md:w-[15%] px-1 py-3 md:table-cell hidden">
+            {t("product-image")}
+          </th>
+          <th className="border text-md w-full md:w-[55%] px-1 py-3">
+            {t("product-name")}
+          </th>
+          <th className="border text-md w-full md:w-[15%] px-1 py-3">
+            <select
+              name="category"
+              className="bg-gray-500 text-center w-full outline-none"
+              onChange={(e) => onFilteredList(e.target.value)}
+            >
+              <option value="">{t("all-category")}</option>
+              <option value="6692b606980352fad38fab7a">{t("earphone")}</option>
+              <option value="6692b616980352fad38fab7e">{t("gadget")}</option>
+              <option value="6692b61f980352fad38fab82">{t("laptop")}</option>
+              <option value="6692b628980352fad38fab86">{t("console")}</option>
+              <option value="6692b634980352fad38fab8a">{t("oculus")}</option>
+              <option value="6692b63c980352fad38fab8e">{t("speaker")}</option>
+            </select>
+          </th>
+          <th className="border text-md w-full md:w-[15%] px-1 py-3">
+            {t("delete-edit")}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {list.map((product, index) => {
+          return (
+            <tr
+              key={product._id}
+              className={`flex flex-col mb-4 sm:table-row ${
+                Math.floor(index % 2) !== 0 ? "bg-gray-400 text-white" : ""
+              } ${Math.floor(index % 2) !== 0 ? "dark:text-black" : ""}`}
+            >
+              <td className="p-1 border md:table-cell hidden">
+                <div className="flex justify-center select-none">
+                  <img
+                    src={`http://${product.images[0]}`}
+                    alt={product.name}
+                    className="max-w-[2rem] rounded sm:max-w-[3rem] bg-white/90"
+                  />
+                </div>
+              </td>
+              <td className="p-1 border truncate">{product.name}</td>
+              <td className="p-1 border truncate">
+                {product.category.name}/{product.subcategory.name}
+              </td>
+              <td className="p-1 border">
+                <div className="flex items-center justify-center gap-4 select-none">
+                  <MdDelete
+                    className="cursor-pointer w-5"
+                    onClick={() => setDeleteProductModal(product._id)}
+                  />
+                  <MdEdit
+                    className="cursor-pointer w-5"
+                    onClick={() => setEditProductModal(product._id)}
+                  />
+                </div>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+};

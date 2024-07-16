@@ -10,17 +10,9 @@ type ProductsTableProps = {
 export const ProductsTable = ({ list, onFilteredList }: ProductsTableProps) => {
   const { t } = useTranslation();
 
-  const setDeleteProductModal = (id: string) => {
-    //   dispatch(setShowModal(true));
-    //   dispatch(setModalName("deleteModal"));
-    //   dispatch(getId(id));
-  };
+  const setDeleteProductModal = (id: string) => {};
 
-  const setEditProductModal = (id: string) => {
-    //   dispatch(setShowModal(true));
-    //   dispatch(setModalName("addEditProduct"));
-    //   dispatch(getId(id));
-  };
+  const setEditProductModal = (id: string) => {};
 
   return (
     <table className="border border-collapse rounded w-full text-center">

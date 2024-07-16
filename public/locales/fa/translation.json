@@ -85,5 +85,10 @@
   "delete-edit": "حذف/ویرایش",
   "product-name": "نام محصول",
   "product-image": "عکس",
-  "all-category": "همه دسته بندی ها"
+  "all-category": "همه دسته بندی ها",
+  "price": "قیمت",
+  "quantity": "تعداد",
+  "product": "محصول",
+  "save": "ذخیره",
+  "changes-saved": "لیست با موفقیت ویرایش گردید."
 }

@@ -12,7 +12,6 @@ function ProductManager() {
   const [page, setPage] = useState(1);
   const [productCategory, setProductCategory] = useState("");
   const { data: products, refetch } = useGetProducts({
-    per_page: 4,
     page,
     category: productCategory,
   });

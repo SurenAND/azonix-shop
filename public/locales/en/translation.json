@@ -85,5 +85,10 @@
   "delete-edit": "Delete/Edit",
   "product-name": "Product Name",
   "product-image": "Image",
-  "all-category": "All Category"
+  "all-category": "All Category",
+  "price": "Price",
+  "quantity": "Quantity",
+  "product": "Product",
+  "save": "Save",
+  "changes-saved": "The list has been edited successfully."
 }

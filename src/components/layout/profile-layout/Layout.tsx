@@ -21,7 +21,7 @@ const ProfileLayout = ({ children }: PropsWithChildren) => {
   }, [i18n.resolvedLanguage]);
 
   return (
-    <div className="min-h-screen bg-axGray pb-5" dir={dir}>
+    <div className="min-h-screen bg-axGray dark:bg-gray-700 pb-5" dir={dir}>
       <Header />
       <div className="flex flex-col md:flex-row justify-center w-full mt-[5vh] max-md:h-[80vh]">
         <div className="w-full md:w-1/5 rounded-lg md:min-h-[50vh]">

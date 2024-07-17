@@ -6,4 +6,5 @@ export const MainRoutes = {
   DASHBOARD: "/dashboard",
   CATEGORY: "/category",
   PROFILE: "/profile",
+  NOTFOUND: "/404",
 };

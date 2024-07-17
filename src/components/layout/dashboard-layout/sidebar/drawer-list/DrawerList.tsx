@@ -23,7 +23,7 @@ export default function DrawerList() {
         <div
           className={`my-2 p-4 rounded-2xl ${
             pathname === MainRoutes.DASHBOARD && !searchParams
-              ? "bg-axWhite text-axLightPurple"
+              ? "bg-axWhite dark:bg-axLightPurple text-axLightPurple dark:text-axWhite"
               : ""
           }`}
         >
@@ -34,7 +34,7 @@ export default function DrawerList() {
             <MdInbox
               className={`w-5 h-5 ${
                 pathname === MainRoutes.DASHBOARD && !searchParams
-                  ? "text-axLightPurple"
+                  ? "text-axLightPurple dark:text-axWhite"
                   : ""
               }`}
             />

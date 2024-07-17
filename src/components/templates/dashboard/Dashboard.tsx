@@ -1,4 +1,4 @@
-import Orders from "@/src/components/templates/dashboard/orders/Orders";
+import { Orders } from "@/src/components/templates/dashboard/orders/Orders";
 import AddProduct from "@/src/components/templates/dashboard/products-management/add-product/AddProduct";
 import Inventory from "@/src/components/templates/dashboard/products-management/inventory/Inventory";
 import ProductManager from "@/src/components/templates/dashboard/products-management/product-manager/ProductManager";

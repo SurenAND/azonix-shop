@@ -1,3 +1,4 @@
+import { useGetCategories } from "@/src/api/category/category.queries";
 import { ProductType } from "@/src/api/product/product.type";
 import { useTranslation } from "react-i18next";
 import { MdDelete, MdEdit } from "react-icons/md";
@@ -9,6 +10,8 @@ type ProductsTableProps = {
 
 export const ProductsTable = ({ list, onFilteredList }: ProductsTableProps) => {
   const { t } = useTranslation();
+
+  const { data: categories } = useGetCategories();
 
   const setDeleteProductModal = (id: string) => {};
 
@@ -31,12 +34,9 @@ export const ProductsTable = ({ list, onFilteredList }: ProductsTableProps) => {
               onChange={(e) => onFilteredList(e.target.value)}
             >
               <option value="">{t("all-category")}</option>
-              <option value="6692b606980352fad38fab7a">{t("earphone")}</option>
-              <option value="6692b616980352fad38fab7e">{t("gadget")}</option>
-              <option value="6692b61f980352fad38fab82">{t("laptop")}</option>
-              <option value="6692b628980352fad38fab86">{t("console")}</option>
-              <option value="6692b634980352fad38fab8a">{t("oculus")}</option>
-              <option value="6692b63c980352fad38fab8e">{t("speaker")}</option>
+              {categories?.data.categories.map((category) => (
+                <option value={category._id}>{category.name}</option>
+              ))}
             </select>
           </th>
           <th className="border text-md w-full md:w-[15%] px-1 py-3">

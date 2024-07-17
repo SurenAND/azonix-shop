@@ -90,5 +90,20 @@
   "quantity": "Quantity",
   "product": "Product",
   "save": "Save",
-  "changes-saved": "The list has been edited successfully."
+  "changes-saved": "The list has been edited successfully.",
+  "product-price": "Price",
+  "product-category": "Category",
+  "product-sub-category": "Sub Category",
+  "product-description": "Description",
+  "product-quantity": "Quantity",
+  "product-brand": "Brand",
+  "empty-list": "The list is empty.",
+  "pending-delivery": "Pending Delivery",
+  "delivered": "Delivered",
+  "user-name": "User Name",
+  "total-price": "Total Price",
+  "order-time": "Order Time",
+  "newest": "Newest",
+  "oldest": "Oldest",
+  "review": "Review"
 }

@@ -90,5 +90,20 @@
   "quantity": "تعداد",
   "product": "محصول",
   "save": "ذخیره",
-  "changes-saved": "لیست با موفقیت ویرایش گردید."
+  "changes-saved": "لیست با موفقیت ویرایش گردید.",
+  "product-price": "قیمت",
+  "product-category": "دسته بندی",
+  "product-sub-category": "زیر دسته",
+  "product-description": "توضیحات",
+  "product-quantity": "تعداد",
+  "product-brand": "برند",
+  "empty-list": "لیست خالی می باشد.",
+  "pending-delivery": "در انتظار تحویل",
+  "delivered": "تحویل شده",
+  "user-name": "نام کاربر",
+  "total-price": "مجموع مبلغ",
+  "order-time": "زمان ثبت سفارش",
+  "newest": "جدیدترین",
+  "oldest": "قدیمی ترین",
+  "review": "بررسی"
 }

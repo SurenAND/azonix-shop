@@ -4,15 +4,14 @@ import {
 } from "@/src/api/product/product.queries";
 import { ProductType } from "@/src/api/product/product.type";
 import Pagination from "@/src/components/shared/pagination/Pagination";
+import InventoryTable from "@/src/components/templates/dashboard/products-management/inventory/inventory-table/InventoryTable";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import InventoryTable from "./inventory-table/InventoryTable";
 
 function Inventory() {
   const { t } = useTranslation();
 
-  const [list, setList] = useState<ProductType[]>([]);
   const [page, setPage] = useState(1);
   const [hasEditItem, setHasEditItem] = useState(false);
   const [editedList, SetEditedList] = useState<ProductType[] | []>([]);
@@ -25,7 +24,6 @@ function Inventory() {
 
   useEffect(() => {
     refetch();
-    setList(products?.data.products || []);
   }, [page]);
 
   const containEditItem = (status: boolean) => {

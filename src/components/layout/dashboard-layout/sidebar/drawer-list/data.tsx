@@ -1,10 +1,9 @@
 import {
-  MdInventory,
   MdAdd,
-  MdEdit,
-  MdDelete,
-  MdLocalShipping,
   MdAdminPanelSettings,
+  MdEdit,
+  MdInventory,
+  MdLocalShipping,
   MdPeopleAlt,
 } from "react-icons/md";
 
@@ -20,14 +19,9 @@ export const drawerProductsItems = [
     icon: <MdAdd className="w-5 h-5" />,
   },
   {
-    title: "edit-product",
-    view: "edit-product",
+    title: "product-manager",
+    view: "product-manager",
     icon: <MdEdit className="w-5 h-5" />,
-  },
-  {
-    title: "delete-product",
-    view: "delete-product",
-    icon: <MdDelete className="w-5 h-5" />,
   },
 ];
 

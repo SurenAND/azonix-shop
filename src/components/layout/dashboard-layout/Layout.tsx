@@ -1,6 +1,6 @@
-import { PropsWithChildren, useEffect, useState } from "react";
 import Header from "@/src/components/layout/dashboard-layout/header/Header";
 import Sidebar from "@/src/components/layout/dashboard-layout/sidebar/SideBar";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
@@ -25,7 +25,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
           className={`me-2 rounded-t-3xl bg-axGray dark:bg-gray-700 transition-all ${
             open
               ? `ms-[-250px] md:ms-0 w-full md:w-[calc(100%_-_270px)] duration-[225ms] ease-out`
-              : "ms-[-250px] w-full h-full duration-[195ms] ease-in"
+              : "ms-[-250px] w-full duration-[195ms] ease-in"
           } overflow-hidden`}
         >
           {children}

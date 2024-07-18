@@ -17,3 +17,12 @@ export const updateProductApi = async (product: ProductType, data: any) => {
   const response = await req.patch(`/products/${product._id}`, data);
   return response.data;
 };
+
+export const addProductApi = async (product: FormData) => {
+  const response = await req.post("/products", product, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};

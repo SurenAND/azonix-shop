@@ -33,7 +33,7 @@ export const Orders = () => {
   };
 
   return (
-    <main className="p-3 min-h-screen w-full md:w-[620px]">
+    <main className="p-3 min-h-screen w-full md:w-[780px]">
       <header className="flex justify-between items-center">
         <h1 className="font-bold text-lg">{t("orders-management")}</h1>
         <div className="flex gap-2">
@@ -61,7 +61,7 @@ export const Orders = () => {
           </div>
         </div>
       </header>
-      <div className="px-3 py-8 w-full md:w-[600px] min-h-[calc(100vh-100px)] mt-5 mx-auto flex items-center sm:justify-center">
+      <div className="px-3 py-8 w-full md:w-[760px] min-h-[calc(100vh-100px)] mx-auto flex items-center sm:justify-center">
         {orders &&
         orders.status === "success" &&
         orders.data.orders.length === 0 ? (

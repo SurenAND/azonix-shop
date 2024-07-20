@@ -41,7 +41,7 @@ function ProductManager() {
   }, [page, productCategory]);
 
   return (
-    <main className="p-3 min-h-screen w-full md:w-[620px]">
+    <main className="p-3 min-h-screen w-full md:w-[780px]">
       <header className="flex justify-between items-center">
         <h1 className="font-bold text-lg">{t("product-manager")}</h1>
         <button
@@ -51,7 +51,7 @@ function ProductManager() {
           {t("add-product")}
         </button>
       </header>
-      <div className="px-3 py-8 w-full md:w-[600px] min-h-[calc(100vh-100px)] mx-auto flex items-center sm:justify-center">
+      <div className="px-3 py-8 w-full md:w-[760px] min-h-[calc(100vh-100px)] mx-auto flex items-center sm:justify-center">
         <ProductsTable
           list={products?.data.products || []}
           onFilteredList={filteredList}

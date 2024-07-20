@@ -8,6 +8,7 @@ export const getAllProductsApi = async (params: GetProductsParamsType) => {
   const _params: any = {};
   if (params.page) _params.page = params.page;
   if (params.category) _params.category = params.category;
+  if (params.limit) _params.limit = params.limit;
 
   const response = await req.get("/products", { params: _params });
   return response.data;

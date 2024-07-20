@@ -19,6 +19,7 @@ function Inventory() {
 
   const { data: products, refetch } = useGetProducts({
     page,
+    limit: 20,
   });
   const { mutate: updateProduct } = useUpdateProduct();
 
@@ -57,7 +58,7 @@ function Inventory() {
   };
 
   return (
-    <main className="p-3">
+    <main className="p-3 min-h-screen w-full md:w-[780px]">
       <header className="flex justify-between items-center">
         <h1 className="font-bold text-lg">{t("inventory")}</h1>
         <button
@@ -68,7 +69,7 @@ function Inventory() {
           {t("save")}
         </button>
       </header>
-      <div className="px-3 py-8 max-w-xl mx-auto">
+      <div className="px-3 py-8 w-full md:w-[760px] min-h-[calc(100vh-100px)] mx-auto flex items-center sm:justify-center">
         <InventoryTable
           list={products?.data.products || []}
           onContainEditItem={containEditItem}

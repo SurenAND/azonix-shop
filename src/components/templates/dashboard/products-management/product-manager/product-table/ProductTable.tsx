@@ -29,7 +29,7 @@ export const ProductsTable = ({
   const setEditProductModal = (id: string) => {};
 
   return (
-    <table className="border border-collapse rounded w-full text-center">
+    <table className="self-start border border-collapse rounded w-full text-center">
       <thead className="select-none">
         <tr className="bg-gray-500 text-white dark:text-black flex flex-col mb-4 sm:table-row">
           <th className="border text-md w-full md:w-[15%] px-1 py-3 md:table-cell hidden">

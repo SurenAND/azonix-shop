@@ -1,11 +1,21 @@
-import { useUserContext } from "@/src/context/authContext";
-import { useRouter } from "next/router";
-import { useMutation } from "react-query";
-import { LoginApi, SignupApi, logoutApi } from "@/src/api/auth/auth.api";
-import { AuthReducerAction } from "@/src/types/enums";
+import {
+  LoginApi,
+  SignupApi,
+  deleteUserApi,
+  getAllUsersApi,
+  logoutApi,
+} from "@/src/api/auth/auth.api";
+import {
+  AllUsersType,
+  GetUsersParamsType,
+  newUserType,
+} from "@/src/api/auth/auth.type";
 import { MainRoutes } from "@/src/constant/routes";
+import { useUserContext } from "@/src/context/authContext";
+import { AuthReducerAction } from "@/src/types/enums";
+import { useRouter } from "next/router";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { toast } from "sonner";
-import { newUserType } from "./auth.type";
 
 export const useLogin = () => {
   const { push: pushRouter } = useRouter();
@@ -69,6 +79,25 @@ export const useLogout = () => {
     mutationFn: () => logoutApi(),
     onSuccess() {
       dispatch({ type: AuthReducerAction.LOGOUT });
+    },
+  });
+};
+
+export const useGetUsers = (params: GetUsersParamsType) => {
+  return useQuery<AllUsersType>({
+    queryKey: ["users"],
+    queryFn: () => getAllUsersApi(params),
+  });
+};
+
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteUserApi(id),
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
     },
   });
 };

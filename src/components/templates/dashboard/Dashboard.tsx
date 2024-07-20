@@ -2,7 +2,6 @@ import { Orders } from "@/src/components/templates/dashboard/orders/Orders";
 import AddProduct from "@/src/components/templates/dashboard/products-management/add-product/AddProduct";
 import Inventory from "@/src/components/templates/dashboard/products-management/inventory/Inventory";
 import ProductManager from "@/src/components/templates/dashboard/products-management/product-manager/ProductManager";
-import AdminsManager from "@/src/components/templates/dashboard/user-manager/admins/AdminsManager";
 import UsersManager from "@/src/components/templates/dashboard/user-manager/users/UsersManager";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -27,7 +26,6 @@ function DashboardTemplate() {
           {searchParams === "add-product" && <AddProduct />}
           {searchParams === "product-manager" && <ProductManager />}
           {searchParams === "users-manager" && <UsersManager />}
-          {searchParams === "admin-manager" && <AdminsManager />}
           {searchParams === "orders" && <Orders />}
           {!searchParams && (
             <div className="flex flex-col items-center justify-center h-screen gap-10">

@@ -119,5 +119,6 @@
   "delete-popup-error": "The id is not correct!",
   "product-delete-success": "Product deleted successfully",
   "user-delete-success": "User deleted successfully",
-  "user-manager": "User Manager"
+  "user-manager": "User Manager",
+  "error-invalid-number": "Only numbers are allowed!"
 }

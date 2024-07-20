@@ -119,5 +119,6 @@
   "user-manager": "مدیریت کاربران",
   "user-delete-popup-context": "این عمل قابل بازگشت <1>نیست</1>. با این کار کاربر <1>{{idToDelete}}</1> برای همیشه حذف می شود.",
   "user-delete-popup-confirm-text": "لطفا برای تایید، شناسه کاربر را تایپ کنید.",
-  "user-delete-popup-confirm": "متوجه شدم، این کاربر را حذف کنید"
+  "user-delete-popup-confirm": "متوجه شدم، این کاربر را حذف کنید",
+  "error-invalid-number": "فقط اعداد مجاز هستند!"
 }

@@ -3,6 +3,7 @@ import {
   useUpdateProduct,
 } from "@/src/api/product/product.queries";
 import { ProductType } from "@/src/api/product/product.type";
+import { EmptyList } from "@/src/components/shared/empty-list/EmptyList";
 import Pagination from "@/src/components/shared/pagination/Pagination";
 import InventoryTable from "@/src/components/templates/dashboard/products-management/inventory/inventory-table/InventoryTable";
 import { useEffect, useState } from "react";
@@ -14,7 +15,7 @@ function Inventory() {
 
   const [page, setPage] = useState(1);
   const [hasEditItem, setHasEditItem] = useState(false);
-  const [editedList, SetEditedList] = useState<ProductType[] | []>([]);
+  const [editedProducts, setEditedProducts] = useState<ProductType[]>([]);
   const [editMode, setEditMode] = useState("doing");
 
   const { data: products, refetch } = useGetProducts({
@@ -34,17 +35,8 @@ function Inventory() {
     }
   };
 
-  const onEditHandler = (list: ProductType[]) => {
-    const newList = list.map((item) => ({
-      ...item,
-      price: item.price,
-      quantity: item.quantity,
-    }));
-    SetEditedList(newList);
-  };
-
   const editHandler = () => {
-    editedList.forEach((item) => {
+    editedProducts.forEach((item) => {
       updateProduct({
         newProduct: item,
         data: {
@@ -70,12 +62,19 @@ function Inventory() {
         </button>
       </header>
       <div className="px-3 py-8 w-full md:w-[760px] min-h-[calc(100vh-100px)] mx-auto flex items-center sm:justify-center">
-        <InventoryTable
-          list={products?.data.products || []}
-          onContainEditItem={containEditItem}
-          onEditHandler={onEditHandler}
-          editMode={editMode}
-        />
+        {products &&
+        products.status === "success" &&
+        products.data.products.length === 0 ? (
+          <EmptyList />
+        ) : (
+          <InventoryTable
+            list={products?.data.products || []}
+            onContainEditItem={containEditItem}
+            editedProducts={editedProducts}
+            setEditedProducts={setEditedProducts}
+            editMode={editMode}
+          />
+        )}
       </div>
       {products && (
         <Pagination

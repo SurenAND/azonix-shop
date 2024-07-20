@@ -1,95 +1,131 @@
 import { ProductType } from "@/src/api/product/product.type";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 type EditableTdProps = {
+  index: number;
   product: ProductType;
-  editValue: number;
-  editList: ProductType[];
-  setEditList: (list: ProductType[]) => void;
-  text: string;
+  field: string;
+  products: ProductType[];
+  setProducts: Dispatch<SetStateAction<ProductType[]>>;
+  editedProducts: ProductType[];
+  setEditedProducts: Dispatch<SetStateAction<ProductType[]>>;
 };
 
 function EditableTd({
+  index,
   product,
-  editValue,
-  editList,
-  setEditList,
-  text,
+  products,
+  setProducts,
+  editedProducts,
+  setEditedProducts,
+  field,
 }: EditableTdProps) {
-  const [editMode, setEditMode] = useState(true);
   const { t } = useTranslation();
+  const [isEdit, setIsEdit] = useState<string | null>(null);
+  const [isModified, setIsModified] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const editHandler = (editedProduct: ProductType) => {
+    const updatedEditedProducts = editedProducts.map((item) =>
+      item._id === editedProduct._id ? editedProduct : item
+    );
+    if (!editedProducts.some((item) => item._id === editedProduct._id)) {
+      setEditedProducts([...editedProducts, editedProduct]);
+    } else {
+      setEditedProducts(updatedEditedProducts);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node) &&
+        !isModified
+      ) {
+        setIsEdit(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isModified]);
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const updatedProduct = {
+      ...product,
+      [field]: +e.target.value,
+      [`is${field.charAt(0).toUpperCase() + field.slice(1)}Edit`]: true,
+    };
+    const updatedProducts = products.map((item, idx) =>
+      idx === index ? updatedProduct : item
+    );
+
+    editHandler(updatedProduct);
+    setIsEdit(null);
+    setProducts(updatedProducts);
+    setIsModified(false);
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      setIsEdit(null);
+      setIsModified(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setIsModified(true);
+      e.target.value = value;
+    } else {
+      e.preventDefault();
+      toast.error(t("error-invalid-number"));
+    }
+  };
+
+  const renderInput = (value: number) => (
+    <input
+      className="text-black w-full text-center font-bold"
+      ref={inputRef}
+      defaultValue={value}
+      onChange={handleInputChange}
+      onBlur={handleBlur}
+      onKeyUp={handleKeyUp}
+    />
+  );
+
+  const renderSpan = (value: number, isEdited: boolean) => (
+    <span
+      className={`block p-1 ${
+        isEdited ? "bg-axLightPurple/60 text-white" : ""
+      }`}
+    >
+      {value}
+    </span>
+  );
+
+  const value = product[field as keyof ProductType] as number;
+  const isEdited = product[
+    `is${
+      field.charAt(0).toUpperCase() + field.slice(1)
+    }Edit` as keyof ProductType
+  ] as unknown as boolean;
+
   return (
     <td
-      className={`p-1 border ${
-        editList.find((i) => i._id === product._id)
-          ? "bg-axLightPurple/60 text-white"
-          : ""
-      }`}
-      contentEditable={editMode}
-      suppressContentEditableWarning={true}
-      onClick={(e) => {
-        setEditMode(true);
-        const event = e.target as HTMLElement;
-        event.innerText = editValue.toLocaleString("en").split("٬").join("");
-      }}
-      onBlur={(e) => {
-        if (
-          e.target.innerText !==
-          editValue.toLocaleString("en").split("٬").join("")
-        ) {
-          const list = [...editList];
-          const filteredList = list.filter(
-            (i: ProductType) => i._id !== product._id
-          );
-
-          const newValue = e.target.innerText;
-          if (newValue.match("^[0-9]*$") !== null) {
-            let editedValue: ProductType = { ...product };
-            if (text === t("price")) {
-              editedValue = {
-                ...product,
-                price: Number(newValue),
-              };
-            } else {
-              editedValue = {
-                ...product,
-                quantity: Number(newValue),
-              };
-            }
-
-            filteredList.push(editedValue);
-          } else {
-            e.target.innerText = editValue.toLocaleString("en");
-          }
-
-          setEditList(filteredList);
-        }
-      }}
-      onKeyDown={(e) => {
-        if (e.key === "Escape") {
-          const event = e.target as HTMLElement;
-          event.innerText = editValue.toLocaleString("en");
-
-          const list = [...editList];
-          const filteredList = list.filter((i) => i._id !== product._id);
-
-          setEditList(filteredList);
-          setEditMode(false);
-        }
+      onClick={() => {
+        setIsEdit(product._id);
       }}
     >
-      {text === t("price")
-        ? editList.find((i) => i._id === product._id)
-          ? editList[
-              editList.findIndex((i) => i._id === product._id)
-            ].price.toLocaleString("en")
-          : editValue.toLocaleString("en")
-        : editList.find((i) => i._id === product._id)
-        ? editList[
-            editList.findIndex((i) => i._id === product._id)
-          ].quantity.toLocaleString("en")
-        : editValue.toLocaleString("en")}
+      {isEdit === product._id
+        ? renderInput(value)
+        : renderSpan(value, isEdited)}
     </td>
   );
 }

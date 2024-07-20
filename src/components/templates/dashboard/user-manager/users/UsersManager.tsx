@@ -1,4 +1,5 @@
 import { useDeleteUser, useGetUsers } from "@/src/api/auth/auth.queries";
+import { EmptyList } from "@/src/components/shared/empty-list/EmptyList";
 import Pagination from "@/src/components/shared/pagination/Pagination";
 import DeletePopUp from "@/src/components/templates/dashboard/user-manager/users/modals/delete/Delete";
 import { UsersTable } from "@/src/components/templates/dashboard/user-manager/users/users-table/UserTable";
@@ -34,11 +35,17 @@ function UsersManager() {
         <h1 className="font-bold text-lg">{t("user-manager")}</h1>
       </header>
       <div className="px-3 py-8 w-full md:w-[760px] min-h-[calc(100vh-100px)] mx-auto flex items-center sm:justify-center">
-        <UsersTable
-          list={users?.data.users || []}
-          idToDelete={idToDelete}
-          setOpenDelete={setOpenDelete}
-        />
+        {users &&
+        users.status === "success" &&
+        users.data.users.length === 0 ? (
+          <EmptyList />
+        ) : (
+          <UsersTable
+            list={users?.data.users || []}
+            idToDelete={idToDelete}
+            setOpenDelete={setOpenDelete}
+          />
+        )}
       </div>
       {users && (
         <Pagination

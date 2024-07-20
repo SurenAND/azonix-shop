@@ -1,57 +1,55 @@
 import { ProductType } from "@/src/api/product/product.type";
 import EditableTd from "@/src/components/shared/editable-td/EditableTd";
-import { useEffect, useState } from "react";
+
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type InventoryTableProps = {
   list: ProductType[];
   onContainEditItem: (a: boolean) => void;
-  onEditHandler: (a: ProductType[]) => void;
+  editedProducts: ProductType[];
+  setEditedProducts: Dispatch<SetStateAction<ProductType[]>>;
   editMode: string;
 };
 
 function InventoryTable({
   list,
   onContainEditItem,
-  onEditHandler,
+  editedProducts,
+  setEditedProducts,
   editMode,
 }: InventoryTableProps) {
   const { t } = useTranslation();
 
-  const [editPriceList, setEditPriceList] = useState<ProductType[] | []>([]);
-  const [editQuantityList, setEditQuantityList] = useState<ProductType[] | []>(
-    []
-  );
+  const [products, setProducts] = useState<ProductType[]>([]);
+
+  useEffect(() => {
+    setProducts(list);
+  }, [list]);
 
   // reset lists for changing colorful background
   useEffect(() => {
     if (editMode === "done") {
-      setEditPriceList([]);
-      setEditQuantityList([]);
+      setEditedProducts([]);
     }
   }, [editMode]);
 
   useEffect(() => {
-    if (editPriceList.length > 0) {
+    if (editedProducts.length > 0) {
       onContainEditItem(true);
-      onEditHandler(editPriceList);
-    }
-    if (editQuantityList.length > 0) {
-      onContainEditItem(true);
-      onEditHandler(editQuantityList);
     } else {
       onContainEditItem(false);
     }
-  }, [editPriceList, editQuantityList]);
+  }, [editedProducts]);
 
   return (
     <table className="self-start border border-collapse rounded w-full text-center">
       <thead className="select-none">
         <tr className="bg-gray-500 text-white dark:text-black flex flex-col mb-4 sm:table-row">
-          <th className="border text-md w-full md:w-[15%] px-1 py-3">
+          <th className="border text-md w-full md:w-[55%] px-1 py-3">
             {t("product")}
           </th>
-          <th className="border text-md w-full md:w-[55%] px-1 py-3">
+          <th className="border text-md w-full md:w-[15%] px-1 py-3">
             {t("price")}
           </th>
           <th className="border text-md w-full md:w-[15%] px-1 py-3">
@@ -60,7 +58,7 @@ function InventoryTable({
         </tr>
       </thead>
       <tbody>
-        {list.map((product, index) => {
+        {products.map((product, index) => {
           return (
             <tr
               key={product._id}
@@ -70,18 +68,22 @@ function InventoryTable({
             >
               <td className="p-1 border truncate">{product.name}</td>
               <EditableTd
+                index={index}
                 product={product}
-                editList={editPriceList}
-                setEditList={(list) => setEditPriceList(list)}
-                editValue={product.price}
-                text={t("price")}
+                products={products}
+                setProducts={setProducts}
+                editedProducts={editedProducts}
+                setEditedProducts={setEditedProducts}
+                field="price"
               />
               <EditableTd
+                index={index}
                 product={product}
-                editList={editQuantityList}
-                setEditList={(list) => setEditQuantityList(list)}
-                editValue={product.quantity}
-                text={t("quantity")}
+                products={products}
+                setProducts={setProducts}
+                editedProducts={editedProducts}
+                setEditedProducts={setEditedProducts}
+                field="quantity"
               />
             </tr>
           );

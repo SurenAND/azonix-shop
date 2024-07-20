@@ -106,5 +106,13 @@
   "newest": "Newest",
   "oldest": "Oldest",
   "review": "Review",
-  "product-add-success": "Product added successfully"
+  "product-add-success": "Product added successfully",
+  "delete-popup-title": "Are you sure?",
+  "delete-popup-context": "This action <1>CANNOT</1> be undone. This will permanently delete the <1>{{idToDelete}}</1> product.",
+  "delete-popup-confirm": "I understand, delete this product",
+  "delete-popup-warning": "Unexpected bad things can happen if you don’t read this!",
+  "delete-popup-confirm-text": "Please type in the id of the product to confirm.",
+  "delete-popup-confirm-placeholder": "Ex. {{idToDelete}}",
+  "delete-popup-error": "The id is not correct!",
+  "product-delete-success": "Product deleted successfully"
 }

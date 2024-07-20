@@ -1,10 +1,15 @@
-import { useGetProducts } from "@/src/api/product/product.queries";
+import {
+  useDeleteProduct,
+  useGetProducts,
+} from "@/src/api/product/product.queries";
 import Pagination from "@/src/components/shared/pagination/Pagination";
+import DeletePopUp from "@/src/components/templates/dashboard/products-management/product-manager/modals/delete/Delete";
 import { ProductsTable } from "@/src/components/templates/dashboard/products-management/product-manager/product-table/ProductTable";
 import { MainRoutes } from "@/src/constant/routes";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 function ProductManager() {
   const { t } = useTranslation();
@@ -16,9 +21,19 @@ function ProductManager() {
     category: productCategory,
   });
 
+  const { mutate: deleteProduct } = useDeleteProduct();
+
+  const [openDelete, setOpenDelete] = useState(false);
+  const idToDelete = useRef<string>("");
+
   const filteredList = (id: string) => {
     setProductCategory(id);
     setPage(1);
+  };
+
+  const handleDelete = (id: string) => {
+    deleteProduct(id);
+    toast.success(t("product-delete-success"));
   };
 
   useEffect(() => {
@@ -40,6 +55,8 @@ function ProductManager() {
         <ProductsTable
           list={products?.data.products || []}
           onFilteredList={filteredList}
+          idToDelete={idToDelete}
+          setOpenDelete={setOpenDelete}
         />
       </div>
       {products && (
@@ -49,6 +66,12 @@ function ProductManager() {
           OnSetPage={(pageNo) => setPage(pageNo)}
         />
       )}
+      <DeletePopUp
+        openDelete={openDelete}
+        onClose={() => setOpenDelete(false)}
+        action={() => handleDelete(idToDelete.current)}
+        idToDelete={idToDelete.current}
+      />
     </main>
   );
 }

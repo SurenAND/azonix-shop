@@ -106,5 +106,13 @@
   "newest": "جدیدترین",
   "oldest": "قدیمی ترین",
   "review": "بررسی",
-  "product-add-success": "محصول با موفقیت اضافه شد"
+  "product-add-success": "محصول با موفقیت اضافه شد",
+  "delete-popup-title": "آیا مطمئن هستید؟",
+  "delete-popup-context": "این عمل قابل بازگشت <1>نیست</1>. با این کار محصول <1>{{idToDelete}}</1> برای همیشه حذف می شود.",
+  "delete-popup-confirm": "متوجه شدم، این محصول را حذف کنید",
+  "delete-popup-warning": "اگر این را نخوانید ممکن است اتفاقات بد غیرمنتظره ای رخ دهد!",
+  "delete-popup-confirm-text": "لطفا برای تایید، شناسه محصول را تایپ کنید.",
+  "delete-popup-confirm-placeholder": "به عنوان مثال {{idToDelete}}",
+  "delete-popup-error": "شناسه اشتباه است!",
+  "product-delete-success": "محصول با موفقیت حذف شد"
 }

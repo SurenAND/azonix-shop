@@ -1,5 +1,6 @@
 import {
   addProductApi,
+  deleteProductApi,
   getAllProductsApi,
   updateProductApi,
 } from "@/src/api/product/product.api";
@@ -52,6 +53,18 @@ export const useAddProduct = () => {
       if (data.status === "fail") {
         toast.error(data.message);
       }
+    },
+  });
+};
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteProductApi(id),
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: ["products"],
+      });
     },
   });
 };

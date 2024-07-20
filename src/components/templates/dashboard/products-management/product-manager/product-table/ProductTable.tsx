@@ -1,19 +1,30 @@
 import { useGetCategories } from "@/src/api/category/category.queries";
 import { ProductType } from "@/src/api/product/product.type";
+import { Dispatch, MutableRefObject, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import { MdDelete, MdEdit } from "react-icons/md";
 
 type ProductsTableProps = {
   list: ProductType[];
   onFilteredList: (e: string) => void;
+  idToDelete: MutableRefObject<string>;
+  setOpenDelete: Dispatch<SetStateAction<boolean>>;
 };
 
-export const ProductsTable = ({ list, onFilteredList }: ProductsTableProps) => {
+export const ProductsTable = ({
+  list,
+  onFilteredList,
+  idToDelete,
+  setOpenDelete,
+}: ProductsTableProps) => {
   const { t } = useTranslation();
 
   const { data: categories } = useGetCategories();
 
-  const setDeleteProductModal = (id: string) => {};
+  const setDeleteProductModal = (id: string) => {
+    idToDelete.current = id;
+    setOpenDelete(true);
+  };
 
   const setEditProductModal = (id: string) => {};
 

@@ -26,3 +26,8 @@ export const addProductApi = async (product: FormData) => {
   });
   return response.data;
 };
+
+export const deleteProductApi = async (id: string) => {
+  const response = await req.delete(`/products/${id}`);
+  return response.data;
+};

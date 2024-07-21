@@ -1,13 +1,18 @@
 import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 function DragDropImageUploader({
   images,
   setImages,
+  deleteImage,
 }: {
   images: File[];
   setImages: Dispatch<SetStateAction<File[]>>;
+  deleteImage: (index: number) => void;
 }) {
+  const { t } = useTranslation();
+
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -35,10 +40,6 @@ function DragDropImageUploader({
     }
   };
 
-  const deleteImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(true);
@@ -54,12 +55,12 @@ function DragDropImageUploader({
     const files = e.dataTransfer.files;
     if (!files || files.length === 0) return;
     if (images.length + files.length > 4) {
-      toast.error("You can only upload up to 4 images");
+      toast.error(t("image-upload-limitation-error"));
       return;
     }
     for (let i = 0; i < files.length; i++) {
       if (files[i].type.split("/")[0] !== "image") {
-        toast.error("Only image files are allowed");
+        toast.error(t("image-upload-type-error"));
         return;
       }
       if (!images.some((e) => e.name === files[i].name)) {
@@ -69,31 +70,33 @@ function DragDropImageUploader({
   };
 
   return (
-    <div className="p-3 shadow rounded-md overflow-hidden">
+    <div className="hidden lg:block p-3 shadow rounded-md overflow-hidden dark:bg-gray-800">
       <div className="text-center">
-        <p className="font-bold text-axLightPurple">Drag & Drop Images</p>
+        <p className="font-bold text-axLightPurple dark:text-white">
+          {t("drag-drop-images")}
+        </p>
       </div>
       <div
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
-        className={`h-36 rounded-md border-2 border-dashed border-axLightPurple bg-white flex items-center justify-center select-none mt-3 ${
+        className={`h-36 rounded-md border-2 border-dashed border-axLightPurple bg-white dark:border-gray-600 dark:bg-gray-700 flex items-center justify-center select-none mt-3 ${
           isDragging ? "text-lg" : ""
         }`}
       >
         {isDragging ? (
-          <span className="text-axLightPurple ml-1 cursor-pointer duration-500 hover:opacity-60">
-            Drop Images Here
+          <span className="text-axLightPurple ml-1 cursor-pointer duration-500 hover:opacity-60 dark:text-white">
+            {t("drop-images-here")}
           </span>
         ) : (
           <>
-            Drag & Drop Image Here or{" "}
+            {t("drag-drop-image-here")}
             <span
               role="button"
               onClick={selectFiles}
-              className="text-axLightPurple ml-1 cursor-pointer duration-500 hover:opacity-60"
+              className="text-axLightPurple ms-1 cursor-pointer duration-500 hover:opacity-60 dark:text-violet-400 dark:font-bold"
             >
-              Browse
+              {t("browse")}
             </span>
           </>
         )}
@@ -110,7 +113,7 @@ function DragDropImageUploader({
         {images.map((image, index) => (
           <div className="w-20 mr-1 h-20 relative mb-2" key={index}>
             <span
-              className="absolute -top-[2px] -end-2 text-xl cursor-pointer z-50 text-axLightPurple"
+              className="absolute -top-[2px] -end-2 text-xl cursor-pointer z-50 text-axLightPurple dark:text-violet-400 dark:bg-red-600 dark:rounded-full dark:w-6 dark:h-6 dark:flex dark:items-end dark:justify-center dark:top-[2px]"
               onClick={() => deleteImage(index)}
             >
               &times;

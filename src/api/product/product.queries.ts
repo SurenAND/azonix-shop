@@ -2,11 +2,13 @@ import {
   addProductApi,
   deleteProductApi,
   getAllProductsApi,
+  getProductByIdApi,
   updateProductApi,
 } from "@/src/api/product/product.api";
 import {
   AllProductsType,
   GetProductsParamsType,
+  ProductByIdType,
   ProductType,
 } from "@/src/api/product/product.type";
 import { useTranslation } from "react-i18next";
@@ -66,5 +68,14 @@ export const useDeleteProduct = () => {
         queryKey: ["products"],
       });
     },
+  });
+};
+
+export const useGetProductById = (productId: string) => {
+  return useQuery<ProductByIdType>({
+    queryKey: ["products", "single", productId],
+    queryFn: () => getProductByIdApi(productId),
+    refetchOnMount: "always",
+    enabled: !!productId,
   });
 };

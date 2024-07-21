@@ -2,9 +2,9 @@ import {
   useDeleteProduct,
   useGetProducts,
 } from "@/src/api/product/product.queries";
-import { EmptyList } from "@/src/components/shared/empty-list/EmptyList";
 import Pagination from "@/src/components/shared/pagination/Pagination";
 import DeletePopUp from "@/src/components/templates/dashboard/products-management/product-manager/modals/delete/Delete";
+import EditPopUp from "@/src/components/templates/dashboard/products-management/product-manager/modals/edit/Edit";
 import { ProductsTable } from "@/src/components/templates/dashboard/products-management/product-manager/product-table/ProductTable";
 import { MainRoutes } from "@/src/constant/routes";
 import { useRouter } from "next/router";
@@ -26,6 +26,9 @@ function ProductManager() {
 
   const [openDelete, setOpenDelete] = useState(false);
   const idToDelete = useRef<string>("");
+
+  const [openEdit, setOpenEdit] = useState(false);
+  const [idToEdit, setIdToEdit] = useState<string>("");
 
   const filteredList = (id: string) => {
     setProductCategory(id);
@@ -53,18 +56,14 @@ function ProductManager() {
         </button>
       </header>
       <div className="px-3 py-8 w-full md:w-[760px] min-h-[calc(100vh-100px)] mx-auto flex items-center sm:justify-center">
-        {products &&
-        products.status === "success" &&
-        products.data.products.length === 0 ? (
-          <EmptyList />
-        ) : (
-          <ProductsTable
-            list={products?.data.products || []}
-            onFilteredList={filteredList}
-            idToDelete={idToDelete}
-            setOpenDelete={setOpenDelete}
-          />
-        )}
+        <ProductsTable
+          list={products?.data.products || []}
+          onFilteredList={filteredList}
+          idToDelete={idToDelete}
+          setOpenDelete={setOpenDelete}
+          setIdToEdit={setIdToEdit}
+          setOpenEdit={setOpenEdit}
+        />
       </div>
       {products && (
         <Pagination
@@ -78,6 +77,12 @@ function ProductManager() {
         onClose={() => setOpenDelete(false)}
         action={() => handleDelete(idToDelete.current)}
         idToDelete={idToDelete.current}
+      />
+      <EditPopUp
+        openEdit={openEdit}
+        onClose={() => setOpenEdit(false)}
+        idToEdit={idToEdit}
+        setIdToEdit={setIdToEdit}
       />
     </main>
   );

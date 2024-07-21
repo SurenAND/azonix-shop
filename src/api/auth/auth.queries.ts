@@ -87,6 +87,7 @@ export const useGetUsers = (params: GetUsersParamsType) => {
   return useQuery<AllUsersType>({
     queryKey: ["users"],
     queryFn: () => getAllUsersApi(params),
+    refetchOnMount: true,
   });
 };
 

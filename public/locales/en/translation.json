@@ -120,5 +120,10 @@
   "product-delete-success": "Product deleted successfully",
   "user-delete-success": "User deleted successfully",
   "user-manager": "User Manager",
-  "error-invalid-number": "Only numbers are allowed!"
+  "error-invalid-number": "Only numbers are allowed!",
+  "update-product": "Update Product",
+  "drag-drop-images": "Drag & Drop Images",
+  "drop-images-here": "Drop Images Here",
+  "drag-drop-image-here": "Drag & Drop Image Here or ",
+  "browse": "Browse"
 }

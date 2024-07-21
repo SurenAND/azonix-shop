@@ -39,6 +39,13 @@ export type AllProductsType = {
   };
 };
 
+export type ProductByIdType = {
+  status: string;
+  data: {
+    product: ProductType;
+  };
+};
+
 export type GetProductsParamsType = {
   page?: number;
   limit?: number;

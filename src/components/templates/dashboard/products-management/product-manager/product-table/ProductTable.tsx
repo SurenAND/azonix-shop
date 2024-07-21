@@ -9,6 +9,8 @@ type ProductsTableProps = {
   onFilteredList: (e: string) => void;
   idToDelete: MutableRefObject<string>;
   setOpenDelete: Dispatch<SetStateAction<boolean>>;
+  setIdToEdit: Dispatch<SetStateAction<string>>;
+  setOpenEdit: Dispatch<SetStateAction<boolean>>;
 };
 
 export const ProductsTable = ({
@@ -16,6 +18,8 @@ export const ProductsTable = ({
   onFilteredList,
   idToDelete,
   setOpenDelete,
+  setIdToEdit,
+  setOpenEdit,
 }: ProductsTableProps) => {
   const { t } = useTranslation();
 
@@ -26,7 +30,10 @@ export const ProductsTable = ({
     setOpenDelete(true);
   };
 
-  const setEditProductModal = (id: string) => {};
+  const setEditProductModal = (id: string) => {
+    setIdToEdit(id);
+    setOpenEdit(true);
+  };
 
   return (
     <table className="self-start border border-collapse rounded w-full text-center">

@@ -61,6 +61,7 @@ export const Orders = () => {
           </div>
         </div>
       </header>
+
       <div className="px-3 py-8 w-full md:w-[760px] min-h-[calc(100vh-100px)] mx-auto flex items-center sm:justify-center">
         {orders &&
         orders.status === "success" &&

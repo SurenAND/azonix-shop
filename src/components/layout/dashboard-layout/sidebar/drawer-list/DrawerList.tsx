@@ -12,8 +12,6 @@ import { MdInbox } from "react-icons/md";
 export default function DrawerList() {
   const { pathname, push: pushRouter } = useRouter();
   const searchParams = useSearchParams().get("view");
-  const state = { role: "moderator" }; // temporary state
-
   const { t } = useTranslation();
 
   return (

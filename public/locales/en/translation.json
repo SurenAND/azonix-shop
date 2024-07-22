@@ -125,5 +125,12 @@
   "drag-drop-images": "Drag & Drop Images",
   "drop-images-here": "Drop Images Here",
   "drag-drop-image-here": "Drag & Drop Image Here or ",
-  "browse": "Browse"
+  "browse": "Browse",
+  "product-name-input-error": "Product name is required!",
+  "product-price-input-error": "Product price is required!",
+  "product-quantity-input-error": "Product quantity is required!",
+  "product-brand-input-error": "Product brand is required!",
+  "product-category-input-error": "Product category is required!",
+  "product-sub-category-input-error": "Product sub category is required!",
+  "product-description-input-error": "Product description is required!"
 }

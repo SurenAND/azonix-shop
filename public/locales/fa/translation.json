@@ -125,5 +125,12 @@
   "drag-drop-images": "بکشید و رها کنید",
   "drop-images-here": "تصاویر را اینجا رها کنید",
   "drag-drop-image-here": "بکشید و رها کنید یا ",
-  "browse": "انتخاب کنید"
+  "browse": "انتخاب کنید",
+  "product-name-input-error": "نام محصول الزامی است!",
+  "product-price-input-error": "قیمت محصول الزامی است!",
+  "product-quantity-input-error": "تعداد محصول الزامی است!",
+  "product-brand-input-error": "برند محصول الزامی است!",
+  "product-category-input-error": "دسته بندی محصول الزامی است!",
+  "product-sub-category-input-error": "زیر دسته محصول الزامی است!",
+  "product-description-input-error": "توضیحات محصول الزامی است!"
 }

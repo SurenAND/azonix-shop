@@ -1,10 +1,13 @@
-import "@/styles/globals.css";
+import { AuthContextProvider } from "@/src/context/authContext";
+import "@/src/lib/i18next";
 import { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { ReactElement, ReactNode } from "react";
-import "@/src/lib/i18next";
-import { AuthContextProvider } from "@/src/context/authContext";
 import { QueryClient, QueryClientProvider } from "react-query";
+// css
+import "@/styles/globals.css";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -12,6 +12,15 @@ body {
   }
 }
 
+@layer utilities {
+  .hero-bg-color-ltr {
+    @apply bg-gradient-to-r from-gray-300/80 to-gray-100 dark:from-gray-900 dark:to-gray-800 dark:text-white;
+  }
+  .hero-bg-color-rtl {
+    @apply bg-gradient-to-l from-gray-300/80 to-gray-100 dark:from-gray-900 dark:to-gray-800 dark:text-white;
+  }
+}
+
 /* Custom scrollbar */
 /* width */
 ::-webkit-scrollbar {

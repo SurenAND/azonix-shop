@@ -1,5 +1,5 @@
-import { PropsWithChildren, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const Header = dynamic(

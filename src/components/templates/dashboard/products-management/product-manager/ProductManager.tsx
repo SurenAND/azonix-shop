@@ -3,18 +3,16 @@ import {
   useGetProducts,
 } from "@/src/api/product/product.queries";
 import Pagination from "@/src/components/shared/pagination/Pagination";
+import AddPopUp from "@/src/components/templates/dashboard/products-management/product-manager/modals/add/Add";
 import DeletePopUp from "@/src/components/templates/dashboard/products-management/product-manager/modals/delete/Delete";
 import EditPopUp from "@/src/components/templates/dashboard/products-management/product-manager/modals/edit/Edit";
 import { ProductsTable } from "@/src/components/templates/dashboard/products-management/product-manager/product-table/ProductTable";
-import { MainRoutes } from "@/src/constant/routes";
-import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 function ProductManager() {
   const { t } = useTranslation();
-  const { push: pushRouter } = useRouter();
   const [page, setPage] = useState(1);
   const [productCategory, setProductCategory] = useState("");
   const { data: products, refetch } = useGetProducts({
@@ -29,6 +27,8 @@ function ProductManager() {
 
   const [openEdit, setOpenEdit] = useState(false);
   const [idToEdit, setIdToEdit] = useState<string>("");
+
+  const [openAdd, setOpenAdd] = useState(false);
 
   const filteredList = (id: string) => {
     setProductCategory(id);
@@ -50,7 +50,7 @@ function ProductManager() {
         <h1 className="font-bold text-lg">{t("product-manager")}</h1>
         <button
           className="bg-axLightPurple text-white text-xs py-2 px-7 rounded-lg font-semibold tracking-wide uppercase mt-2 hover:bg-axDarkPurple"
-          onClick={() => pushRouter(`${MainRoutes.DASHBOARD}?view=add-product`)}
+          onClick={() => setOpenAdd(true)}
         >
           {t("add-product")}
         </button>
@@ -84,6 +84,7 @@ function ProductManager() {
         idToEdit={idToEdit}
         setIdToEdit={setIdToEdit}
       />
+      <AddPopUp openAdd={openAdd} onClose={() => setOpenAdd(false)} />
     </main>
   );
 }

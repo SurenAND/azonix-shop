@@ -2,37 +2,21 @@ import {
   useGetCategories,
   useGetSubCategories,
 } from "@/src/api/category/category.queries";
-import {
-  useGetProductById,
-  useUpdateProduct,
-} from "@/src/api/product/product.queries";
+import { useAddProduct } from "@/src/api/product/product.queries";
 import DragDropImageUploader from "@/src/components/shared/dragdrop-image-uploader/DragDropImageUploader";
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { FaTimes } from "react-icons/fa";
-import { toast } from "sonner";
 
-type EditModalProps = {
-  openEdit: boolean;
+type AddModalProps = {
+  openAdd: boolean;
   onClose: () => void;
-  idToEdit: string;
-  setIdToEdit: Dispatch<SetStateAction<string>>;
 };
 
-const EditPopUp = ({
-  openEdit,
-  onClose,
-  idToEdit,
-  setIdToEdit,
-}: EditModalProps) => {
+const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
   const { t } = useTranslation();
+
   const {
     register,
     handleSubmit,
@@ -40,21 +24,20 @@ const EditPopUp = ({
     formState: { errors },
   } = useForm();
   const [images, setImages] = useState<File[]>([]);
-  const { mutate: updateProduct } = useUpdateProduct();
+  const { mutate: addNewProduct } = useAddProduct();
   const { data: categories } = useGetCategories();
   const [productCategory, setProductCategory] = useState("");
   const { data: subCategories, refetch } = useGetSubCategories({
     category: productCategory,
   });
-  const { data: oldProduct } = useGetProductById(idToEdit);
 
-  const filteredList = useCallback((id: string) => {
+  const filteredList = (id: string) => {
     setProductCategory(id);
-  }, []);
+  };
 
-  const deleteImage = useCallback((index: number) => {
+  const deleteImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
-  }, []);
+  };
 
   useEffect(() => {
     if (categories) {
@@ -64,95 +47,54 @@ const EditPopUp = ({
 
   useEffect(() => {
     refetch();
-  }, [productCategory, refetch]);
+  }, [productCategory]);
 
-  useEffect(() => {
-    if (oldProduct) {
-      reset({
-        name: oldProduct?.data?.product?.name || "",
-        price: oldProduct?.data?.product?.price || "",
-        quantity: oldProduct?.data?.product?.quantity || "",
-        brand: oldProduct?.data?.product?.brand || "",
-        description: oldProduct?.data?.product?.description || "",
-        category: oldProduct?.data?.product?.category?._id || "",
-        subcategory: oldProduct?.data?.product?.subcategory?._id || "",
-      });
-      setProductCategory(oldProduct?.data?.product?.category?._id || "");
-    }
-
-    const fetchImages = async () => {
-      const imageUrls = oldProduct?.data?.product?.images;
-      if (imageUrls) {
-        // Convert image URLs to File objects
-        const imageFiles = await Promise.all(
-          imageUrls.map(async (url) => {
-            const imageUrl = `http://${url}`;
-            const response = await fetch(imageUrl);
-            const data = await response.blob();
-            return new File([data], "image.jpg", { type: "image/jpeg" });
-          })
-        );
-        setImages(imageFiles);
-      }
-    };
-
-    fetchImages();
-  }, [oldProduct, reset]);
-
+  // handle mage change on mobile and tablets
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImages((prev) => [...prev, file]);
-      };
-      reader.readAsDataURL(file);
+      setImages((prev) => [...prev, file]);
     }
   };
 
-  const handleForm = (data: FieldValues) => {
+  function handleForm(data: FieldValues) {
     const FD = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      FD.append(key, value as string);
-    });
-    images.forEach((image) => {
-      FD.append("images", image);
-    });
-
-    if (oldProduct) {
-      updateProduct(
-        {
-          newProduct: oldProduct.data.product,
-          data: FD,
-        },
-        {
-          onSuccess: (data) => {
-            if (data.status === "success") {
-              reset();
-              setImages([]);
-              onClose();
-              setIdToEdit("");
-              toast.success(t("changes-saved"));
-            }
-          },
-        }
-      );
+    FD.append("name", data.name);
+    FD.append("price", data.price);
+    FD.append("quantity", data.quantity);
+    FD.append("brand", data.brand);
+    FD.append("category", data.category);
+    FD.append("subcategory", data.subcategory);
+    FD.append("description", data.description);
+    if (images && images.length > 0) {
+      images.forEach((image) => {
+        FD.append("images", image);
+      });
     }
-  };
+    addNewProduct(FD, {
+      onSuccess: (data) => {
+        if (data.status === "success") {
+          reset();
+          setImages([]);
+          onClose();
+        }
+      },
+    });
+  }
 
   return (
     // backdrop
     <div
       onClick={onClose}
       className={`fixed inset-0 z-50 flex justify-center items-center transition-colors ${
-        openEdit ? "visible bg-black/30" : "invisible"
+        openAdd ? "visible bg-black/30" : "invisible"
       }`}
     >
       {/* modal */}
       <div
         onClick={(e) => e.stopPropagation()}
         className={`max-h-[95vh] overflow-y-auto relative w-2/3 lg:w-1/2 p-6 flex flex-col justify-start items-center rounded-xl shadow transition-all bg-white dark:bg-gray-800 text-start ${
-          openEdit ? "scale-100 opacity-100" : "scale-125 opacity-0"
+          openAdd ? "scale-100 opacity-100" : "scale-125 opacity-0"
         }`}
       >
         {/* close button */}
@@ -163,7 +105,7 @@ const EditPopUp = ({
           <FaTimes />
         </button>
 
-        {/* edit form */}
+        {/* add form */}
         <form
           onSubmit={handleSubmit(handleForm)}
           className="grid grid-cols-1 gap-4 w-full"
@@ -335,23 +277,6 @@ const EditPopUp = ({
               className="p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
               onChange={handleImageChange}
             />
-            <div className="w-full h-auto flex justify-start items-center flex-wrap max-h-52 overflow-y-auto mt-3">
-              {images.map((image, index) => (
-                <div className="w-20 mr-1 h-20 relative mb-2" key={index}>
-                  <span
-                    className="absolute -top-[2px] -end-2 text-xl cursor-pointer z-50 text-axLightPurple dark:text-violet-400"
-                    onClick={() => deleteImage(index)}
-                  >
-                    &times;
-                  </span>
-                  <img
-                    className="w-full h-full rounded-md"
-                    src={URL.createObjectURL(image)}
-                    alt={image.name}
-                  />
-                </div>
-              ))}
-            </div>
           </div>
           <DragDropImageUploader
             images={images}
@@ -363,7 +288,7 @@ const EditPopUp = ({
             type="submit"
             className="w-full py-2 text-white bg-purple-700 rounded hover:bg-purple-800 dark:bg-purple-900 dark:hover:bg-purple-800"
           >
-            {t("update-product")}
+            {t("add-product")}
           </button>
         </form>
       </div>
@@ -371,4 +296,4 @@ const EditPopUp = ({
   );
 };
 
-export default EditPopUp;
+export default AddPopUp;

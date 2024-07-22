@@ -133,5 +133,7 @@
   "product-category-input-error": "Product category is required!",
   "product-sub-category-input-error": "Product sub category is required!",
   "product-description-input-error": "Product description is required!",
-  "shop-now": "Shop Now"
+  "shop-now": "Shop Now",
+  "enjoy": "Enjoy",
+  "with": "With"
 }

@@ -1,6 +1,5 @@
 import {
   MdAdd,
-  MdAdminPanelSettings,
   MdEdit,
   MdInventory,
   MdLocalShipping,
@@ -35,15 +34,8 @@ export const drawerOrdersItems = [
 
 export const drawerUserItems = [
   {
-    title: "admin-manager",
-    view: "admin-manager",
-    icon: <MdAdminPanelSettings className="w-5 h-5" />,
-    roleToSee: ["moderator"],
-  },
-  {
     title: "users",
     view: "users-manager",
     icon: <MdPeopleAlt className="w-5 h-5" />,
-    roleToSee: ["admin", "moderator"],
   },
 ];

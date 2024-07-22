@@ -39,8 +39,15 @@ export type AllProductsType = {
   };
 };
 
+export type ProductByIdType = {
+  status: string;
+  data: {
+    product: ProductType;
+  };
+};
+
 export type GetProductsParamsType = {
   page?: number;
-  per_page?: number;
+  limit?: number;
   category?: string;
 };

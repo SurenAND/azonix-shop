@@ -12,17 +12,17 @@ const Pagination = ({ page, totalPages, OnSetPage }: paginationPropsType) => {
   const [pages, setPages] = useState<number[]>([]);
 
   const changePaginationNums = (page: number) => {
-    const startIdx = Math.floor((page - 1) / 4) * 4 + 1;
     const newPages = [];
-    for (let i = 0; i < 4; i++) {
-      if (startIdx + i <= totalPages) {
-        newPages.push(startIdx + i);
-      }
+    const startIdx = Math.max(1, page - 1);
+    const endIdx = Math.min(totalPages, startIdx + 3);
+
+    for (let i = startIdx; i <= endIdx; i++) {
+      newPages.push(i);
     }
+
     setPages(newPages);
   };
 
-  // Initialize pages on component mount or when totalPages changes
   useEffect(() => {
     changePaginationNums(page);
   }, [page, totalPages]);

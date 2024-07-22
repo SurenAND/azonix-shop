@@ -3,6 +3,7 @@ import {
   useUpdateProduct,
 } from "@/src/api/product/product.queries";
 import { ProductType } from "@/src/api/product/product.type";
+import { EmptyList } from "@/src/components/shared/empty-list/EmptyList";
 import Pagination from "@/src/components/shared/pagination/Pagination";
 import InventoryTable from "@/src/components/templates/dashboard/products-management/inventory/inventory-table/InventoryTable";
 import { useEffect, useState } from "react";
@@ -14,11 +15,12 @@ function Inventory() {
 
   const [page, setPage] = useState(1);
   const [hasEditItem, setHasEditItem] = useState(false);
-  const [editedList, SetEditedList] = useState<ProductType[] | []>([]);
+  const [editedProducts, setEditedProducts] = useState<ProductType[]>([]);
   const [editMode, setEditMode] = useState("doing");
 
   const { data: products, refetch } = useGetProducts({
     page,
+    limit: 20,
   });
   const { mutate: updateProduct } = useUpdateProduct();
 
@@ -33,17 +35,8 @@ function Inventory() {
     }
   };
 
-  const onEditHandler = (list: ProductType[]) => {
-    const newList = list.map((item) => ({
-      ...item,
-      price: item.price,
-      quantity: item.quantity,
-    }));
-    SetEditedList(newList);
-  };
-
   const editHandler = () => {
-    editedList.forEach((item) => {
+    editedProducts.forEach((item) => {
       updateProduct({
         newProduct: item,
         data: {
@@ -57,7 +50,7 @@ function Inventory() {
   };
 
   return (
-    <main className="p-3">
+    <main className="p-3 min-h-screen w-full md:w-[780px]">
       <header className="flex justify-between items-center">
         <h1 className="font-bold text-lg">{t("inventory")}</h1>
         <button
@@ -68,13 +61,20 @@ function Inventory() {
           {t("save")}
         </button>
       </header>
-      <div className="px-3 py-8 max-w-xl mx-auto">
-        <InventoryTable
-          list={products?.data.products || []}
-          onContainEditItem={containEditItem}
-          onEditHandler={onEditHandler}
-          editMode={editMode}
-        />
+      <div className="px-3 py-8 w-full md:w-[760px] min-h-[calc(100vh-100px)] mx-auto flex items-center sm:justify-center">
+        {products &&
+        products.status === "success" &&
+        products.data.products.length === 0 ? (
+          <EmptyList />
+        ) : (
+          <InventoryTable
+            list={products?.data.products || []}
+            onContainEditItem={containEditItem}
+            editedProducts={editedProducts}
+            setEditedProducts={setEditedProducts}
+            editMode={editMode}
+          />
+        )}
       </div>
       {products && (
         <Pagination

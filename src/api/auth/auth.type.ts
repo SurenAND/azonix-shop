@@ -1,20 +1,13 @@
 export type UserDataType = {
-  token: {
-    accessToken: string;
-    refreshToken: string;
-  };
-  data: {
-    user: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      username: string;
-      password: string;
-      phoneNumber: string;
-      address: string;
-      role: string;
-    };
-  };
+  _id: string;
+  firstname: string;
+  lastname: string;
+  username: string;
+  phoneNumber: string;
+  address: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type newUserType = {
@@ -24,4 +17,21 @@ export type newUserType = {
   password: string;
   phoneNumber: string;
   address: string;
+};
+
+export type AllUsersType = {
+  status: string;
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
+  data: {
+    users: UserDataType[];
+  };
+};
+
+export type GetUsersParamsType = {
+  page?: number;
+  limit?: number;
+  role?: string;
 };

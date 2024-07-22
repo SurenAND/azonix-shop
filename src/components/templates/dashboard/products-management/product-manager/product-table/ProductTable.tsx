@@ -1,24 +1,42 @@
 import { useGetCategories } from "@/src/api/category/category.queries";
 import { ProductType } from "@/src/api/product/product.type";
+import { Dispatch, MutableRefObject, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import { MdDelete, MdEdit } from "react-icons/md";
 
 type ProductsTableProps = {
   list: ProductType[];
   onFilteredList: (e: string) => void;
+  idToDelete: MutableRefObject<string>;
+  setOpenDelete: Dispatch<SetStateAction<boolean>>;
+  setIdToEdit: Dispatch<SetStateAction<string>>;
+  setOpenEdit: Dispatch<SetStateAction<boolean>>;
 };
 
-export const ProductsTable = ({ list, onFilteredList }: ProductsTableProps) => {
+export const ProductsTable = ({
+  list,
+  onFilteredList,
+  idToDelete,
+  setOpenDelete,
+  setIdToEdit,
+  setOpenEdit,
+}: ProductsTableProps) => {
   const { t } = useTranslation();
 
   const { data: categories } = useGetCategories();
 
-  const setDeleteProductModal = (id: string) => {};
+  const setDeleteProductModal = (id: string) => {
+    idToDelete.current = id;
+    setOpenDelete(true);
+  };
 
-  const setEditProductModal = (id: string) => {};
+  const setEditProductModal = (id: string) => {
+    setIdToEdit(id);
+    setOpenEdit(true);
+  };
 
   return (
-    <table className="border border-collapse rounded w-full text-center">
+    <table className="self-start border border-collapse rounded w-full text-center">
       <thead className="select-none">
         <tr className="bg-gray-500 text-white dark:text-black flex flex-col mb-4 sm:table-row">
           <th className="border text-md w-full md:w-[15%] px-1 py-3 md:table-cell hidden">

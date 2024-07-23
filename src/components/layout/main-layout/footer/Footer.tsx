@@ -1,13 +1,16 @@
+import {
+  ImportantLinks,
+  QuickLinks,
+} from "@/src/components/layout/main-layout/footer/data";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { FooterLinks } from "@/src/components/layout/main-layout/footer/data";
+import { FaMobileAlt } from "react-icons/fa";
 import {
   FaFacebook,
   FaInstagram,
   FaLinkedin,
   FaLocationArrow,
 } from "react-icons/fa6";
-import { FaMobileAlt } from "react-icons/fa";
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -44,7 +47,7 @@ export default function Footer() {
                 {t("important-links")}
               </h1>
               <ul className="space-y-3">
-                {FooterLinks.map((data) => (
+                {ImportantLinks.map((data) => (
                   <li key={data.id}>
                     <Link
                       href={data.links}
@@ -63,7 +66,7 @@ export default function Footer() {
                 {t("quick-links")}
               </h1>
               <ul className="space-y-3">
-                {FooterLinks.map((data) => (
+                {QuickLinks.map((data) => (
                   <li key={data.id}>
                     <Link
                       href={data.links}

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 const RecentNews = () => {
   const { t, i18n } = useTranslation();
   return (
-    <div className="my-12">
+    <div className="my-12" id="blogs">
       <div className="container">
         {/* Heading section */}
         <Heading

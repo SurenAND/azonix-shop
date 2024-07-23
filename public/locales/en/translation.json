@@ -132,5 +132,13 @@
   "product-brand-input-error": "Product brand is required!",
   "product-category-input-error": "Product category is required!",
   "product-sub-category-input-error": "Product sub category is required!",
-  "product-description-input-error": "Product description is required!"
+  "product-description-input-error": "Product description is required!",
+  "shop-now": "Shop Now",
+  "enjoy": "Enjoy",
+  "with": "With",
+  "bestseller-title": "Best Seller Products",
+  "bestseller-subtitle": "Explore Our Best Seller Products",
+  "add-to-cart": "Add to cart",
+  "recent-news-title": "Recent News",
+  "recent-news-subtitle": "Explore Our Recent News"
 }

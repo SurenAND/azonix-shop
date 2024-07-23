@@ -1,14 +1,14 @@
-import { FaGooglePlusG, FaLinkedinIn } from "react-icons/fa6";
-import { FaFacebookF, FaGithub } from "react-icons/fa";
+import { useLogin } from "@/src/api/auth/auth.queries";
 import MyIconBtn from "@/src/components/shared/icon-button/IconButton";
 import MyInput from "@/src/components/shared/input/Input";
+import Link from "next/link";
+import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useLogin } from "@/src/api/auth/auth.queries";
-import { useState } from "react";
-import { TbEyeClosed } from "react-icons/tb";
 import { CgEye } from "react-icons/cg";
-import Link from "next/link";
+import { FaFacebookF, FaGithub } from "react-icons/fa";
+import { FaGooglePlusG, FaLinkedinIn } from "react-icons/fa6";
+import { TbEyeClosed } from "react-icons/tb";
 
 interface LoginFormValues {
   username: string;
@@ -112,7 +112,9 @@ export default function LogInTemplate({ active }: { active: boolean }) {
         </Link>
         <button
           type="submit"
-          className="bg-axLightPurple text-white text-xs py-4 px-14 rounded-lg font-semibold tracking-wide uppercase mt-2 hover:bg-axDarkPurple"
+          className={`bg-axLightPurple text-white text-xs py-4 px-14 rounded-lg font-semibold uppercase mt-2 hover:bg-axDarkPurple ${
+            i18n.dir() === "ltr" ? "tracking-wide" : ""
+          }`}
         >
           {t("login")}
         </button>

@@ -36,9 +36,9 @@ export default function ToSignUp({
       </p>
       <button
         onClick={handleClick}
-        className={`bg-transparent text-white border border-white text-xs py-4 px-14 rounded-lg font-semibold tracking-wide uppercase mt-2 hover:bg-axLightPurple hover:border-axLightPurple ${
+        className={`bg-transparent text-white border border-white text-xs py-4 px-14 rounded-lg font-semibold uppercase mt-2 hover:bg-axLightPurple hover:border-axLightPurple ${
           active ? "hidden" : "block"
-        }`}
+        } ${i18n.dir() === "ltr" ? "tracking-wide" : ""}`}
       >
         {t("signup")}
       </button>

@@ -132,5 +132,13 @@
   "product-brand-input-error": "برند محصول الزامی است!",
   "product-category-input-error": "دسته بندی محصول الزامی است!",
   "product-sub-category-input-error": "زیر دسته محصول الزامی است!",
-  "product-description-input-error": "توضیحات محصول الزامی است!"
+  "product-description-input-error": "توضیحات محصول الزامی است!",
+  "shop-now": "خرید",
+  "enjoy": "لذت واقعی",
+  "with": "با",
+  "bestseller-title": "پرفروش ترین محصولات",
+  "bestseller-subtitle": "پرفروش ترین محصولات ما را ببینید",
+  "add-to-cart": "افزودن به سبد خرید",
+  "recent-news-title": "اخبار اخیر",
+  "recent-news-subtitle": "اخبار اخیر ما را ببینید"
 }

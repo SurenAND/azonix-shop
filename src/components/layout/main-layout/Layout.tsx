@@ -21,7 +21,7 @@ export default function Layout({ children }: PropsWithChildren) {
   }, [i18n.resolvedLanguage]);
   return (
     <div
-      className="relative min-h-screen bg-white dark:bg-gray-900 dark:text-white duration-200"
+      className="relative min-h-screen bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden"
       dir={dir}
     >
       <Header />

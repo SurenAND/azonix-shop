@@ -1,3 +1,4 @@
+import BestSellerProducts from "@/src/components/templates/home/best-seller/BestSellerProducts";
 import Categories from "@/src/components/templates/home/categories/Categories";
 import Hero from "@/src/components/templates/home/hero/Hero";
 import OnSaleBanner from "@/src/components/templates/home/on-sale/OnSaleBanner";
@@ -19,6 +20,7 @@ export default function HomeTemplate() {
           <Categories />
           <Services />
           <OnSaleBanner data={firstBannerData} />
+          <BestSellerProducts />
           <OnSaleBanner data={secondBannerData} />
         </>
       )}

@@ -1,11 +1,11 @@
-import { useState } from "react";
-import MyInput from "@/src/components/shared/input/Input";
-import { FieldValues, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { useSignup } from "@/src/api/auth/auth.queries";
 import { newUserType } from "@/src/api/auth/auth.type";
-import { TbEyeClosed } from "react-icons/tb";
+import MyInput from "@/src/components/shared/input/Input";
+import { useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { CgEye } from "react-icons/cg";
+import { TbEyeClosed } from "react-icons/tb";
 
 export default function SignUpTemplate({ active }: { active: boolean }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -144,7 +144,9 @@ export default function SignUpTemplate({ active }: { active: boolean }) {
           {t("password-input-error")}
         </p>
         <button
-          className="bg-axLightPurple text-white text-xs py-4 px-14 rounded-lg font-semibold tracking-wide uppercase mt-2 hover:bg-axDarkPurple"
+          className={`bg-axLightPurple text-white text-xs py-4 px-14 rounded-lg font-semibold uppercase mt-2 hover:bg-axDarkPurple ${
+            i18n.dir() === "ltr" ? "tracking-wide" : ""
+          }`}
           type="submit"
         >
           {t("signup")}

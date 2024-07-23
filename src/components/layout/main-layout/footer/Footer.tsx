@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa6";
 
 export default function Footer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <div className="dark:bg-gray-950">
       <div className="container">
@@ -22,7 +22,9 @@ export default function Footer() {
           <div className="py-9 px-4">
             <Link
               href="#"
-              className="text-primary font-bold tracking-widest text-2xl uppercase sm:text-3xl"
+              className={`text-primary font-bold text-2xl uppercase sm:text-3xl ${
+                i18n.dir() === "ltr" ? "tracking-widest" : ""
+              }`}
             >
               {t("company-name")}
             </Link>

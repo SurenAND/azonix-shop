@@ -61,7 +61,12 @@ const OnSaleBanner = ({ data }: OnSaleBannerProps) => {
             <p data-aos="fade-up" className="text-3xl sm:text-5xl font-bold">
               {i18n.dir() === "ltr" ? data.title3EN : data.title3FA}
             </p>
-            <p data-aos="fade-up" className="text-sm tracking-wide leading-5">
+            <p
+              data-aos="fade-up"
+              className={`text-sm leading-5 ${
+                i18n.dir() === "ltr" ? "tracking-wide" : ""
+              }`}
+            >
               {i18n.dir() === "ltr" ? data.title4EN : data.title4FA}
             </p>
             <div data-aos="fade-up" data-aos-offset="0">

@@ -18,7 +18,12 @@ const RecentNews = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-4 md:gap-7">
           {/* Blog Card */}
           {blogsData.map((blog) => (
-            <div key={blog.id} className="bg-white dark:bg-gray-900">
+            <div
+              key={blog.id}
+              data-aos="fade-up"
+              data-aos-delay={blog.aosDelay}
+              className="bg-white dark:bg-gray-900"
+            >
               {/* Image section */}
               <div className="overflow-hidden rounded-2xl mb-2">
                 <Image

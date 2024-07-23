@@ -13,7 +13,7 @@ const SecondRow = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* first col */}
           <div
-            className={`col-span-2 py-10 ps-5 from-gray-400/90 to-gray-100 text-white rounded-3xl relative h-[320px] flex items-end ${
+            className={`sm:col-span-2 py-10 ps-5 from-gray-400/90 to-gray-100 text-white rounded-3xl relative h-[320px] flex items-end ${
               i18n.dir() === "ltr" ? "bg-gradient-to-br" : "bg-gradient-to-bl"
             }`}
           >

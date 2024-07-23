@@ -14,6 +14,7 @@ export const blogsData = [
     publishedEN: "Jan 20, 2024 by Dilshad",
     publishedFA: "20 فروردین 1403 توسط دلشاد",
     image: Img1,
+    aosDelay: "0",
   },
   {
     id: 2,
@@ -26,6 +27,7 @@ export const blogsData = [
     publishedEN: "Jan 20, 2024 by Satya",
     publishedFA: "20 فروردین 1403 توسط ساتیا",
     image: Img2,
+    aosDelay: "200",
   },
   {
     id: 3,
@@ -38,5 +40,6 @@ export const blogsData = [
     publishedEN: "Jan 20, 2024 by Sabir",
     publishedFA: "20 فروردین 1403 توسط سابیر",
     image: Img3,
+    aosDelay: "400",
   },
 ];

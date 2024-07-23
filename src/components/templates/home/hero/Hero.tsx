@@ -11,7 +11,7 @@ const Hero = () => {
     infinite: true,
     speed: 800,
     slidesToScroll: 1,
-    // autoplay: true,
+    autoplay: true,
     autoplaySpeed: 4000,
     cssEase: "ease-in-out",
     pauseOnHover: false,
@@ -33,16 +33,36 @@ const Hero = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2">
                   {/* text content section */}
                   <div className="flex flex-col justify-center gap-4 sm:ps-3 pt-12 sm:pt-0 text-center sm:text-start order-2 sm:order-1 relative z-10">
-                    <h1 className="text-2xl sm:text-6xl lg:text-2xl font-bold">
+                    <h1
+                      data-aos="zoom-out"
+                      data-aos-duration="500"
+                      data-aos-once="true"
+                      className="text-2xl sm:text-6xl lg:text-2xl font-bold"
+                    >
                       {i18n.dir() === "ltr" ? data.subtitleEN : data.subtitleFA}
                     </h1>
-                    <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold">
+                    <h1
+                      data-aos="zoom-out"
+                      data-aos-duration="500"
+                      data-aos-once="true"
+                      className="text-5xl sm:text-6xl lg:text-7xl font-bold"
+                    >
                       {i18n.dir() === "ltr" ? data.titleEN : data.titleFA}
                     </h1>
-                    <h1 className="text-5xl uppercase text-white dark:text-white/5 sm:text-[80px] md:text-[100px] xl:text-[150px] font-bold">
+                    <h1
+                      data-aos="zoom-out"
+                      data-aos-duration="500"
+                      data-aos-once="true"
+                      className="text-5xl uppercase text-white dark:text-white/5 sm:text-[80px] md:text-[100px] xl:text-[150px] font-bold"
+                    >
                       {i18n.dir() === "ltr" ? data.title2EN : data.title2FA}
                     </h1>
-                    <div>
+                    <div
+                      data-aos="fade-up"
+                      data-aos-offset="0"
+                      data-aos-duration="500"
+                      data-aos-delay="300"
+                    >
                       <MyButton
                         text={t("shop-now")}
                         bgColor="bg-primary"
@@ -52,7 +72,11 @@ const Hero = () => {
                   </div>
                   {/* image section */}
                   <div className="order-1 sm:order-2">
-                    <div>
+                    <div
+                      data-aos="zoom-in"
+                      data-aos-once="true"
+                      className="relative z-10"
+                    >
                       <Image
                         src={data.img}
                         alt={data.title2EN}

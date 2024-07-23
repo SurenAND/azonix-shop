@@ -60,7 +60,7 @@ const FirstRow = () => {
           </div>
 
           {/* third col */}
-          <div className="col-span-2 py-10 ps-5 bg-gradient-to-br from-primary to-primary/90 text-white rounded-3xl relative h-[320px] flex items-end">
+          <div className="sm:col-span-2 py-10 ps-5 bg-gradient-to-br from-primary to-primary/90 text-white rounded-3xl relative h-[320px] flex items-end">
             <div>
               <div className="mb-2">
                 <p className="mb-2 text-white">{t("enjoy")}</p>

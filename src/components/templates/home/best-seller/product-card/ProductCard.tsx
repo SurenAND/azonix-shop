@@ -15,7 +15,7 @@ type ProductCardProps = {
 const ProductCard = ({ data }: ProductCardProps) => {
   const { t, i18n } = useTranslation();
   return (
-    <div className="group">
+    <div data-aos="fade-up" data-aos-delay={data.aosDelay} className="group">
       <div className="relative">
         <Image
           src={data.img}

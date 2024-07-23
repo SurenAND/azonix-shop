@@ -30,19 +30,22 @@ const OnSaleBanner = ({ data }: OnSaleBannerProps) => {
         >
           {/* first col */}
           <div className="p-6 sm:p-8 flex flex-col justify-center gap-4">
-            <p className="text-sm">
+            <p data-aos="slide-right">
               {i18n.dir() === "ltr" ? data.discountEN : data.discountFA}
             </p>
-            <h1 className="uppercase text-4xl lg:text-7xl font-bold">
+            <h1
+              data-aos="zoom-out"
+              className="uppercase text-4xl lg:text-7xl font-bold"
+            >
               {i18n.dir() === "ltr" ? data.titleEN : data.titleFA}
             </h1>
-            <p className="text-sm">
+            <p data-aos="fade-up">
               {i18n.dir() === "ltr" ? data.dateEN : data.dateFA}
             </p>
           </div>
 
           {/* second col */}
-          <div className="h-full flex items-center">
+          <div data-aos="zoom-in" className="h-full flex items-center">
             <Image
               src={data.image}
               alt="on sale"
@@ -52,16 +55,16 @@ const OnSaleBanner = ({ data }: OnSaleBannerProps) => {
 
           {/* third col */}
           <div className="flex flex-col justify-center gap-4 p-6 sm:p-8">
-            <p className="font-bold text-xl">
+            <p data-aos="zoom-out" className="font-bold text-xl">
               {i18n.dir() === "ltr" ? data.title2EN : data.title2FA}
             </p>
-            <p className="text-3xl sm:text-5xl font-bold">
+            <p data-aos="fade-up" className="text-3xl sm:text-5xl font-bold">
               {i18n.dir() === "ltr" ? data.title3EN : data.title3FA}
             </p>
-            <p className="text-sm tracking-wide leading-5">
+            <p data-aos="fade-up" className="text-sm tracking-wide leading-5">
               {i18n.dir() === "ltr" ? data.title4EN : data.title4FA}
             </p>
-            <div>
+            <div data-aos="fade-up" data-aos-offset="0">
               <button
                 className="bg-white px-4 py-2 rounded-full"
                 style={{ color: data.bgColor }}

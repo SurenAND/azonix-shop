@@ -2,6 +2,7 @@ import BestSellerProducts from "@/src/components/templates/home/best-seller/Best
 import Categories from "@/src/components/templates/home/categories/Categories";
 import Hero from "@/src/components/templates/home/hero/Hero";
 import OnSaleBanner from "@/src/components/templates/home/on-sale/OnSaleBanner";
+import Partners from "@/src/components/templates/home/partners/Partners";
 import RecentNews from "@/src/components/templates/home/recent-news/RecentNews";
 import Services from "@/src/components/templates/home/services/Services";
 import { firstBannerData, secondBannerData } from "@/src/constant/bannerData";
@@ -24,6 +25,7 @@ export default function HomeTemplate() {
           <BestSellerProducts />
           <OnSaleBanner data={secondBannerData} />
           <RecentNews />
+          <Partners />
         </>
       )}
     </div>

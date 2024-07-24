@@ -24,7 +24,6 @@ function AddProduct() {
   const { data: subCategories, refetch } = useGetSubCategories({
     category: productCategory,
   });
-
   const filteredList = (id: string) => {
     setProductCategory(id);
   };
@@ -200,28 +199,32 @@ function AddProduct() {
               </p>
             </div>
             {/* Product Sub Category */}
-            <div className="flex flex-col">
-              <label className="mb-2 dark:text-gray-300">
-                {t("product-sub-category")} :
-              </label>
-              <select
-                {...register("subcategory", { required: true })}
-                className="p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
-              >
-                {productCategory &&
-                  subCategories?.data.subcategories.map((subCategory) => (
-                    <option value={subCategory._id}>{subCategory.name}</option>
-                  ))}
-              </select>
-              {/* subcategory error message */}
-              <p
-                className={`text-rose-400 text-xs ${
-                  errors.subcategory ? "visible" : "invisible"
-                }`}
-              >
-                {t("product-sub-category-input-error")}
-              </p>
-            </div>
+            {productCategory && (
+              <div className="flex flex-col">
+                <label className="mb-2 dark:text-gray-300">
+                  {t("product-sub-category")} :
+                </label>
+                <select
+                  {...register("subcategory", { required: true })}
+                  className="p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                >
+                  {productCategory &&
+                    subCategories?.data.subcategories.map((subCategory) => (
+                      <option value={subCategory._id}>
+                        {subCategory.name}
+                      </option>
+                    ))}
+                </select>
+                {/* subcategory error message */}
+                <p
+                  className={`text-rose-400 text-xs ${
+                    errors.subcategory ? "visible" : "invisible"
+                  }`}
+                >
+                  {t("product-sub-category-input-error")}
+                </p>
+              </div>
+            )}
           </div>
           {/* Product Description */}
           <div className="flex flex-col">

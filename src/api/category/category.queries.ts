@@ -18,7 +18,7 @@ export const useGetCategories = () => {
 
 export const useGetSubCategories = (params: GetSubCategoriesParamsType) => {
   return useQuery<AllSubCategoriesType>({
-    queryKey: ["subcategories"],
+    queryKey: ["subcategories", params],
     queryFn: () => getAllSubCategoriesApi(params),
   });
 };

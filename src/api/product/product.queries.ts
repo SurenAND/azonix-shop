@@ -17,7 +17,7 @@ import { toast } from "sonner";
 
 export const useGetProducts = (params: GetProductsParamsType) => {
   return useQuery<AllProductsType>({
-    queryKey: ["products"],
+    queryKey: ["products", params],
     queryFn: () => getAllProductsApi(params),
   });
 };

@@ -7,4 +7,5 @@ export const MainRoutes = {
   CATEGORY: "/category",
   PROFILE: "/profile",
   NOTFOUND: "/404",
+  SHOP: "/shop",
 };

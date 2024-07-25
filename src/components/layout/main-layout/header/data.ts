@@ -1,16 +1,15 @@
 import { MainRoutes } from "@/src/constant/routes";
-import { access } from "fs";
 
 export const MenuLinks = [
   {
     id: 1,
     name: "home",
-    link: "/#",
+    link: MainRoutes.HOME,
   },
   {
     id: 2,
     name: "shop",
-    link: "/#shop",
+    link: MainRoutes.SHOP,
   },
   {
     id: 3,

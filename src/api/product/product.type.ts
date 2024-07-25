@@ -20,6 +20,7 @@ export type ProductType = {
   };
   name: string;
   price: number;
+  discountPercentage: number;
   quantity: number;
   brand: string;
   description: string;
@@ -50,4 +51,7 @@ export type GetProductsParamsType = {
   page?: number;
   limit?: number;
   category?: string;
+  subcategory?: string;
+  minPrice?: number;
+  maxPrice?: number;
 };

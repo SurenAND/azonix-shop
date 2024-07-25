@@ -21,6 +21,7 @@ export type ProductType = {
   name: string;
   price: number;
   discountPercentage: number;
+  priceAfterDiscount: number;
   quantity: number;
   brand: string;
   description: string;

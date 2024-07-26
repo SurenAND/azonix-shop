@@ -84,7 +84,7 @@
   "bookshelf-speakers": "Bookshelf Speakers",
   "delete-edit": "Delete/Edit",
   "product-name": "Product Name",
-  "product-image": "Image",
+  "product-image": "Images (Max 4)",
   "all-category": "All Category",
   "price": "Price",
   "quantity": "Quantity",
@@ -145,5 +145,7 @@
   "over": "Over",
   "k-reviews": "k reviews",
   "discount-save": "Save",
-  "stock": "Only {{amount}} item left in stock"
+  "stock": "Only {{amount}} item left in stock",
+  "discount": "Discount (%)",
+  "price-with-discount": "Price W/ Discount"
 }

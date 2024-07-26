@@ -84,7 +84,7 @@
   "bookshelf-speakers": "رومیزی",
   "delete-edit": "حذف/ویرایش",
   "product-name": "نام محصول",
-  "product-image": "عکس",
+  "product-image": "عکس (حداکثر 4 عکس)",
   "all-category": "همه دسته بندی ها",
   "price": "قیمت",
   "quantity": "تعداد",
@@ -145,5 +145,7 @@
   "over": "بیش از",
   "k-reviews": " هزار بازدید",
   "discount-save": "تخفیف",
-  "stock": "تنها {{amount}} عدد در انبار باقی مانده"
+  "stock": "تنها {{amount}} عدد در انبار باقی مانده",
+  "discount": "تخفیف (%)",
+  "price-with-discount": "قیمت با تخفیف"
 }

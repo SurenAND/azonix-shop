@@ -1,20 +1,20 @@
 import {
   useDeleteProduct,
   useGetProducts,
-} from "@/src/api/product/product.queries";
-import Pagination from "@/src/components/shared/pagination/Pagination";
-import AddPopUp from "@/src/components/templates/dashboard/products-management/product-manager/modals/add/Add";
-import DeletePopUp from "@/src/components/templates/dashboard/products-management/product-manager/modals/delete/Delete";
-import EditPopUp from "@/src/components/templates/dashboard/products-management/product-manager/modals/edit/Edit";
-import { ProductsTable } from "@/src/components/templates/dashboard/products-management/product-manager/product-table/ProductTable";
-import { useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+} from '@/src/api/product/product.queries';
+import Pagination from '@/src/components/shared/pagination/Pagination';
+import AddPopUp from '@/src/components/templates/dashboard/products-management/product-manager/modals/add/Add';
+import DeletePopUp from '@/src/components/templates/dashboard/products-management/product-manager/modals/delete/Delete';
+import EditPopUp from '@/src/components/templates/dashboard/products-management/product-manager/modals/edit/Edit';
+import { ProductsTable } from '@/src/components/templates/dashboard/products-management/product-manager/product-table/ProductTable';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 function ProductManager() {
   const { t, i18n } = useTranslation();
   const [page, setPage] = useState(1);
-  const [productCategory, setProductCategory] = useState("");
+  const [productCategory, setProductCategory] = useState('');
   const { data: products, refetch } = useGetProducts({
     page,
     category: productCategory,
@@ -23,10 +23,10 @@ function ProductManager() {
   const { mutate: deleteProduct } = useDeleteProduct();
 
   const [openDelete, setOpenDelete] = useState(false);
-  const idToDelete = useRef<string>("");
+  const idToDelete = useRef<string>('');
 
   const [openEdit, setOpenEdit] = useState(false);
-  const [idToEdit, setIdToEdit] = useState<string>("");
+  const [idToEdit, setIdToEdit] = useState<string>('');
 
   const [openAdd, setOpenAdd] = useState(false);
 
@@ -37,7 +37,7 @@ function ProductManager() {
 
   const handleDelete = (id: string) => {
     deleteProduct(id);
-    toast.success(t("product-delete-success"));
+    toast.success(t('product-delete-success'));
   };
 
   useEffect(() => {
@@ -45,19 +45,19 @@ function ProductManager() {
   }, [page, productCategory]);
 
   return (
-    <main className="p-3 min-h-screen w-full md:w-[780px]">
-      <header className="flex justify-between items-center">
-        <h1 className="font-bold text-lg">{t("product-manager")}</h1>
+    <main className='min-h-screen w-full p-3 md:w-[780px]'>
+      <header className='flex items-center justify-between'>
+        <h1 className='text-lg font-bold'>{t('product-manager')}</h1>
         <button
-          className={`bg-axLightPurple text-white text-xs py-2 px-7 rounded-lg font-semibold uppercase mt-2 hover:bg-axDarkPurple ${
-            i18n.dir() === "ltr" ? "tracking-wide" : ""
+          className={`mt-2 rounded-lg bg-axLightPurple px-7 py-2 text-xs font-semibold uppercase text-white hover:bg-axDarkPurple ${
+            i18n.dir() === 'ltr' ? 'tracking-wide' : ''
           }`}
           onClick={() => setOpenAdd(true)}
         >
-          {t("add-product")}
+          {t('add-product')}
         </button>
       </header>
-      <div className="px-3 py-8 w-full md:w-[760px] min-h-[calc(100vh-100px)] mx-auto flex items-center sm:justify-center">
+      <div className='mx-auto flex min-h-[calc(100vh-100px)] w-full items-center px-3 py-8 sm:justify-center md:w-[760px]'>
         <ProductsTable
           list={products?.data.products || []}
           onFilteredList={filteredList}

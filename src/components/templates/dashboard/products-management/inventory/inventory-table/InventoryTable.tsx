@@ -1,8 +1,8 @@
-import { ProductType } from "@/src/api/product/product.type";
-import EditableTd from "@/src/components/shared/editable-td/EditableTd";
+import { ProductType } from '@/src/api/product/product.type';
+import EditableTd from '@/src/components/shared/editable-td/EditableTd';
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type InventoryTableProps = {
   list: ProductType[];
@@ -29,7 +29,7 @@ function InventoryTable({
 
   // reset lists for changing colorful background
   useEffect(() => {
-    if (editMode === "done") {
+    if (editMode === 'done') {
       setEditedProducts([]);
     }
   }, [editMode]);
@@ -43,17 +43,23 @@ function InventoryTable({
   }, [editedProducts]);
 
   return (
-    <table className="self-start border border-collapse rounded w-full text-center">
-      <thead className="select-none">
-        <tr className="bg-gray-500 text-white dark:text-black flex flex-col mb-4 sm:table-row">
-          <th className="border text-md w-full md:w-[55%] px-1 py-3">
-            {t("product")}
+    <table className='w-full border-collapse self-start rounded border text-center'>
+      <thead className='select-none'>
+        <tr className='mb-4 flex flex-col bg-gray-500 text-white dark:text-black sm:table-row'>
+          <th className='text-md w-full border px-1 py-3 md:w-[40%]'>
+            {t('product')}
           </th>
-          <th className="border text-md w-full md:w-[15%] px-1 py-3">
-            {t("price")}
+          <th className='text-md w-full border px-1 py-3 md:w-[15%]'>
+            {t('price-with-discount')}
           </th>
-          <th className="border text-md w-full md:w-[15%] px-1 py-3">
-            {t("quantity")}
+          <th className='text-md w-full border px-1 py-3 md:w-[15%]'>
+            {t('price')}
+          </th>
+          <th className='text-md w-full border px-1 py-3 md:w-[15%]'>
+            {t('quantity')}
+          </th>
+          <th className='text-md w-full border px-1 py-3 md:w-[15%]'>
+            {t('discount')}
           </th>
         </tr>
       </thead>
@@ -62,11 +68,14 @@ function InventoryTable({
           return (
             <tr
               key={product._id}
-              className={`flex flex-col mb-4 sm:table-row ${
-                Math.floor(index % 2) !== 0 ? "bg-gray-400 text-white" : ""
-              } ${Math.floor(index % 2) !== 0 ? "dark:text-black" : ""}`}
+              className={`mb-4 flex flex-col sm:table-row ${
+                Math.floor(index % 2) !== 0 ? 'bg-gray-400 text-white' : ''
+              } ${Math.floor(index % 2) !== 0 ? 'dark:text-black' : ''}`}
             >
-              <td className="p-1 border truncate">{product.name}</td>
+              <td className='truncate border p-1'>{product.name}</td>
+              <td className='truncate border p-1'>
+                {product.priceAfterDiscount.toFixed(2)}
+              </td>
               <EditableTd
                 index={index}
                 product={product}
@@ -74,7 +83,7 @@ function InventoryTable({
                 setProducts={setProducts}
                 editedProducts={editedProducts}
                 setEditedProducts={setEditedProducts}
-                field="price"
+                field='price'
               />
               <EditableTd
                 index={index}
@@ -83,7 +92,16 @@ function InventoryTable({
                 setProducts={setProducts}
                 editedProducts={editedProducts}
                 setEditedProducts={setEditedProducts}
-                field="quantity"
+                field='quantity'
+              />
+              <EditableTd
+                index={index}
+                product={product}
+                products={products}
+                setProducts={setProducts}
+                editedProducts={editedProducts}
+                setEditedProducts={setEditedProducts}
+                field='discountPercentage'
               />
             </tr>
           );

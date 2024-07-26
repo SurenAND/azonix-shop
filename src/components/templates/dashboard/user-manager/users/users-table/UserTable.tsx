@@ -1,18 +1,22 @@
-import { UserDataType } from "@/src/api/auth/auth.type";
-import { Dispatch, MutableRefObject, SetStateAction } from "react";
-import { useTranslation } from "react-i18next";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { UserDataType } from '@/src/api/auth/auth.type';
+import { Dispatch, MutableRefObject, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
+import { MdDelete, MdEdit } from 'react-icons/md';
 
 type UsersTableProps = {
   list: UserDataType[];
   idToDelete: MutableRefObject<string>;
   setOpenDelete: Dispatch<SetStateAction<boolean>>;
+  setIdToEdit: Dispatch<SetStateAction<string>>;
+  setOpenEdit: Dispatch<SetStateAction<boolean>>;
 };
 
 export const UsersTable = ({
   list,
   idToDelete,
   setOpenDelete,
+  setIdToEdit,
+  setOpenEdit,
 }: UsersTableProps) => {
   const { t } = useTranslation();
 
@@ -21,26 +25,29 @@ export const UsersTable = ({
     setOpenDelete(true);
   };
 
-  const setEditUserModal = (id: string) => {};
+  const setEditUserModal = (id: string) => {
+    setIdToEdit(id);
+    setOpenEdit(true);
+  };
 
   return (
-    <table className="self-start border border-collapse rounded w-full text-center">
-      <thead className="select-none">
-        <tr className="bg-gray-500 text-white dark:text-black flex flex-col mb-4 sm:table-row">
-          <th className="border text-md w-full md:w-[20%] px-1 py-3">
-            {t("firstname")}
+    <table className='w-full border-collapse self-start rounded border text-center'>
+      <thead className='select-none'>
+        <tr className='mb-4 flex flex-col bg-gray-500 text-white dark:text-black sm:table-row'>
+          <th className='text-md w-full border px-1 py-3 md:w-[20%]'>
+            {t('firstname')}
           </th>
-          <th className="border text-md w-full md:w-[20%] px-1 py-3">
-            {t("lastname")}
+          <th className='text-md w-full border px-1 py-3 md:w-[20%]'>
+            {t('lastname')}
           </th>
-          <th className="border text-md w-full md:w-[20%] px-1 py-3">
-            {t("username")}
+          <th className='text-md w-full border px-1 py-3 md:w-[20%]'>
+            {t('username')}
           </th>
-          <th className="border text-md w-full md:w-[20%] px-1 py-3">
-            {t("phone-number")}
+          <th className='text-md w-full border px-1 py-3 md:w-[20%]'>
+            {t('phone-number')}
           </th>
-          <th className="border text-md w-full md:w-[20%] px-1 py-3">
-            {t("delete-edit")}
+          <th className='text-md w-full border px-1 py-3 md:w-[20%]'>
+            {t('delete-edit')}
           </th>
         </tr>
       </thead>
@@ -49,22 +56,22 @@ export const UsersTable = ({
           return (
             <tr
               key={user._id}
-              className={`flex flex-col mb-4 sm:table-row ${
-                Math.floor(index % 2) !== 0 ? "bg-gray-400 text-white" : ""
-              } ${Math.floor(index % 2) !== 0 ? "dark:text-black" : ""}`}
+              className={`mb-4 flex flex-col sm:table-row ${
+                Math.floor(index % 2) !== 0 ? 'bg-gray-400 text-white' : ''
+              } ${Math.floor(index % 2) !== 0 ? 'dark:text-black' : ''}`}
             >
-              <td className="p-1 border truncate">{user?.firstname}</td>
-              <td className="p-1 border truncate">{user?.lastname}</td>
-              <td className="p-1 border truncate">{user?.username}</td>
-              <td className="p-1 border truncate">{user?.phoneNumber}</td>
-              <td className="p-1 border">
-                <div className="flex items-center justify-center gap-4 select-none">
+              <td className='truncate border p-1'>{user?.firstname}</td>
+              <td className='truncate border p-1'>{user?.lastname}</td>
+              <td className='truncate border p-1'>{user?.username}</td>
+              <td className='truncate border p-1'>{user?.phoneNumber}</td>
+              <td className='border p-1'>
+                <div className='flex select-none items-center justify-center gap-4'>
                   <MdDelete
-                    className="cursor-pointer w-5"
+                    className='w-5 cursor-pointer'
                     onClick={() => setDeleteUserModal(user._id)}
                   />
                   <MdEdit
-                    className="cursor-pointer w-5"
+                    className='w-5 cursor-pointer'
                     onClick={() => setEditUserModal(user._id)}
                   />
                 </div>

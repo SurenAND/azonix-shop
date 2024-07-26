@@ -1,16 +1,16 @@
+import UsFlag from "@/src/assets/images/languages/en.png";
+import IrFlag from "@/src/assets/images/languages/fa.png";
+import Loading from "@/src/components/shared/loading/Loading";
+import LogInTemplate from "@/src/components/templates/register/LogIn/LogIn";
+import SignUpTemplate from "@/src/components/templates/register/SignUp/SignUp";
+import ToggleRegister from "@/src/components/templates/register/Toggle/ToggleRegister";
 import { MainRoutes } from "@/src/constant/routes";
+import Image, { StaticImageData } from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { Suspense, useEffect, useState } from "react";
-import Loading from "@/src/components/shared/loading/Loading";
-import SignUpTemplate from "@/src/components/templates/register/SignUp/SignUp";
-import LogInTemplate from "@/src/components/templates/register/LogIn/LogIn";
-import ToggleRegister from "@/src/components/templates/register/Toggle/ToggleRegister";
-import { Toaster } from "sonner";
 import { useTranslation } from "react-i18next";
-import IrFlag from "@/src/assets/images/languages/fa.png";
-import UsFlag from "@/src/assets/images/languages/en.png";
-import Image, { StaticImageData } from "next/image";
+import { Toaster } from "sonner";
 
 const lngs: Record<"en" | "fa", { flag: StaticImageData }> = {
   en: { flag: UsFlag },
@@ -72,14 +72,18 @@ export default function RegisterTemplate() {
           <div className="sm:hidden text-axLightPurple">
             {active ? (
               <button
-                className="text-xs text-white py-2 px-7 rounded-lg font-semibold tracking-wide uppercase mt-2 bg-axLightPurple"
+                className={`text-xs text-white py-2 px-7 rounded-lg font-semibold uppercase mt-2 bg-axLightPurple ${
+                  i18n.dir() === "ltr" ? "tracking-wide" : ""
+                }`}
                 onClick={handleClick}
               >
                 To {t("login")}
               </button>
             ) : (
               <button
-                className="text-xs text-white py-2 px-7 rounded-lg font-semibold tracking-wide uppercase mt-2 bg-axLightPurple"
+                className={`text-xs text-white py-2 px-7 rounded-lg font-semibold uppercase mt-2 bg-axLightPurple ${
+                  i18n.dir() === "ltr" ? "tracking-wide" : ""
+                }`}
                 onClick={handleClick}
               >
                 To {t("signup")}

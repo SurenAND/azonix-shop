@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 function Inventory() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [page, setPage] = useState(1);
   const [hasEditItem, setHasEditItem] = useState(false);
@@ -54,7 +54,9 @@ function Inventory() {
       <header className="flex justify-between items-center">
         <h1 className="font-bold text-lg">{t("inventory")}</h1>
         <button
-          className="bg-axLightPurple text-white text-xs py-2 px-7 rounded-lg font-semibold tracking-wide uppercase mt-2 hover:bg-axDarkPurple disabled:opacity-50"
+          className={`bg-axLightPurple text-white text-xs py-2 px-7 rounded-lg font-semibold uppercase mt-2 hover:bg-axDarkPurple disabled:opacity-50 ${
+            i18n.dir() === "ltr" ? "tracking-wide" : ""
+          }`}
           onClick={editHandler}
           disabled={!hasEditItem}
         >

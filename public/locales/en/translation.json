@@ -144,5 +144,6 @@
   "filters": "Filters",
   "over": "Over",
   "k-reviews": "k reviews",
-  "discount-save": "Save"
+  "discount-save": "Save",
+  "stock": "Only {{amount}} item left in stock"
 }

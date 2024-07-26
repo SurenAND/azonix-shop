@@ -144,5 +144,6 @@
   "filters": "فیلتر ها",
   "over": "بیش از",
   "k-reviews": " هزار بازدید",
-  "discount-save": "تخفیف"
+  "discount-save": "تخفیف",
+  "stock": "تنها {{amount}} عدد در انبار باقی مانده"
 }

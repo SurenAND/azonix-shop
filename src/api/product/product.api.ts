@@ -9,6 +9,11 @@ export const getAllProductsApi = async (params: GetProductsParamsType) => {
   if (params.page) _params.page = params.page;
   if (params.category) _params.category = params.category;
   if (params.limit) _params.limit = params.limit;
+  if (params.minPrice)
+    _params.price = { ..._params.price, ["gte"]: params.minPrice };
+  if (params.maxPrice)
+    _params.price = { ..._params.price, ["lt"]: params.maxPrice };
+  if (params.subcategory) _params.subcategory = params.subcategory;
 
   const response = await req.get("/products", { params: _params });
   return response.data;

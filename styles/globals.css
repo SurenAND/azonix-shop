@@ -23,6 +23,17 @@ body {
   font-family: "Vazirmatn", sans-serif;
 }
 
+@layer base {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 @layer components {
   .search-bar {
     @apply w-0 transition-all duration-300 rounded-full group-hover:w-[18vw] group-hover:border group-hover:border-gray-500 px-3 py-1 focus:outline-none dark:border-gray-800 dark:bg-gray-900 group-hover:dark:bg-gray-800;

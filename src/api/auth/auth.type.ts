@@ -35,3 +35,10 @@ export type GetUsersParamsType = {
   limit?: number;
   role?: string;
 };
+
+export type UserByIdType = {
+  status: string;
+  data: {
+    user: UserDataType;
+  };
+};

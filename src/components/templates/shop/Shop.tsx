@@ -3,11 +3,11 @@ import {
   useGetSubCategories,
 } from '@/src/api/category/category.queries';
 import { useGetProducts } from '@/src/api/product/product.queries';
+import Products from '@/src/components/shared/products/Products';
+import SubCategories from '@/src/components/shared/sub-categories/SubCategories';
+import Nav from '@/src/components/templates/shop/nav/Nav';
+import Sidebar from '@/src/components/templates/shop/sidebar/Sidebar';
 import { ChangeEvent, MouseEvent, useState } from 'react';
-import Nav from './nav/Nav';
-import Products from './products/Products';
-import Sidebar from './sidebar/Sidebar';
-import SubCategories from './sub-categories/SubCategories';
 
 const ShopTemplate = () => {
   // sidebar open state

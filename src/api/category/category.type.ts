@@ -18,6 +18,10 @@ export type AllCategoriesType = {
   };
 };
 
+export type GetCategoriesParamsType = {
+  slugname?: string;
+};
+
 export type GetSubCategoriesParamsType = {
   category?: string;
 };

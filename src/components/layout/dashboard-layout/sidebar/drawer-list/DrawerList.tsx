@@ -1,19 +1,17 @@
-import { MdInbox } from "react-icons/md";
 import {
   drawerOrdersItems,
   drawerProductsItems,
   drawerUserItems,
 } from "@/src/components/layout/dashboard-layout/sidebar/drawer-list/data";
-import { useRouter } from "next/router";
 import { MainRoutes } from "@/src/constant/routes";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import { MdInbox } from "react-icons/md";
 
 export default function DrawerList() {
   const { pathname, push: pushRouter } = useRouter();
   const searchParams = useSearchParams().get("view");
-  const state = { role: "moderator" }; // temporary state
-
   const { t } = useTranslation();
 
   return (
@@ -103,7 +101,7 @@ export default function DrawerList() {
             key={index}
             className={`my-2 p-4 rounded-2xl ${
               searchParams === item.view ? "bg-axWhite text-axLightPurple" : ""
-            } ${item.roleToSee.includes(state.role) ? "flex" : "hidden"}`}
+            }`}
           >
             <button
               onClick={() =>

@@ -1,14 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   min-height: 100vh;
 }
 
+/* For LTR, use Poppins */
+[dir="ltr"] {
+  font-family: "Poppins", sans-serif;
+}
+
+/* For RTL, use Vazirmatn */
+[dir="rtl"] {
+  font-family: "Vazirmatn", sans-serif;
+}
+
+@layer base {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 @layer components {
   .search-bar {
     @apply w-0 transition-all duration-300 rounded-full group-hover:w-[18vw] group-hover:border group-hover:border-gray-500 px-3 py-1 focus:outline-none dark:border-gray-800 dark:bg-gray-900 group-hover:dark:bg-gray-800;
+  }
+}
+
+@layer utilities {
+  .hero-bg-color-ltr {
+    @apply bg-gradient-to-r from-gray-300/80 to-gray-100 dark:from-gray-900 dark:to-gray-800 dark:text-white;
+  }
+  .hero-bg-color-rtl {
+    @apply bg-gradient-to-l from-gray-300/80 to-gray-100 dark:from-gray-900 dark:to-gray-800 dark:text-white;
   }
 }
 

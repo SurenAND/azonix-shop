@@ -20,6 +20,8 @@ export type ProductType = {
   };
   name: string;
   price: number;
+  discountPercentage: number;
+  priceAfterDiscount: number;
   quantity: number;
   brand: string;
   description: string;
@@ -39,8 +41,18 @@ export type AllProductsType = {
   };
 };
 
+export type ProductByIdType = {
+  status: string;
+  data: {
+    product: ProductType;
+  };
+};
+
 export type GetProductsParamsType = {
   page?: number;
-  per_page?: number;
+  limit?: number;
   category?: string;
+  subcategory?: string;
+  minPrice?: number;
+  maxPrice?: number;
 };

@@ -1,6 +1,6 @@
-import { MainRoutes } from "@/src/constant/routes";
-import { useRouter } from "next/router";
-import { useTranslation } from "react-i18next";
+import { MainRoutes } from '@/src/constant/routes';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 export default function ToSignUp({
   setActive,
@@ -20,27 +20,27 @@ export default function ToSignUp({
 
   return (
     <div
-      className={`absolute h-full px-6 text-center top-0 end-0 ${
+      className={`absolute end-0 top-0 h-full px-6 text-center ${
         active
-          ? i18n.dir() === "ltr"
-            ? "translate-x-full"
-            : "-translate-x-full"
-          : "translate-x-0"
-      } transition-all duration-600 ease-in-out flex flex-col justify-center items-center gap-20`}
+          ? i18n.dir() === 'ltr'
+            ? 'translate-x-full'
+            : '-translate-x-full'
+          : 'translate-x-0'
+      } duration-600 flex flex-col items-center justify-center gap-20 transition-all ease-in-out`}
     >
-      <h4 className={`font-bold text-5xl ${active ? "hidden" : "block"}`}>
-        {t("signup-toggle-title")}
+      <h4 className={`text-5xl font-bold ${active ? 'hidden' : 'block'}`}>
+        {t('signup-toggle-title')}
       </h4>
-      <p className={`text-lg ${active ? "hidden" : "block"}`}>
-        {t("signup-toggle-description")}
+      <p className={`text-lg ${active ? 'hidden' : 'block'}`}>
+        {t('signup-toggle-description')}
       </p>
       <button
         onClick={handleClick}
-        className={`bg-transparent text-white border border-white text-xs py-4 px-14 rounded-lg font-semibold tracking-wide uppercase mt-2 hover:bg-axLightPurple hover:border-axLightPurple ${
-          active ? "hidden" : "block"
-        }`}
+        className={`mt-2 rounded-lg border border-white bg-transparent px-14 py-4 text-xs font-semibold uppercase text-white hover:border-axLightPurple hover:bg-axLightPurple ${
+          active ? 'hidden' : 'block'
+        } ${i18n.dir() === 'ltr' ? 'tracking-wide' : ''}`}
       >
-        {t("signup")}
+        {t('signup')}
       </button>
     </div>
   );

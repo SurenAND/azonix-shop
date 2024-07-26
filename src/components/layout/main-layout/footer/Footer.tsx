@@ -1,16 +1,19 @@
+import {
+  ImportantLinks,
+  QuickLinks,
+} from "@/src/components/layout/main-layout/footer/data";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { FooterLinks } from "@/src/components/layout/main-layout/footer/data";
+import { FaMobileAlt } from "react-icons/fa";
 import {
   FaFacebook,
   FaInstagram,
   FaLinkedin,
   FaLocationArrow,
 } from "react-icons/fa6";
-import { FaMobileAlt } from "react-icons/fa";
 
 export default function Footer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <div className="dark:bg-gray-950">
       <div className="container">
@@ -19,7 +22,9 @@ export default function Footer() {
           <div className="py-9 px-4">
             <Link
               href="#"
-              className="text-primary font-bold tracking-widest text-2xl uppercase sm:text-3xl"
+              className={`text-primary font-bold text-2xl uppercase sm:text-3xl ${
+                i18n.dir() === "ltr" ? "tracking-widest" : ""
+              }`}
             >
               {t("company-name")}
             </Link>
@@ -44,7 +49,7 @@ export default function Footer() {
                 {t("important-links")}
               </h1>
               <ul className="space-y-3">
-                {FooterLinks.map((data) => (
+                {ImportantLinks.map((data) => (
                   <li key={data.id}>
                     <Link
                       href={data.links}
@@ -63,7 +68,7 @@ export default function Footer() {
                 {t("quick-links")}
               </h1>
               <ul className="space-y-3">
-                {FooterLinks.map((data) => (
+                {QuickLinks.map((data) => (
                   <li key={data.id}>
                     <Link
                       href={data.links}

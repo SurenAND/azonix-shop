@@ -1,15 +1,15 @@
-import { useGetOrders } from "@/src/api/orders/orders.queries";
-import { EmptyList } from "@/src/components/shared/empty-list/EmptyList";
-import Pagination from "@/src/components/shared/pagination/Pagination";
-import { OrdersTable } from "@/src/components/templates/dashboard/orders/orders-table/OrdersTable";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { MdRadioButtonChecked, MdRadioButtonUnchecked } from "react-icons/md";
+import { useGetOrders } from '@/src/api/orders/orders.queries';
+import { EmptyList } from '@/src/components/shared/empty-list/EmptyList';
+import Pagination from '@/src/components/shared/pagination/Pagination';
+import { OrdersTable } from '@/src/components/templates/dashboard/orders/orders-table/OrdersTable';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { MdRadioButtonChecked, MdRadioButtonUnchecked } from 'react-icons/md';
 
 export const Orders = () => {
   const { t } = useTranslation();
   const [isDelivered, setIsDelivered] = useState(false);
-  const [sortDate, setSortDate] = useState("desc");
+  const [sortDate, setSortDate] = useState('desc');
   const [page, setPage] = useState(1);
 
   const { data: orders, refetch } = useGetOrders({
@@ -33,37 +33,38 @@ export const Orders = () => {
   };
 
   return (
-    <main className="p-3 min-h-screen w-full md:w-[620px]">
-      <header className="flex justify-between items-center">
-        <h1 className="font-bold text-lg">{t("orders-management")}</h1>
-        <div className="flex gap-2">
+    <main className='min-h-screen w-full p-3 md:w-[780px]'>
+      <header className='flex items-center justify-between'>
+        <h1 className='text-lg font-bold'>{t('orders-management')}</h1>
+        <div className='flex gap-2'>
           <div
-            className="flex items-center gap-1 border-l border-[#afafaf50] px-2"
+            className='flex items-center gap-1 border-l border-[#afafaf50] px-2'
             onClick={() => deliverHandler(false)}
           >
             {isDelivered ? (
-              <MdRadioButtonUnchecked color="#5e35b0" />
+              <MdRadioButtonUnchecked color='#5e35b0' />
             ) : (
-              <MdRadioButtonChecked color="#5e35b0" />
+              <MdRadioButtonChecked color='#5e35b0' />
             )}
-            <span>{t("pending-delivery")}</span>
+            <span>{t('pending-delivery')}</span>
           </div>
           <div
-            className="flex items-center gap-1"
+            className='flex items-center gap-1'
             onClick={() => deliverHandler(true)}
           >
             {isDelivered ? (
-              <MdRadioButtonChecked color="#5e35b0" />
+              <MdRadioButtonChecked color='#5e35b0' />
             ) : (
-              <MdRadioButtonUnchecked color="#5e35b0" />
+              <MdRadioButtonUnchecked color='#5e35b0' />
             )}
-            <span>{t("delivered")}</span>
+            <span>{t('delivered')}</span>
           </div>
         </div>
       </header>
-      <div className="px-3 py-8 w-full md:w-[600px] min-h-[calc(100vh-100px)] mt-5 mx-auto flex items-center sm:justify-center">
+
+      <div className='mx-auto flex min-h-[calc(100vh-100px)] w-full items-center px-3 py-8 sm:justify-center md:w-[760px]'>
         {orders &&
-        orders.status === "success" &&
+        orders.status === 'success' &&
         orders.data.orders.length === 0 ? (
           <EmptyList />
         ) : (

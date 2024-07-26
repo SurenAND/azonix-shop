@@ -1,7 +1,7 @@
-import { ProductType } from "@/src/api/product/product.type";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { ProductType } from '@/src/api/product/product.type';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 type EditableTdProps = {
   index: number;
@@ -29,7 +29,7 @@ function EditableTd({
 
   const editHandler = (editedProduct: ProductType) => {
     const updatedEditedProducts = editedProducts.map((item) =>
-      item._id === editedProduct._id ? editedProduct : item
+      item._id === editedProduct._id ? editedProduct : item,
     );
     if (!editedProducts.some((item) => item._id === editedProduct._id)) {
       setEditedProducts([...editedProducts, editedProduct]);
@@ -49,9 +49,9 @@ function EditableTd({
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isModified]);
 
@@ -62,7 +62,7 @@ function EditableTd({
       [`is${field.charAt(0).toUpperCase() + field.slice(1)}Edit`]: true,
     };
     const updatedProducts = products.map((item, idx) =>
-      idx === index ? updatedProduct : item
+      idx === index ? updatedProduct : item,
     );
 
     editHandler(updatedProduct);
@@ -72,7 +72,7 @@ function EditableTd({
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Escape") {
+    if (e.key === 'Escape') {
       setIsEdit(null);
       setIsModified(false);
     }
@@ -80,18 +80,18 @@ function EditableTd({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
       setIsModified(true);
       e.target.value = value;
     } else {
       e.preventDefault();
-      toast.error(t("error-invalid-number"));
+      toast.error(t('error-invalid-number'));
     }
   };
 
   const renderInput = (value: number) => (
     <input
-      className="text-black w-full text-center font-bold"
+      className='w-full text-center font-bold text-black'
       ref={inputRef}
       defaultValue={value}
       onChange={handleInputChange}
@@ -103,7 +103,7 @@ function EditableTd({
   const renderSpan = (value: number, isEdited: boolean) => (
     <span
       className={`block p-1 ${
-        isEdited ? "bg-axLightPurple/60 text-white" : ""
+        isEdited ? 'bg-axLightPurple/60 text-white' : ''
       }`}
     >
       {value}
@@ -119,6 +119,7 @@ function EditableTd({
 
   return (
     <td
+      className='truncate border p-1'
       onClick={() => {
         setIsEdit(product._id);
       }}

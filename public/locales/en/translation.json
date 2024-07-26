@@ -145,5 +145,7 @@
   "over": "Over",
   "k-reviews": "k reviews",
   "discount-save": "Save",
-  "stock": "Only {{amount}} item left in stock"
+  "stock": "Only {{amount}} item left in stock",
+  "discount": "Discount (%)",
+  "price-with-discount": "Price W/ Discount"
 }

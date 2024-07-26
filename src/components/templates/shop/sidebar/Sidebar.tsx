@@ -20,7 +20,7 @@ const Sidebar = ({
   toggleSidebar,
   open,
 }: SidebarProps) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <>
       <section
@@ -33,7 +33,7 @@ const Sidebar = ({
         }`}
       >
         <h2 className='border-b-2 border-gray-400 pb-5 text-center text-5xl font-bold uppercase'>
-          Filters
+          {t('filters')}
         </h2>
 
         <Category

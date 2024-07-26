@@ -1,4 +1,5 @@
 import { CategoryType } from '@/src/api/category/category.type';
+import { useTranslation } from 'react-i18next';
 
 type CategoryProps = {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -6,9 +7,10 @@ type CategoryProps = {
 };
 
 function Category({ handleChange, productCategory }: CategoryProps) {
+  const { t } = useTranslation();
   return (
     <div>
-      <h2 className='mb-5 text-2xl font-bold'>Category</h2>
+      <h2 className='mb-5 text-2xl font-bold'>{t('product-category')}</h2>
 
       <div className='ms-5 flex flex-col gap-2'>
         <label className='group relative mb-3 block cursor-pointer select-none ps-9'>
@@ -21,7 +23,7 @@ function Category({ handleChange, productCategory }: CategoryProps) {
             defaultChecked
           />
           <span className="after:none absolute start-0 top-0 h-5 w-5 rounded-full bg-white after:absolute after:start-[6.4px] after:top-[6.4px] after:h-2 after:w-2 after:rounded-full after:bg-white after:content-[''] peer-checked:bg-axLightPurple peer-checked:after:block"></span>
-          All
+          {t('all')}
         </label>
 
         {/* categories */}

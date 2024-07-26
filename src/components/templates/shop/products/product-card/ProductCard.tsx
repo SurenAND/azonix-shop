@@ -16,7 +16,7 @@ type ProductCardPropsType = {
 };
 
 const ProductCard = ({ product, index }: ProductCardPropsType) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { push: pushRouter } = useRouter();
   return (
     <div
@@ -64,7 +64,7 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
               ${product.price}
             </span>
             <span className='rounded-md bg-axGreen px-1.5 py-0.5 text-xs text-white'>
-              save {product.discountPercentage}%
+              {t('discount-save')} {product.discountPercentage}%
             </span>
           </div>
         </div>
@@ -96,7 +96,7 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
             alt='empty star'
             className='h-[1.2rem] w-[1.2rem]'
           />
-          <span className='ms-2 text-xs text-gray-500'>20k reviews</span>
+          <span className='ms-2 text-xs text-gray-500'>20{t('k-reviews')}</span>
         </div>
 
         {/* product action button */}
@@ -111,7 +111,7 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
                 : 'bg-primary/80 hover:bg-primary/90'
             }`}
           >
-            Add to cart
+            {t('add-to-cart')}
           </button>
           {/* wishlist button */}
           <button className='flex flex-grow items-center justify-center rounded-md bg-gray-300/60 transition hover:bg-gray-300/80'>

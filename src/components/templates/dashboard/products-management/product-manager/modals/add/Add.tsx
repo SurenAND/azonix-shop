@@ -1,13 +1,14 @@
 import {
   useGetCategories,
   useGetSubCategories,
-} from "@/src/api/category/category.queries";
-import { useAddProduct } from "@/src/api/product/product.queries";
-import DragDropImageUploader from "@/src/components/shared/dragdrop-image-uploader/DragDropImageUploader";
-import { useEffect, useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { FaTimes } from "react-icons/fa";
+} from '@/src/api/category/category.queries';
+import { useAddProduct } from '@/src/api/product/product.queries';
+import DragDropImageUploader from '@/src/components/shared/dragdrop-image-uploader/DragDropImageUploader';
+import MyFileInput from '@/src/components/shared/file-input/FileInput';
+import { useEffect, useState } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { FaTimes } from 'react-icons/fa';
 
 type AddModalProps = {
   openAdd: boolean;
@@ -26,7 +27,7 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
   const [images, setImages] = useState<File[]>([]);
   const { mutate: addNewProduct } = useAddProduct();
   const { data: categories } = useGetCategories();
-  const [productCategory, setProductCategory] = useState("");
+  const [productCategory, setProductCategory] = useState('');
   const { data: subCategories, refetch } = useGetSubCategories({
     category: productCategory,
   });
@@ -59,21 +60,21 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
 
   function handleForm(data: FieldValues) {
     const FD = new FormData();
-    FD.append("name", data.name);
-    FD.append("price", data.price);
-    FD.append("quantity", data.quantity);
-    FD.append("brand", data.brand);
-    FD.append("category", data.category);
-    FD.append("subcategory", data.subcategory);
-    FD.append("description", data.description);
+    FD.append('name', data.name);
+    FD.append('price', data.price);
+    FD.append('quantity', data.quantity);
+    FD.append('brand', data.brand);
+    FD.append('category', data.category);
+    FD.append('subcategory', data.subcategory);
+    FD.append('description', data.description);
     if (images && images.length > 0) {
       images.forEach((image) => {
-        FD.append("images", image);
+        FD.append('images', image);
       });
     }
     addNewProduct(FD, {
       onSuccess: (data) => {
-        if (data.status === "success") {
+        if (data.status === 'success') {
           reset();
           setImages([]);
           onClose();
@@ -86,21 +87,21 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
     // backdrop
     <div
       onClick={onClose}
-      className={`fixed inset-0 z-50 flex justify-center items-center transition-colors ${
-        openAdd ? "visible bg-black/30" : "invisible"
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-colors ${
+        openAdd ? 'visible bg-black/30' : 'invisible'
       }`}
     >
       {/* modal */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`max-h-[95vh] overflow-y-auto relative w-2/3 lg:w-1/2 p-6 flex flex-col justify-start items-center rounded-xl shadow transition-all bg-white dark:bg-gray-800 text-start ${
-          openAdd ? "scale-100 opacity-100" : "scale-125 opacity-0"
+        className={`relative flex max-h-[95vh] w-2/3 flex-col items-center justify-start overflow-y-auto rounded-xl bg-white p-6 text-start shadow transition-all dark:bg-gray-800 lg:w-1/2 ${
+          openAdd ? 'scale-100 opacity-100' : 'scale-125 opacity-0'
         }`}
       >
         {/* close button */}
         <button
           onClick={onClose}
-          className="p-1 rounded-lg text-gray-400 dark:hover:text-white hover:text-red-500 absolute top-4 end-4"
+          className='absolute end-4 top-4 rounded-lg p-1 text-gray-400 hover:text-red-500 dark:hover:text-white'
         >
           <FaTimes />
         </button>
@@ -108,108 +109,108 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
         {/* add form */}
         <form
           onSubmit={handleSubmit(handleForm)}
-          className="grid grid-cols-1 gap-4 w-full"
+          className='grid w-full grid-cols-1 gap-4'
         >
           {/* Product Name */}
-          <div className="flex flex-col">
-            <label className="mb-2 dark:text-gray-300">
-              {t("product-name")} :
+          <div className='flex flex-col'>
+            <label className='mb-2 dark:text-gray-300'>
+              {t('product-name')} :
             </label>
             <input
-              type="text"
-              {...register("name", {
+              type='text'
+              {...register('name', {
                 required: true,
               })}
-              className="p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
+              className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
             />
             {/* name error message */}
             <p
-              className={`text-rose-400 text-xs ${
-                errors.name ? "visible" : "invisible"
+              className={`text-xs text-rose-400 ${
+                errors.name ? 'visible' : 'invisible'
               }`}
             >
-              {t("product-name-input-error")}
+              {t('product-name-input-error')}
             </p>
           </div>
           {/* Product Price */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col">
-              <label className="mb-2 dark:text-gray-300">
-                {t("product-price")} :
+          <div className='grid grid-cols-2 gap-4'>
+            <div className='flex flex-col'>
+              <label className='mb-2 dark:text-gray-300'>
+                {t('product-price')} :
               </label>
               <input
-                type="text"
-                {...register("price", {
+                type='text'
+                {...register('price', {
                   required: true,
                   pattern: /^[0-9]+$/,
                 })}
-                className="p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
               {/* price error message */}
               <p
-                className={`text-rose-400 text-xs ${
-                  errors.price ? "visible" : "invisible"
+                className={`text-xs text-rose-400 ${
+                  errors.price ? 'visible' : 'invisible'
                 }`}
               >
-                {t("product-price-input-error")}
+                {t('product-price-input-error')}
               </p>
             </div>
             {/* Product Quantity */}
-            <div className="flex flex-col">
-              <label className="mb-2 dark:text-gray-300">
-                {t("product-quantity")} :
+            <div className='flex flex-col'>
+              <label className='mb-2 dark:text-gray-300'>
+                {t('product-quantity')} :
               </label>
               <input
-                type="text"
-                {...register("quantity", {
+                type='text'
+                {...register('quantity', {
                   required: true,
                   pattern: /^[0-9]+$/,
                 })}
-                className="p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
               {/* quantity error message */}
               <p
-                className={`text-rose-400 text-xs ${
-                  errors.quantity ? "visible" : "invisible"
+                className={`text-xs text-rose-400 ${
+                  errors.quantity ? 'visible' : 'invisible'
                 }`}
               >
-                {t("product-quantity-input-error")}
+                {t('product-quantity-input-error')}
               </p>
             </div>
           </div>
           {/* Product Brand & Category & Sub Category */}
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className='grid gap-4 md:grid-cols-3'>
             {/* Product Brand */}
-            <div className="flex flex-col">
-              <label className="mb-2 dark:text-gray-300">
-                {t("product-brand")} :
+            <div className='flex flex-col'>
+              <label className='mb-2 dark:text-gray-300'>
+                {t('product-brand')} :
               </label>
               <input
-                type="text"
-                {...register("brand", {
+                type='text'
+                {...register('brand', {
                   required: true,
                   pattern: /^[a-zA-Z0-9 ]+$/,
                 })}
-                className="p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
               {/* brand error message */}
               <p
-                className={`text-rose-400 text-xs ${
-                  errors.brand ? "visible" : "invisible"
+                className={`text-xs text-rose-400 ${
+                  errors.brand ? 'visible' : 'invisible'
                 }`}
               >
-                {t("product-brand-input-error")}
+                {t('product-brand-input-error')}
               </p>
             </div>
             {/* Product Category */}
-            <div className="flex flex-col">
-              <label className="mb-2 dark:text-gray-300">
-                {t("product-category")} :
+            <div className='flex flex-col'>
+              <label className='mb-2 dark:text-gray-300'>
+                {t('product-category')} :
               </label>
               <select
-                {...register("category", { required: true })}
+                {...register('category', { required: true })}
                 onChange={(e) => filteredList(e.target.value)}
-                className="p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               >
                 {categories?.data.categories.map((category) => (
                   <option value={category._id}>{category.name}</option>
@@ -217,21 +218,21 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
               </select>
               {/* category error message */}
               <p
-                className={`text-rose-400 text-xs ${
-                  errors.category ? "visible" : "invisible"
+                className={`text-xs text-rose-400 ${
+                  errors.category ? 'visible' : 'invisible'
                 }`}
               >
-                {t("product-category-input-error")}
+                {t('product-category-input-error')}
               </p>
             </div>
             {/* Product Sub Category */}
-            <div className="flex flex-col">
-              <label className="mb-2 dark:text-gray-300">
-                {t("product-sub-category")} :
+            <div className='flex flex-col'>
+              <label className='mb-2 dark:text-gray-300'>
+                {t('product-sub-category')} :
               </label>
               <select
-                {...register("subcategory", { required: true })}
-                className="p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                {...register('subcategory', { required: true })}
+                className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               >
                 {productCategory &&
                   subCategories?.data.subcategories.map((subCategory) => (
@@ -240,43 +241,39 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
               </select>
               {/* subcategory error message */}
               <p
-                className={`text-rose-400 text-xs ${
-                  errors.subcategory ? "visible" : "invisible"
+                className={`text-xs text-rose-400 ${
+                  errors.subcategory ? 'visible' : 'invisible'
                 }`}
               >
-                {t("product-sub-category-input-error")}
+                {t('product-sub-category-input-error')}
               </p>
             </div>
           </div>
           {/* Product Description */}
-          <div className="flex flex-col">
-            <label className="mb-2 dark:text-gray-300">
-              {t("product-description")} :
+          <div className='flex flex-col'>
+            <label className='mb-2 dark:text-gray-300'>
+              {t('product-description')} :
             </label>
             <textarea
-              {...register("description", { required: true, minLength: 10 })}
-              className="p-2 border rounded resize-none dark:bg-gray-700 dark:text-white dark:border-gray-600"
+              {...register('description', { required: true, minLength: 10 })}
+              className='resize-none rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               rows={2}
             />
             {/* description error message */}
             <p
-              className={`text-rose-400 text-xs ${
-                errors.description ? "visible" : "invisible"
+              className={`text-xs text-rose-400 ${
+                errors.description ? 'visible' : 'invisible'
               }`}
             >
-              {t("product-description-input-error")}
+              {t('product-description-input-error')}
             </p>
           </div>
           {/* Product Image */}
-          <div className="flex lg:hidden flex-col">
-            <label className="mb-2 dark:text-gray-300">
-              {t("product-image")} :
+          <div className='flex flex-col lg:hidden'>
+            <label className='mb-2 dark:text-gray-300'>
+              {t('product-image')} :
             </label>
-            <input
-              type="file"
-              className="p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
-              onChange={handleImageChange}
-            />
+            <MyFileInput changeHandler={handleImageChange} />
           </div>
           <DragDropImageUploader
             images={images}
@@ -285,10 +282,10 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
           />
           {/* Add Product Button */}
           <button
-            type="submit"
-            className="w-full py-2 text-white bg-purple-700 rounded hover:bg-purple-800 dark:bg-purple-900 dark:hover:bg-purple-800"
+            type='submit'
+            className='w-full rounded bg-purple-700 py-2 text-white hover:bg-purple-800 dark:bg-purple-900 dark:hover:bg-purple-800'
           >
-            {t("add-product")}
+            {t('add-product')}
           </button>
         </form>
       </div>

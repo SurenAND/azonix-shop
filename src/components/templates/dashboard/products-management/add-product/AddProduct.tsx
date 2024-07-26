@@ -4,6 +4,7 @@ import {
 } from '@/src/api/category/category.queries';
 import { useAddProduct } from '@/src/api/product/product.queries';
 import DragDropImageUploader from '@/src/components/shared/dragdrop-image-uploader/DragDropImageUploader';
+import MyFileInput from '@/src/components/shared/file-input/FileInput';
 import { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -75,7 +76,7 @@ function AddProduct() {
   }
 
   return (
-    <div className='flex min-h-screen w-2/3 select-none flex-col items-center justify-center space-y-5 dark:bg-gray-900'>
+    <div className='flex min-h-screen w-2/3 select-none flex-col items-center justify-center space-y-5'>
       <h4 className='text-4xl font-black uppercase dark:text-white'>
         {t('add-product')}
       </h4>
@@ -250,11 +251,7 @@ function AddProduct() {
             <label className='mb-2 dark:text-gray-300'>
               {t('product-image')} :
             </label>
-            <input
-              type='file'
-              className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
-              onChange={handleImageChange}
-            />
+            <MyFileInput changeHandler={handleImageChange} />
           </div>
           <DragDropImageUploader
             images={images}

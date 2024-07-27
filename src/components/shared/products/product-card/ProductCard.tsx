@@ -8,7 +8,10 @@ import HalfStar from '@/src/assets/images/rating/star-half-fill.svg';
 import EmptyStar from '@/src/assets/images/rating/star-no-fill.svg';
 import FullStar from '@/src/assets/images/rating/star.svg';
 import { MainRoutes } from '@/src/constant/routes';
+import { useUserContext } from '@/src/context/authContext';
+import useCheckoutStore from '@/src/store/checkout/checkout.store';
 import { useRouter } from 'next/router';
+import { toast } from 'sonner';
 
 type ProductCardPropsType = {
   product: ProductType;
@@ -18,6 +21,25 @@ type ProductCardPropsType = {
 const ProductCard = ({ product, index }: ProductCardPropsType) => {
   const { t, i18n } = useTranslation();
   const { push: pushRouter } = useRouter();
+
+  const { state } = useUserContext();
+  const { setShoppingCartInfo } = useCheckoutStore();
+
+  const addToCardHandler = () => {
+    if (product && state.isLogin) {
+      setShoppingCartInfo({
+        _id: product._id,
+        userId: state.userId,
+        name: product.name,
+        image: product.images[0],
+        price: product.priceAfterDiscount,
+        quantity: 0,
+      });
+    } else {
+      toast.warning(t('please-login-to-add-to-cart'));
+    }
+  };
+
   return (
     <div
       key={product._id}
@@ -103,6 +125,7 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
         <div className='mt-5 flex gap-2'>
           {/* add to cart button */}
           <button
+            onClick={addToCardHandler}
             className={`rounded-md px-6 py-2 font-medium text-white transition ${
               i18n.dir() === 'ltr' ? 'tracking-wider' : ''
             } ${

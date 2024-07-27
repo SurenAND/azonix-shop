@@ -42,11 +42,11 @@ export const useLogin = () => {
         });
         pushRouter(MainRoutes.HOME);
       }
-      if (data.status === 'fail') {
-        toast.warning(
-          'User Not Found Please Sign Up or enter valid username and password!',
-        );
-      }
+    },
+    onError() {
+      toast.warning(
+        'User Not Found Please Sign Up or enter valid username and password!',
+      );
     },
   });
 };

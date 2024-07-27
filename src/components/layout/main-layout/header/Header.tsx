@@ -1,23 +1,24 @@
-import { useLogout } from "@/src/api/auth/auth.queries";
-import UsFlag from "@/src/assets/images/languages/en.png";
-import IrFlag from "@/src/assets/images/languages/fa.png";
-import Logo from "@/src/assets/images/logo.webp";
+import { useLogout } from '@/src/api/auth/auth.queries';
+import UsFlag from '@/src/assets/images/languages/en.png';
+import IrFlag from '@/src/assets/images/languages/fa.png';
+import Logo from '@/src/assets/images/logo.webp';
 import {
   DropdownLinks,
   MenuLinks,
-} from "@/src/components/layout/main-layout/header/data";
-import DarkMode from "@/src/components/shared/dark-mode/DarkMode";
-import { MainRoutes } from "@/src/constant/routes";
-import { useUserContext } from "@/src/context/authContext";
-import Image, { StaticImageData } from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { FaCaretDown, FaCartShopping } from "react-icons/fa6";
-import { IoMdLogIn, IoMdSearch } from "react-icons/io";
-import { IoMenu } from "react-icons/io5";
+} from '@/src/components/layout/main-layout/header/data';
+import DarkMode from '@/src/components/shared/dark-mode/DarkMode';
+import { MainRoutes } from '@/src/constant/routes';
+import { useUserContext } from '@/src/context/authContext';
+import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import Image, { StaticImageData } from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FaCaretDown, FaCartShopping } from 'react-icons/fa6';
+import { IoMdLogIn, IoMdSearch } from 'react-icons/io';
+import { IoMenu } from 'react-icons/io5';
 
-const lngs: Record<"en" | "fa", { flag: StaticImageData }> = {
+const lngs: Record<'en' | 'fa', { flag: StaticImageData }> = {
   en: { flag: UsFlag },
   fa: { flag: IrFlag },
 };
@@ -27,6 +28,8 @@ export default function Header() {
   const { state } = useUserContext();
   const { mutate: logout } = useLogout();
 
+  const { shoppingCartInfo } = useCheckoutStore();
+
   const [showMobileDropdown, setShowMobileDropdown] = useState(false);
 
   const handleLogout = () => {
@@ -34,22 +37,22 @@ export default function Header() {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
-      <div className="py-4">
-        <div className="container flex justify-between items-center">
+    <div className='relative z-40 bg-white duration-200 dark:bg-gray-900 dark:text-white'>
+      <div className='py-4'>
+        <div className='container flex items-center justify-between'>
           {/* Logo and Links section */}
-          <div className="flex items-center gap-4">
+          <div className='flex items-center gap-4'>
             <Link href={MainRoutes.HOME}>
-              <Image src={Logo} alt="shop" width={144} height={144} />
+              <Image src={Logo} alt='shop' width={144} height={144} />
             </Link>
             {/* Menu Items */}
-            <div className="hidden lg:block">
-              <ul className="flex items-center gap-4">
+            <div className='hidden lg:block'>
+              <ul className='flex items-center gap-4'>
                 {MenuLinks.map((data) => (
                   <li key={data.id}>
                     <Link
                       href={data.link}
-                      className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
+                      className='inline-block px-4 font-semibold text-gray-500 duration-200 hover:text-black dark:hover:text-white'
                     >
                       {t(data.name)}
                     </Link>
@@ -57,39 +60,39 @@ export default function Header() {
                 ))}
                 {/* Dropdown */}
                 {state.isLogin && (
-                  <li className="relative cursor-pointer group">
+                  <li className='group relative cursor-pointer'>
                     <Link
-                      href="#"
-                      className="flex items-center gap-[2px] font-semibold text-gray-500 dark:hover:text-white py-2"
+                      href='#'
+                      className='flex items-center gap-[2px] py-2 font-semibold text-gray-500 dark:hover:text-white'
                     >
-                      {t("quick-links")}
+                      {t('quick-links')}
                       <span>
-                        <FaCaretDown className="group-hover:rotate-180 duration-300" />
+                        <FaCaretDown className='duration-300 group-hover:rotate-180' />
                       </span>
                     </Link>
                     {/* Dropdown Menu */}
-                    <div className="absolute z-[999] hidden group-hover:block w-[200px] rounded-md bg-axGray dark:bg-gray-700 p-2 dark:text-white">
-                      <ul className="space-y-2">
+                    <div className='absolute z-[999] hidden w-[200px] rounded-md bg-axGray p-2 group-hover:block dark:bg-gray-700 dark:text-white'>
+                      <ul className='space-y-2'>
                         {DropdownLinks.map((data) => (
                           <li
                             key={data.id}
                             className={`${
                               data.roleToAccess.includes(state.role)
-                                ? "flex"
-                                : "hidden"
+                                ? 'flex'
+                                : 'hidden'
                             }`}
                           >
                             <Link
                               href={data.link}
-                              className="text-gray-500 dark:text-gray-400 dark:hover:text-white duration-200 inline-block w-full p-2 hover:bg-primary/20 rounded-md font-semibold"
+                              className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'
                             >
                               {t(data.name)}
                             </Link>
                           </li>
                         ))}
                         <li onClick={handleLogout}>
-                          <span className="text-gray-500 dark:text-gray-400 dark:hover:text-white duration-200 inline-block w-full p-2 hover:bg-primary/20 rounded-md font-semibold">
-                            {t("logout")}
+                          <span className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'>
+                            {t('logout')}
                           </span>
                         </li>
                       </ul>
@@ -99,40 +102,40 @@ export default function Header() {
               </ul>
             </div>
             {/* Dropdown on Mobile */}
-            <div className="relative lg:hidden">
+            <div className='relative lg:hidden'>
               <button
-                className="bg-axWhite dark:bg-axDarkPurple rounded-lg transition-all duration-200 ease-in-out text-axLightPurple dark:text-axWhite hover:bg-axDarkPurple dark:hover:bg-axLightPurple hover:text-white w-10 h-10 flex items-center justify-center"
+                className='flex h-10 w-10 items-center justify-center rounded-lg bg-axWhite text-axLightPurple transition-all duration-200 ease-in-out hover:bg-axDarkPurple hover:text-white dark:bg-axDarkPurple dark:text-axWhite dark:hover:bg-axLightPurple'
                 onClick={() => setShowMobileDropdown((prev) => !prev)}
               >
-                <IoMenu className="w-6 h-6" />
+                <IoMenu className='h-6 w-6' />
               </button>
               {/* Dropdown Menu */}
               <div
-                className={`absolute z-[999] w-[200px] rounded-md bg-axGray dark:bg-gray-700 p-2 dark:text-white ${
-                  showMobileDropdown ? "block" : "hidden"
+                className={`absolute z-[999] w-[200px] rounded-md bg-axGray p-2 dark:bg-gray-700 dark:text-white ${
+                  showMobileDropdown ? 'block' : 'hidden'
                 }`}
               >
-                <ul className="space-y-2">
+                <ul className='space-y-2'>
                   {DropdownLinks.map((data) => (
                     <li
                       key={data.id}
                       className={`${
                         data.roleToAccess.includes(state.role)
-                          ? "flex"
-                          : "hidden"
+                          ? 'flex'
+                          : 'hidden'
                       }`}
                     >
                       <Link
                         href={data.link}
-                        className="text-gray-500 dark:text-gray-400 dark:hover:text-white duration-200 inline-block w-full p-2 hover:bg-primary/20 rounded-md font-semibold"
+                        className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'
                       >
                         {t(data.name)}
                       </Link>
                     </li>
                   ))}
                   <li onClick={handleLogout}>
-                    <span className="text-gray-500 dark:text-gray-400 dark:hover:text-white duration-200 inline-block w-full p-2 hover:bg-primary/20 rounded-md font-semibold">
-                      {t("logout")}
+                    <span className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'>
+                      {t('logout')}
                     </span>
                   </li>
                 </ul>
@@ -141,42 +144,49 @@ export default function Header() {
           </div>
 
           {/* Navbar Right section */}
-          <div className="flex justify-between items-center gap-4">
+          <div className='flex items-center justify-between gap-4'>
             {/* Search Bar section */}
-            <div className="relative group hidden sm:block">
+            <div className='group relative hidden sm:block'>
               <input
-                type="text"
-                placeholder={t("search-for-products")}
-                className="search-bar"
+                type='text'
+                placeholder={t('search-for-products')}
+                className='search-bar'
               />
               <IoMdSearch
                 className={
-                  "text-2xl text-gray-600 group-hover:text-primary dark:text-gray-400 absolute top-1/2 -translate-y-1/2 end-3 duration-200"
+                  'absolute end-3 top-1/2 -translate-y-1/2 text-2xl text-gray-600 duration-200 group-hover:text-primary dark:text-gray-400'
                 }
               />
             </div>
 
             {/* Login Button section */}
             {!state.isLogin && (
-              <button className="relative p-3">
+              <button className='relative p-3'>
                 <Link href={MainRoutes.REGISTER}>
-                  <IoMdLogIn className="text-2xl text-gray-600 dark:text-gray-400" />
+                  <IoMdLogIn className='text-2xl text-gray-600 dark:text-gray-400' />
                 </Link>
-                <div className="w-4 h-4 text-gray-600 dark:text-gray-400 absolute bottom-2 end-0 text-sm">
-                  {t("login")}
+                <div className='absolute bottom-2 end-0 h-4 w-4 text-sm text-gray-600 dark:text-gray-400'>
+                  {t('login')}
                 </div>
               </button>
             )}
 
             {/* Order Button section */}
-            <button className="relative p-3">
-              <FaCartShopping className="text-xl text-gray-600 dark:text-gray-400" />
-              <div className="w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 end-0 flex items-center justify-center text-xs">
-                4
-              </div>
+            <button className='relative p-3'>
+              <FaCartShopping className='text-xl text-gray-600 dark:text-gray-400' />
+              {shoppingCartInfo.filter((item) => item.userId === state.userId)
+                .length > 0 && (
+                <div className='absolute end-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white'>
+                  {
+                    shoppingCartInfo.filter(
+                      (item) => item.userId === state.userId,
+                    ).length
+                  }
+                </div>
+              )}
             </button>
 
-            <div className="flex items-center gap-4">
+            <div className='flex items-center gap-4'>
               {Object.keys(lngs).map((lng) => {
                 return (
                   <button
@@ -185,8 +195,8 @@ export default function Header() {
                     disabled={i18n.resolvedLanguage === lng}
                   >
                     <Image
-                      src={lngs[lng as "en" | "fa"].flag}
-                      alt="language"
+                      src={lngs[lng as 'en' | 'fa'].flag}
+                      alt='language'
                       width={20}
                       height={20}
                     />

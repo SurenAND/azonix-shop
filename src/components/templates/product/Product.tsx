@@ -35,7 +35,8 @@ const ProductTemplate = ({ productId }: ProductTemplateProps) => {
         userId: state.userId,
         name: product?.data.product.name,
         image: product?.data.product.images[0],
-        price: product?.data.product.priceAfterDiscount,
+        price: product?.data.product.price,
+        priceAfterDiscount: product?.data.product.priceAfterDiscount,
         quantity: amount,
       });
     } else {

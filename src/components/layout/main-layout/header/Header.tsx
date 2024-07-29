@@ -12,6 +12,7 @@ import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaCaretDown, FaCartShopping } from 'react-icons/fa6';
@@ -24,6 +25,7 @@ const lngs: Record<'en' | 'fa', { flag: StaticImageData }> = {
 };
 
 export default function Header() {
+  const { push: pushRouter } = useRouter();
   const { t, i18n } = useTranslation();
   const { state } = useUserContext();
   const { mutate: logout } = useLogout();
@@ -172,7 +174,10 @@ export default function Header() {
             )}
 
             {/* Order Button section */}
-            <button className='relative p-3'>
+            <button
+              className='relative p-3'
+              onClick={() => pushRouter(MainRoutes.CART)}
+            >
               <FaCartShopping className='text-xl text-gray-600 dark:text-gray-400' />
               {shoppingCartInfo.filter((item) => item.userId === state.userId)
                 .length > 0 && (

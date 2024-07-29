@@ -31,6 +31,10 @@ const initialState: CheckoutState = {
   },
   setActiveStep: () => {},
   setShoppingCartInfo: () => {},
+  incrementQuantity: () => {},
+  decrementQuantity: () => {},
+  removeFromCart: () => {},
+  clearUserCart: () => {},
   setPersonalInfo: () => {},
   setShippingInfo: () => {},
   setPaymentOptionsInfo: () => {},
@@ -46,7 +50,7 @@ const useCheckoutStore = create<CheckoutState>()(
       setShoppingCartInfo: (info: ShoppingCartItem) => {
         set((prev) => {
           const existingItemIndex = prev.shoppingCartInfo.findIndex(
-            (item) => item._id === info._id,
+            (item) => item._id === info._id && item.userId === info.userId,
           );
 
           if (existingItemIndex !== -1) {
@@ -69,6 +73,42 @@ const useCheckoutStore = create<CheckoutState>()(
             };
           }
         });
+      },
+
+      incrementQuantity: (userId: string, productId: string) => {
+        set((prev) => ({
+          shoppingCartInfo: prev.shoppingCartInfo.map((item) =>
+            item._id === productId && item.userId === userId
+              ? { ...item, quantity: item.quantity + 1 }
+              : item,
+          ),
+        }));
+      },
+
+      decrementQuantity: (userId: string, productId: string) => {
+        set((prev) => ({
+          shoppingCartInfo: prev.shoppingCartInfo.map((item) =>
+            item._id === productId && item.userId === userId
+              ? { ...item, quantity: item.quantity - 1 }
+              : item,
+          ),
+        }));
+      },
+
+      removeFromCart: (userId: string, productId: string) => {
+        set((prev) => ({
+          shoppingCartInfo: prev.shoppingCartInfo.filter(
+            (item) => item._id !== productId || item.userId !== userId,
+          ),
+        }));
+      },
+
+      clearUserCart: (userId: string) => {
+        set((prev) => ({
+          shoppingCartInfo: prev.shoppingCartInfo.filter(
+            (item) => item.userId !== userId,
+          ),
+        }));
       },
 
       setPersonalInfo: (info: PersonalInfo) => set({ personalInfo: info }),

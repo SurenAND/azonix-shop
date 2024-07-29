@@ -4,6 +4,7 @@ export interface ShoppingCartItem {
   name: string;
   image: string;
   price: number;
+  priceAfterDiscount: number;
   quantity: number;
 }
 
@@ -37,6 +38,10 @@ export interface CheckoutState {
   setPersonalInfo: (info: PersonalInfo) => void;
   shippingInfo: ShippingInfo;
   setShippingInfo: (info: ShippingInfo) => void;
+  incrementQuantity: (userId: string, productId: string) => void;
+  decrementQuantity: (userId: string, productId: string) => void;
+  removeFromCart: (userId: string, productId: string) => void;
+  clearUserCart: (userId: string) => void;
   paymentOptionsInfo: PaymentOptionsInfo;
   setPaymentOptionsInfo: (info: PaymentOptionsInfo) => void;
   reset: () => void;

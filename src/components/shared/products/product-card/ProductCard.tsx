@@ -32,7 +32,8 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
         userId: state.userId,
         name: product.name,
         image: product.images[0],
-        price: product.priceAfterDiscount,
+        price: product.price,
+        priceAfterDiscount: product.priceAfterDiscount,
         quantity: 0,
       });
     } else {

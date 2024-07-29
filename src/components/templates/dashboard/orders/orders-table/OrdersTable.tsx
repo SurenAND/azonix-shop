@@ -1,6 +1,6 @@
-import { OrderType } from "@/src/api/orders/orders.type";
-import { useTranslation } from "react-i18next";
-import { BsClipboard2CheckFill } from "react-icons/bs";
+import { OrderType } from '@/src/api/orders/orders.type';
+import { useTranslation } from 'react-i18next';
+import { BsClipboard2CheckFill } from 'react-icons/bs';
 
 export const OrdersTable = ({
   list,
@@ -13,28 +13,28 @@ export const OrdersTable = ({
   const showOrdersInfo = (id: string) => {};
 
   return (
-    <table className="self-start border border-collapse rounded w-full text-center">
-      <thead className="select-none">
-        <tr className="bg-gray-500 text-white dark:text-black flex flex-col mb-4 sm:table-row">
-          <th className="border text-md w-full md:w-[20%] px-1 py-3">
-            {t("user-name")}
+    <table className='w-full border-collapse self-start rounded border text-center'>
+      <thead className='select-none'>
+        <tr className='mb-4 flex flex-col bg-gray-500 text-white dark:text-black sm:table-row'>
+          <th className='text-md w-full border px-1 py-3 md:w-[20%]'>
+            {t('user-name')}
           </th>
-          <th className="border text-md w-full md:w-[25%] px-1 py-3">
-            {t("total-price")}
+          <th className='text-md w-full border px-1 py-3 md:w-[25%]'>
+            {t('total-price')}
           </th>
-          <th className="border text-md w-full md:w-[20%] px-1 py-3">
+          <th className='text-md w-full border px-1 py-3 md:w-[20%]'>
             <select
-              name="category"
-              className="bg-gray-500 text-center w-full outline-none"
+              name='category'
+              className='w-full bg-gray-500 text-center outline-none'
               onChange={(e) => onFilteredList(e.target.value)}
             >
-              <option className="hidden">{t("order-time")}</option>
-              <option value="desc">{t("newest")}</option>
-              <option value="asc">{t("oldest")}</option>
+              <option className='hidden'>{t('order-time')}</option>
+              <option value='desc'>{t('newest')}</option>
+              <option value='asc'>{t('oldest')}</option>
             </select>
           </th>
-          <th className="border text-md w-full md:w-[15%] px-1 py-3">
-            {t("review")}
+          <th className='text-md w-full border px-1 py-3 md:w-[15%]'>
+            {t('review')}
           </th>
         </tr>
       </thead>
@@ -43,24 +43,24 @@ export const OrdersTable = ({
           return (
             <tr
               key={item._id}
-              className={`flex flex-col mb-4 sm:table-row ${
-                Math.floor(index % 2) !== 0 ? "bg-gray-400 text-white" : ""
-              } ${Math.floor(index % 2) !== 0 ? "dark:text-black" : ""}`}
+              className={`mb-4 flex flex-col sm:table-row ${
+                Math.floor(index % 2) !== 0 ? 'bg-gray-400 text-white' : ''
+              } ${Math.floor(index % 2) !== 0 ? 'dark:text-black' : ''}`}
             >
-              <td className="p-1 border truncate">
+              <td className='truncate border p-1'>
                 {item?.user.firstname} {item?.user.lastname}
               </td>
-              <td className="p-1 border truncate">
-                {item.totalPrice.toLocaleString("en")}
+              <td className='truncate border p-1'>
+                {item.totalPrice.toFixed(2)}
               </td>
-              <td className="p-1 border truncate">
-                {new Date(item.createdAt).toLocaleDateString("en")}
+              <td className='truncate border p-1'>
+                {new Date(item.deliveryDate).toLocaleDateString('en')}
               </td>
-              <td className="p-1 border truncate">
-                <div className="flex justify-center">
+              <td className='truncate border p-1'>
+                <div className='flex justify-center'>
                   <BsClipboard2CheckFill
-                    width="20"
-                    color="#525252"
+                    width='20'
+                    color='#525252'
                     onClick={() => showOrdersInfo(item._id)}
                   />
                 </div>

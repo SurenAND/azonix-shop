@@ -5,12 +5,14 @@ import {
   LoginApi,
   logoutApi,
   SignupApi,
+  updateUserApi,
 } from '@/src/api/auth/auth.api';
 import {
   AllUsersType,
   GetUsersParamsType,
   newUserType,
   UserByIdType,
+  UserDataType,
 } from '@/src/api/auth/auth.type';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
@@ -111,5 +113,18 @@ export const useGetUserById = (id: string) => {
     queryFn: () => getUserByIdApi(id),
     refetchOnMount: 'always',
     enabled: !!id,
+  });
+};
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ newUser, data }: { newUser: UserDataType; data: any }) =>
+      updateUserApi(newUser, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['users'],
+      });
+    },
   });
 };

@@ -6,21 +6,23 @@ import DeliveryInfo from '@/src/components/templates/cart/delivery-info/Delivery
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 const CartTemplate = () => {
-  const [deliveryDate, setDeliveryDate] = useState<string>();
   const [paymentMethodSelected, setPaymentMethodSelected] = useState<
     number | null
   >(null);
   const [paymentName, setPaymentName] = useState('');
 
-  const { shoppingCartInfo, clearUserCart } = useCheckoutStore();
-  const { push: pushRouter } = useRouter();
+  const {
+    shoppingCartInfo,
+    clearUserCart,
+    deliveryDate,
+    resetUserDeliveryDate,
+  } = useCheckoutStore();
   const { t } = useTranslation();
   const { state } = useUserContext();
 
@@ -56,7 +58,7 @@ const CartTemplate = () => {
     }
 
     if (paymentName === 'online') {
-      pushRouter(MainRoutes.PAYMENT);
+      location.href = MainRoutes.PAYMENT;
     } else {
       // add new order
       addNewOrder(
@@ -69,7 +71,10 @@ const CartTemplate = () => {
               count: item.quantity,
             })),
           deliveryStatus: false,
-          deliveryDate: deliveryDate?.split('T')[0] || '',
+          deliveryDate:
+            deliveryDate
+              .find((item) => item.userId === state.userId)
+              ?.date.split('T')[0] || '',
         },
         {
           onSuccess: (data) => {
@@ -85,6 +90,8 @@ const CartTemplate = () => {
               });
               // clear user's cart
               clearUserCart(state?.userId);
+              // reset user delivery date
+              resetUserDeliveryDate(state?.userId);
             }
           },
         },
@@ -103,7 +110,6 @@ const CartTemplate = () => {
           <DeliveryInfo
             register={register}
             errors={errors}
-            setDeliveryDate={setDeliveryDate}
             setPaymentMethodSelected={setPaymentMethodSelected}
             setPaymentName={setPaymentName}
             paymentMethodSelected={paymentMethodSelected}

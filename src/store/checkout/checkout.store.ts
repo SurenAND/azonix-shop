@@ -1,12 +1,16 @@
 import {
   CheckoutState,
+  DeliveryDate,
   ShoppingCartItem,
 } from '@/src/store/checkout/checkout.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 const initialState: CheckoutState = {
+  deliveryDate: [],
   shoppingCartInfo: [],
+  setDeliveryDate: () => {},
+  resetUserDeliveryDate: () => {},
   setShoppingCartInfo: () => {},
   incrementQuantity: () => {},
   decrementQuantity: () => {},
@@ -18,6 +22,29 @@ const useCheckoutStore = create<CheckoutState>()(
   persist(
     (set) => ({
       ...initialState,
+      setDeliveryDate: (data: DeliveryDate) => {
+        set((prev) => {
+          const existingItemIndex = prev.deliveryDate.findIndex(
+            (item) => item.userId === data.userId,
+          );
+          if (existingItemIndex !== -1) {
+            const updatedDeliveryDate = [...prev.deliveryDate];
+            updatedDeliveryDate[existingItemIndex] = data;
+            return { deliveryDate: updatedDeliveryDate };
+          } else {
+            return { deliveryDate: [...prev.deliveryDate, data] };
+          }
+        });
+      },
+
+      resetUserDeliveryDate: (userId: string) => {
+        set((prev) => ({
+          deliveryDate: prev.deliveryDate.filter(
+            (item) => item.userId !== userId,
+          ),
+        }));
+      },
+
       setShoppingCartInfo: (info: ShoppingCartItem) => {
         set((prev) => {
           const existingItemIndex = prev.shoppingCartInfo.findIndex(

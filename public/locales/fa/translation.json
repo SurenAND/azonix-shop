@@ -168,5 +168,8 @@
   "cart-require-account-part-1": "یک یا چند محصول در سبد خرید شما نیاز به حساب کاربری دارند.",
   "cart-require-account-part-2": "ورود یا ثبت نام",
   "remove": "حذف",
-  "confirm-order": "تایید سفارش"
+  "confirm-order": "تایید سفارش",
+  "payment-result-successful": "با تشکر از پرداخت شما، سفارش شما ثبت شده و جهت هماهنگی ارسال با شما تماس گرفته خواهد شد.",
+  "payment-result-failed": "پرداخت موفقیت آمیز نبود، سفارش شما در انتظار پرداخت است.",
+  "back-to-payment-gateway": "بازگشت به درگاه پرداخت"
 }

@@ -8,4 +8,5 @@ export const MainRoutes = {
   NOTFOUND: '/404',
   SHOP: '/shop',
   PAYMENT: '/payment',
+  PAYMENT_RESULT: '/payment-result',
 };

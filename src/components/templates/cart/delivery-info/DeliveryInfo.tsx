@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next';
 type DeliveryInfoPropsType = {
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors;
-  setDeliveryDate: Dispatch<SetStateAction<string | undefined>>;
   paymentMethodSelected: number | null;
   setPaymentName: Dispatch<SetStateAction<string>>;
   setPaymentMethodSelected: Dispatch<SetStateAction<number | null>>;
@@ -24,7 +23,6 @@ type DeliveryInfoPropsType = {
 const DeliveryInfo = ({
   register,
   errors,
-  setDeliveryDate,
   setPaymentName,
   setPaymentMethodSelected,
   paymentMethodSelected,
@@ -32,7 +30,6 @@ const DeliveryInfo = ({
   reset,
 }: DeliveryInfoPropsType) => {
   const [scheduleDelivery, setScheduleDelivery] = useState(false);
-
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -176,7 +173,7 @@ const DeliveryInfo = ({
               <label className='mb-2 dark:text-gray-300'>
                 {t('delivery-date')}
               </label>
-              <DataPickerInput setDeliveryDate={setDeliveryDate} />
+              <DataPickerInput />
             </div>
             {/* Note */}
             <div className='flex flex-col'>

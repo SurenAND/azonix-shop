@@ -1,5 +1,10 @@
+import { useAddNewOrder } from '@/src/api/orders/orders.queries';
+import { useUpdateProduct } from '@/src/api/product/product.queries';
 import CardBackground from '@/src/assets/images/card-bg.jpeg';
 import Chip from '@/src/assets/images/chip.png';
+import { MainRoutes } from '@/src/constant/routes';
+import { useUserContext } from '@/src/context/authContext';
+import useCheckoutStore from '@/src/store/checkout/checkout.store';
 import { useState } from 'react';
 
 const CreditCardForm = () => {
@@ -11,6 +16,16 @@ const CreditCardForm = () => {
   const [isCardFlipped, setIsCardFlipped] = useState(false);
 
   const minCardYear = new Date().getFullYear();
+
+  const { mutate: addNewOrder } = useAddNewOrder();
+  const { mutate: updateProduct } = useUpdateProduct();
+  const { state } = useUserContext();
+  const {
+    shoppingCartInfo,
+    clearUserCart,
+    deliveryDate,
+    resetUserDeliveryDate,
+  } = useCheckoutStore();
 
   const flipCard = (status: boolean) => {
     setIsCardFlipped(status);
@@ -31,6 +46,46 @@ const CreditCardForm = () => {
     }
 
     return maskedNumber;
+  };
+
+  const handlePayment = () => {
+    // add new order
+    addNewOrder(
+      {
+        user: state?.userId,
+        products: shoppingCartInfo
+          .filter((item) => item.userId === state.userId)
+          .map((item) => ({
+            product: item._id,
+            count: item.quantity,
+          })),
+        deliveryStatus: false,
+        deliveryDate:
+          deliveryDate
+            .find((item) => item.userId === state.userId)
+            ?.date.split('T')[0] || '',
+      },
+      {
+        onSuccess: (data) => {
+          if (data.status === 'success') {
+            // remove orders from product
+            data?.data.order.products.forEach((item: any) => {
+              updateProduct({
+                newProduct: item.product,
+                data: {
+                  quantity: item.product.quantity - item.count,
+                },
+              });
+            });
+            // clear user's cart
+            clearUserCart(state?.userId);
+            // reset user delivery date
+            resetUserDeliveryDate(state?.userId);
+            location.href = MainRoutes.PAYMENT_RESULT + '?result=successful';
+          }
+        },
+      },
+    );
   };
 
   return (
@@ -189,10 +244,18 @@ const CreditCardForm = () => {
             />
           </div>
           <div className='flex justify-between gap-5'>
-            <button className='w-full rounded-lg bg-primary/90 p-3 font-semibold text-white shadow-lg hover:bg-primary focus:outline-none'>
+            <button
+              className='w-full rounded-lg bg-primary/90 p-3 font-semibold text-white shadow-lg hover:bg-primary focus:outline-none'
+              onClick={() =>
+                (location.href = MainRoutes.PAYMENT_RESULT + '?result=failed')
+              }
+            >
               Cancel
             </button>
-            <button className='w-full rounded-lg bg-axBlue p-3 font-semibold text-white shadow-lg hover:bg-axBlue/80 focus:outline-none'>
+            <button
+              className='w-full rounded-lg bg-axBlue p-3 font-semibold text-white shadow-lg hover:bg-axBlue/80 focus:outline-none'
+              onClick={handlePayment}
+            >
               Confirm
             </button>
           </div>

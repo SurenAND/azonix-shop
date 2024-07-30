@@ -8,7 +8,15 @@ export interface ShoppingCartItem {
   quantity: number;
 }
 
+export interface DeliveryDate {
+  date: string;
+  userId: string;
+}
+
 export interface CheckoutState {
+  deliveryDate: DeliveryDate[];
+  setDeliveryDate: (data: DeliveryDate) => void;
+  resetUserDeliveryDate: (userId: string) => void;
   shoppingCartInfo: ShoppingCartItem[];
   setShoppingCartInfo: (info: ShoppingCartItem) => void;
   incrementQuantity: (userId: string, productId: string) => void;

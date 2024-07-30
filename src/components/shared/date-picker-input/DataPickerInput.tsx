@@ -1,4 +1,6 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useUserContext } from '@/src/context/authContext';
+import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import { useEffect, useState } from 'react';
 import gregorian from 'react-date-object/calendars/gregorian';
 import persian from 'react-date-object/calendars/persian';
 import gregorian_en from 'react-date-object/locales/gregorian_en';
@@ -9,11 +11,7 @@ import { CiCalendar } from 'react-icons/ci';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
 import * as shamsi from 'shamsi-date-converter';
 
-type DataPickerInputProps = {
-  setDeliveryDate: Dispatch<SetStateAction<string | undefined>>;
-};
-
-const DataPickerInput = ({ setDeliveryDate }: DataPickerInputProps) => {
+const DataPickerInput = () => {
   const { t, i18n } = useTranslation();
   const [value, setValue] = useState<{
     format?: string;
@@ -25,6 +23,9 @@ const DataPickerInput = ({ setDeliveryDate }: DataPickerInputProps) => {
   });
   const [hasDate, setHasDate] = useState(false);
   const [isValidDate, setIsValidDate] = useState<null | boolean>(null);
+
+  const { setDeliveryDate } = useCheckoutStore();
+  const { state } = useUserContext();
 
   const convert = (date: DateObject | null) => {
     if (date) {
@@ -50,7 +51,10 @@ const DataPickerInput = ({ setDeliveryDate }: DataPickerInputProps) => {
         // Add 1 day
         date.setDate(date.getDate() + 1);
 
-        setDeliveryDate(date.toISOString());
+        setDeliveryDate({
+          date: date.toISOString(),
+          userId: state.userId,
+        });
         setIsValidDate(true);
       } else {
         setIsValidDate(false);

@@ -167,5 +167,6 @@
   "proceed-to-payment": "رفتن به صفحه پرداخت",
   "cart-require-account-part-1": "یک یا چند محصول در سبد خرید شما نیاز به حساب کاربری دارند.",
   "cart-require-account-part-2": "ورود یا ثبت نام",
-  "remove": "حذف"
+  "remove": "حذف",
+  "confirm-order": "تایید سفارش"
 }

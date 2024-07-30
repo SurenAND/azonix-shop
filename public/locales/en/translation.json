@@ -167,5 +167,6 @@
   "proceed-to-payment": "Proceed to Payment",
   "cart-require-account-part-1": "One or more items in your cart require an account.",
   "cart-require-account-part-2": "Sign in or create an account now.",
-  "remove": "remove"
+  "remove": "remove",
+  "confirm-order": "Confirm Order"
 }

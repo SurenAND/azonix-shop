@@ -109,7 +109,7 @@ export const useDeleteUser = () => {
 
 export const useGetUserById = (id: string) => {
   return useQuery<UserByIdType>({
-    queryKey: ['user', 'single', id],
+    queryKey: ['users', 'single', id],
     queryFn: () => getUserByIdApi(id),
     refetchOnMount: 'always',
     enabled: !!id,

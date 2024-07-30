@@ -7,4 +7,5 @@ export const MainRoutes = {
   PROFILE: '/profile',
   NOTFOUND: '/404',
   SHOP: '/shop',
+  PAYMENT: '/payment',
 };

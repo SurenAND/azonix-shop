@@ -176,5 +176,7 @@
   "customer-name": "نام مشتری",
   "phone": "تلفن",
   "delivery-time": "زمان تحویل",
-  "product-image-limit": "عکس (حداکثر 4 عکس)"
+  "product-image-limit": "عکس (حداکثر 4 عکس)",
+  "product-discount-percentage": "درصد تخفیف",
+  "product-discount-percentage-input-error": "درصد تخفیف الزامی است!"
 }

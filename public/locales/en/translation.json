@@ -176,5 +176,7 @@
   "customer-name": "Customer Name",
   "phone": "Phone",
   "delivery-time": "Delivery Time",
-  "product-image-limit": "Images (Max 4)"
+  "product-image-limit": "Images (Max 4)",
+  "product-discount-percentage": "Discount Percentage",
+  "product-discount-percentage-input-error": "Discount percentage is required!"
 }

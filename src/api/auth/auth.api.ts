@@ -39,3 +39,8 @@ export const getUserByIdApi = async (id: string) => {
   const response = await req.get(`/users/${id}`);
   return response.data;
 };
+
+export const updateUserApi = async (user: UserDataType, data: any) => {
+  const response = await req.patch(`/users/${user._id}`, data);
+  return response.data;
+};

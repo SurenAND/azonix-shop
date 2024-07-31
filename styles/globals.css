@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -14,13 +14,13 @@ body {
 }
 
 /* For LTR, use Poppins */
-[dir="ltr"] {
-  font-family: "Poppins", sans-serif;
+[dir='ltr'] {
+  font-family: 'Poppins', sans-serif;
 }
 
 /* For RTL, use Vazirmatn */
-[dir="rtl"] {
-  font-family: "Vazirmatn", sans-serif;
+[dir='rtl'] {
+  font-family: 'Vazirmatn', sans-serif;
 }
 
 @layer base {
@@ -32,11 +32,24 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
 }
 
 @layer components {
   .search-bar {
-    @apply w-0 transition-all duration-300 rounded-full group-hover:w-[18vw] group-hover:border group-hover:border-gray-500 px-3 py-1 focus:outline-none dark:border-gray-800 dark:bg-gray-900 group-hover:dark:bg-gray-800;
+    @apply w-0 rounded-full px-3 py-1 transition-all duration-300 focus:outline-none group-hover:w-[18vw] group-hover:border group-hover:border-gray-500 dark:border-gray-800 dark:bg-gray-900 group-hover:dark:bg-gray-800;
   }
 }
 

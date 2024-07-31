@@ -56,6 +56,13 @@ export type AllOrdersType = {
   };
 };
 
+export type SingleOrderType = {
+  status: string;
+  data: {
+    order: OrderType;
+  };
+};
+
 export type GetOrdersParamsType = {
   page?: number;
   sort?: string;

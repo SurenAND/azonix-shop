@@ -249,7 +249,7 @@ function AddProduct() {
           {/* Product Image */}
           <div className='flex flex-col lg:hidden'>
             <label className='mb-2 dark:text-gray-300'>
-              {t('product-image')} :
+              {t('product-image-limit')} :
             </label>
             <MyFileInput changeHandler={handleImageChange} />
           </div>

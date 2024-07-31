@@ -84,7 +84,7 @@
   "bookshelf-speakers": "رومیزی",
   "delete-edit": "حذف/ویرایش",
   "product-name": "نام محصول",
-  "product-image": "عکس (حداکثر 4 عکس)",
+  "product-image": "تصویر محصول",
   "all-category": "همه دسته بندی ها",
   "price": "قیمت",
   "quantity": "تعداد",
@@ -171,5 +171,12 @@
   "confirm-order": "تایید سفارش",
   "payment-result-successful": "با تشکر از پرداخت شما، سفارش شما ثبت شده و جهت هماهنگی ارسال با شما تماس گرفته خواهد شد.",
   "payment-result-failed": "پرداخت موفقیت آمیز نبود، سفارش شما در انتظار پرداخت است.",
-  "back-to-payment-gateway": "بازگشت به درگاه پرداخت"
+  "back-to-payment-gateway": "بازگشت به درگاه پرداخت",
+  "delivered-success": "سفارش با موفقیت تحویل داده شد.",
+  "customer-name": "نام مشتری",
+  "phone": "تلفن",
+  "delivery-time": "زمان تحویل",
+  "product-image-limit": "عکس (حداکثر 4 عکس)",
+  "product-discount-percentage": "درصد تخفیف",
+  "product-discount-percentage-input-error": "درصد تخفیف الزامی است!"
 }

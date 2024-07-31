@@ -84,7 +84,7 @@
   "bookshelf-speakers": "Bookshelf Speakers",
   "delete-edit": "Delete/Edit",
   "product-name": "Product Name",
-  "product-image": "Images (Max 4)",
+  "product-image": "Product Image",
   "all-category": "All Category",
   "price": "Price",
   "quantity": "Quantity",
@@ -171,5 +171,12 @@
   "confirm-order": "Confirm Order",
   "payment-result-successful": "Thank you for your purchase, your order has been registered and you will be contacted to coordinate shipping.",
   "payment-result-failed": "Payment was not successful, your order is pending payment.",
-  "back-to-payment-gateway": "Back to Payment Gateway"
+  "back-to-payment-gateway": "Back to Payment Gateway",
+  "delivered-success": "The order has been delivered successfully.",
+  "customer-name": "Customer Name",
+  "phone": "Phone",
+  "delivery-time": "Delivery Time",
+  "product-image-limit": "Images (Max 4)",
+  "product-discount-percentage": "Discount Percentage",
+  "product-discount-percentage-input-error": "Discount percentage is required!"
 }

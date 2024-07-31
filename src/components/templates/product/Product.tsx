@@ -2,6 +2,7 @@ import { useGetProductById } from '@/src/api/product/product.queries';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import parse from 'html-react-parser';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -99,9 +100,9 @@ const ProductTemplate = ({ productId }: ProductTemplateProps) => {
             <h1 className='text-3xl font-bold'>{product?.data.product.name}</h1>
           </div>
           {/* description */}
-          <p className='text-gray-700 dark:text-gray-400 lg:min-h-72'>
-            {product?.data.product.description}
-          </p>
+          <div className='text-gray-700 dark:text-gray-400 lg:min-h-72'>
+            {product && parse(product?.data.product.description)}
+          </div>
           {/* price */}
           <div className='flex items-center gap-5'>
             {/* after discount price */}

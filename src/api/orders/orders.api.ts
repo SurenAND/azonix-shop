@@ -1,5 +1,5 @@
 import { req } from '@/src/api/api.config';
-import { GetOrdersParamsType } from '@/src/api/orders/orders.type';
+import { GetOrdersParamsType, OrderType } from '@/src/api/orders/orders.type';
 
 export const getAllOrdersApi = async (params: GetOrdersParamsType) => {
   const _params: any = {};
@@ -15,5 +15,15 @@ export const getAllOrdersApi = async (params: GetOrdersParamsType) => {
 
 export const addNewOrderApi = async (data: any) => {
   const response = await req.post('/orders', data);
+  return response.data;
+};
+
+export const getOrderByIdApi = async (orderId: string) => {
+  const response = await req.get(`/orders/${orderId}`);
+  return response.data;
+};
+
+export const updateOrderApi = async (order: OrderType, data: any) => {
+  const response = await req.patch(`/orders/${order._id}`, data);
   return response.data;
 };

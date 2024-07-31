@@ -5,9 +5,12 @@ import {
 import { useAddProduct } from '@/src/api/product/product.queries';
 import DragDropImageUploader from '@/src/components/shared/dragdrop-image-uploader/DragDropImageUploader';
 import MyFileInput from '@/src/components/shared/file-input/FileInput';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import 'react-quill/dist/quill.snow.css';
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 function AddProduct() {
   const { t } = useTranslation();
@@ -19,12 +22,14 @@ function AddProduct() {
     formState: { errors },
   } = useForm();
   const [images, setImages] = useState<File[]>([]);
+  const [description, setDescription] = useState('');
   const { mutate: addNewProduct } = useAddProduct();
   const { data: categories } = useGetCategories();
   const [productCategory, setProductCategory] = useState('');
   const { data: subCategories, refetch } = useGetSubCategories({
     category: productCategory,
   });
+
   const filteredList = (id: string) => {
     setProductCategory(id);
   };
@@ -55,11 +60,12 @@ function AddProduct() {
     const FD = new FormData();
     FD.append('name', data.name);
     FD.append('price', data.price);
+    FD.append('discountPercentage', data.discountPercentage);
     FD.append('quantity', data.quantity);
     FD.append('brand', data.brand);
     FD.append('category', data.category);
     FD.append('subcategory', data.subcategory);
-    FD.append('description', data.description);
+    FD.append('description', description);
     if (images && images.length > 0) {
       images.forEach((image) => {
         FD.append('images', image);
@@ -106,8 +112,8 @@ function AddProduct() {
               {t('product-name-input-error')}
             </p>
           </div>
-          {/* Product Price */}
-          <div className='grid grid-cols-2 gap-4'>
+          <div className='grid grid-cols-3 gap-4'>
+            {/* Product Price */}
             <div className='flex flex-col'>
               <label className='mb-2 dark:text-gray-300'>
                 {t('product-price')} :
@@ -127,6 +133,30 @@ function AddProduct() {
                 }`}
               >
                 {t('product-price-input-error')}
+              </p>
+            </div>
+            {/* Product Discount Percentage */}
+            <div className='flex flex-col'>
+              <label className='mb-2 dark:text-gray-300'>
+                {t('product-discount-percentage')} :
+              </label>
+              <input
+                type='text'
+                {...register('discountPercentage', {
+                  required: true,
+                  pattern: /^[0-9]+$/,
+                  maxLength: 3,
+                  minLength: 1,
+                })}
+                className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+              />
+              {/* discount percentage error message */}
+              <p
+                className={`text-xs text-rose-400 ${
+                  errors.discountPercentage ? 'visible' : 'invisible'
+                }`}
+              >
+                {t('product-discount-percentage-input-error')}
               </p>
             </div>
             {/* Product Quantity */}
@@ -228,14 +258,18 @@ function AddProduct() {
             )}
           </div>
           {/* Product Description */}
-          <div className='flex flex-col'>
-            <label className='mb-2 dark:text-gray-300'>
-              {t('product-description')} :
-            </label>
-            <textarea
-              {...register('description', { required: true, minLength: 10 })}
-              className='resize-none rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
-              rows={2}
+          <label className='mb-2 dark:text-gray-300'>
+            {t('product-description')} :
+          </label>
+          <div className='mb-5 flex h-40 flex-col rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'>
+            <ReactQuill
+              theme='snow'
+              value={description}
+              onChange={setDescription}
+              style={{
+                height: 100,
+                maxHeight: 100,
+              }}
             />
             {/* description error message */}
             <p
@@ -249,7 +283,7 @@ function AddProduct() {
           {/* Product Image */}
           <div className='flex flex-col lg:hidden'>
             <label className='mb-2 dark:text-gray-300'>
-              {t('product-image')} :
+              {t('product-image-limit')} :
             </label>
             <MyFileInput changeHandler={handleImageChange} />
           </div>

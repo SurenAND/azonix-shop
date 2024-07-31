@@ -5,12 +5,14 @@ import {
   LoginApi,
   logoutApi,
   SignupApi,
+  updateUserApi,
 } from '@/src/api/auth/auth.api';
 import {
   AllUsersType,
   GetUsersParamsType,
   newUserType,
   UserByIdType,
+  UserDataType,
 } from '@/src/api/auth/auth.type';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
@@ -42,11 +44,11 @@ export const useLogin = () => {
         });
         pushRouter(MainRoutes.HOME);
       }
-      if (data.status === 'fail') {
-        toast.warning(
-          'User Not Found Please Sign Up or enter valid username and password!',
-        );
-      }
+    },
+    onError() {
+      toast.warning(
+        'User Not Found Please Sign Up or enter valid username and password!',
+      );
     },
   });
 };
@@ -107,9 +109,22 @@ export const useDeleteUser = () => {
 
 export const useGetUserById = (id: string) => {
   return useQuery<UserByIdType>({
-    queryKey: ['user', 'single', id],
+    queryKey: ['users', 'single', id],
     queryFn: () => getUserByIdApi(id),
     refetchOnMount: 'always',
     enabled: !!id,
+  });
+};
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ newUser, data }: { newUser: UserDataType; data: any }) =>
+      updateUserApi(newUser, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['users'],
+      });
+    },
   });
 };

@@ -1,8 +1,9 @@
-import { useGetUserById } from '@/src/api/auth/auth.queries';
+import { useGetUserById, useUpdateUser } from '@/src/api/auth/auth.queries';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { FaTimes } from 'react-icons/fa';
+import { toast } from 'sonner';
 
 type EditModalProps = {
   openEdit: boolean;
@@ -18,6 +19,8 @@ const EditPopUp = ({
   setIdToEdit,
 }: EditModalProps) => {
   const { t } = useTranslation();
+
+  const { mutate: updateUser } = useUpdateUser();
 
   const {
     register,
@@ -41,9 +44,24 @@ const EditPopUp = ({
   }, [oldUser, reset]);
 
   const handleForm = (data: FieldValues) => {
-    reset();
-    onClose();
-    setIdToEdit('');
+    if (oldUser) {
+      updateUser(
+        {
+          newUser: oldUser?.data.user,
+          data: data,
+        },
+        {
+          onSuccess: (data) => {
+            if (data.status === 'success') {
+              reset();
+              onClose();
+              setIdToEdit('');
+              toast.success(t('changes-saved'));
+            }
+          },
+        },
+      );
+    }
   };
 
   return (

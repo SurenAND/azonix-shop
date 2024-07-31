@@ -36,7 +36,7 @@ export type OrderType = {
       };
       count: number;
       _id: string;
-    }
+    },
   ];
   totalPrice: number;
   deliveryDate: string;
@@ -60,4 +60,11 @@ export type GetOrdersParamsType = {
   page?: number;
   sort?: string;
   delivered?: boolean;
+};
+
+export type AddNewOrderParamsType = {
+  user: string;
+  products: { product: string; count: number }[];
+  deliveryStatus: boolean;
+  deliveryDate: string;
 };

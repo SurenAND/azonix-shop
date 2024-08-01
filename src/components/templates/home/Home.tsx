@@ -1,12 +1,27 @@
-import BestSellerProducts from "@/src/components/templates/home/best-seller/BestSellerProducts";
-import Categories from "@/src/components/templates/home/categories/Categories";
-import Hero from "@/src/components/templates/home/hero/Hero";
-import OnSaleBanner from "@/src/components/templates/home/on-sale/OnSaleBanner";
-import Partners from "@/src/components/templates/home/partners/Partners";
-import RecentNews from "@/src/components/templates/home/recent-news/RecentNews";
-import Services from "@/src/components/templates/home/services/Services";
-import { firstBannerData, secondBannerData } from "@/src/constant/bannerData";
-import { useEffect, useState } from "react";
+import { firstBannerData, secondBannerData } from '@/src/constant/bannerData';
+import { lazy, Suspense, useEffect, useState } from 'react';
+import Loading from '../../shared/loading/Loading';
+
+const Hero = lazy(() => import('@/src/components/templates/home/hero/Hero'));
+const Categories = lazy(
+  () => import('@/src/components/templates/home/categories/Categories'),
+);
+const Services = lazy(
+  () => import('@/src/components/templates/home/services/Services'),
+);
+const OnSaleBanner = lazy(
+  () => import('@/src/components/templates/home/on-sale/OnSaleBanner'),
+);
+const BestSellerProducts = lazy(
+  () =>
+    import('@/src/components/templates/home/best-seller/BestSellerProducts'),
+);
+const RecentNews = lazy(
+  () => import('@/src/components/templates/home/recent-news/RecentNews'),
+);
+const Partners = lazy(
+  () => import('@/src/components/templates/home/partners/Partners'),
+);
 
 export default function HomeTemplate() {
   const [isClient, setIsClient] = useState(false);
@@ -14,10 +29,11 @@ export default function HomeTemplate() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
   return (
     <div>
       {isClient && (
-        <>
+        <Suspense fallback={<Loading />}>
           <Hero />
           <Categories />
           <Services />
@@ -26,7 +42,7 @@ export default function HomeTemplate() {
           <OnSaleBanner data={secondBannerData} />
           <RecentNews />
           <Partners />
-        </>
+        </Suspense>
       )}
     </div>
   );

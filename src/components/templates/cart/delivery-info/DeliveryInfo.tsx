@@ -1,5 +1,5 @@
+import { Suspense, lazy } from 'react';
 import { UserByIdType } from '@/src/api/auth/auth.type';
-import DataPickerInput from '@/src/components/shared/date-picker-input/DataPickerInput';
 import { paymentMethodData } from '@/src/constant/paymentMethodData';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
@@ -9,6 +9,11 @@ import {
   UseFormReset,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
+// Lazy load the DataPickerInput component
+const DataPickerInput = lazy(
+  () => import('@/src/components/shared/date-picker-input/DataPickerInput'),
+);
 
 type DeliveryInfoPropsType = {
   register: UseFormRegister<FieldValues>;
@@ -173,7 +178,9 @@ const DeliveryInfo = ({
               <label className='mb-2 dark:text-gray-300'>
                 {t('delivery-date')}
               </label>
-              <DataPickerInput />
+              <Suspense fallback={<div>Loading...</div>}>
+                <DataPickerInput />
+              </Suspense>
             </div>
             {/* Note */}
             <div className='flex flex-col'>

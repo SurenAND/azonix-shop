@@ -1,15 +1,21 @@
 import { useGetUserById, useUpdateUser } from '@/src/api/auth/auth.queries';
 import { useAddNewOrder } from '@/src/api/orders/orders.queries';
 import { useUpdateProduct } from '@/src/api/product/product.queries';
-import Checkout from '@/src/components/templates/cart/checkout/Checkout';
-import DeliveryInfo from '@/src/components/templates/cart/delivery-info/DeliveryInfo';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+
+// Lazy load components
+const Checkout = lazy(
+  () => import('@/src/components/templates/cart/checkout/Checkout'),
+);
+const DeliveryInfo = lazy(
+  () => import('@/src/components/templates/cart/delivery-info/DeliveryInfo'),
+);
 
 const CartTemplate = () => {
   const [paymentMethodSelected, setPaymentMethodSelected] = useState<
@@ -109,21 +115,25 @@ const CartTemplate = () => {
       >
         <div className='mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-6 xl:gap-10'>
           {/* delivery info */}
-          <DeliveryInfo
-            register={register}
-            errors={errors}
-            setPaymentMethodSelected={setPaymentMethodSelected}
-            setPaymentName={setPaymentName}
-            paymentMethodSelected={paymentMethodSelected}
-            oldUser={oldUser}
-            reset={reset}
-          />
+          <Suspense fallback={<div>Loading delivery info...</div>}>
+            <DeliveryInfo
+              register={register}
+              errors={errors}
+              setPaymentMethodSelected={setPaymentMethodSelected}
+              setPaymentName={setPaymentName}
+              paymentMethodSelected={paymentMethodSelected}
+              oldUser={oldUser}
+              reset={reset}
+            />
+          </Suspense>
           {/* order's summary */}
-          <Checkout
-            shoppingCartInfo={shoppingCartInfo}
-            paymentName={paymentName}
-            paymentMethodSelected={paymentMethodSelected}
-          />
+          <Suspense fallback={<div>Loading checkout...</div>}>
+            <Checkout
+              shoppingCartInfo={shoppingCartInfo}
+              paymentName={paymentName}
+              paymentMethodSelected={paymentMethodSelected}
+            />
+          </Suspense>
         </div>
       </form>
     </section>

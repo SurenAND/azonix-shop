@@ -1,10 +1,14 @@
-import CartCard from '@/src/components/templates/cart/cart-card/CartCard';
+import { lazy, Suspense } from 'react';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import { ShoppingCartItem } from '@/src/store/checkout/checkout.type';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+const CartCard = lazy(
+  () => import('@/src/components/templates/cart/cart-card/CartCard'),
+);
 
 type CheckoutPropsType = {
   shoppingCartInfo: ShoppingCartItem[];
@@ -49,11 +53,13 @@ const Checkout = ({
       <div className='ms-2 flex flex-col gap-12 rounded-lg bg-white p-5 dark:bg-gray-800'>
         {/* cart items */}
         <div className='max-h-[300px] space-y-3 overflow-y-auto p-3'>
-          {shoppingCartInfo
-            .filter((item) => item.userId === state.userId)
-            .map((item) => (
-              <CartCard key={item._id} product={item} />
-            ))}
+          <Suspense fallback={<div>Loading...</div>}>
+            {shoppingCartInfo
+              .filter((item) => item.userId === state.userId)
+              .map((item) => (
+                <CartCard key={item._id} product={item} />
+              ))}
+          </Suspense>
         </div>
         {/* prices */}
         <div className='flow-root'>

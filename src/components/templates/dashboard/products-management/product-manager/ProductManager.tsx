@@ -3,13 +3,29 @@ import {
   useGetProducts,
 } from '@/src/api/product/product.queries';
 import Pagination from '@/src/components/shared/pagination/Pagination';
-import AddPopUp from '@/src/components/templates/dashboard/products-management/product-manager/modals/add/Add';
-import DeletePopUp from '@/src/components/templates/dashboard/products-management/product-manager/modals/delete/Delete';
-import EditPopUp from '@/src/components/templates/dashboard/products-management/product-manager/modals/edit/Edit';
 import { ProductsTable } from '@/src/components/templates/dashboard/products-management/product-manager/product-table/ProductTable';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+
+const AddPopUp = lazy(
+  () =>
+    import(
+      '@/src/components/templates/dashboard/products-management/product-manager/modals/add/Add'
+    ),
+);
+const DeletePopUp = lazy(
+  () =>
+    import(
+      '@/src/components/templates/dashboard/products-management/product-manager/modals/delete/Delete'
+    ),
+);
+const EditPopUp = lazy(
+  () =>
+    import(
+      '@/src/components/templates/dashboard/products-management/product-manager/modals/edit/Edit'
+    ),
+);
 
 function ProductManager() {
   const { t, i18n } = useTranslation();
@@ -74,19 +90,27 @@ function ProductManager() {
           OnSetPage={(pageNo) => setPage(pageNo)}
         />
       )}
-      <DeletePopUp
-        openDelete={openDelete}
-        onClose={() => setOpenDelete(false)}
-        action={() => handleDelete(idToDelete.current)}
-        idToDelete={idToDelete.current}
-      />
-      <EditPopUp
-        openEdit={openEdit}
-        onClose={() => setOpenEdit(false)}
-        idToEdit={idToEdit}
-        setIdToEdit={setIdToEdit}
-      />
-      <AddPopUp openAdd={openAdd} onClose={() => setOpenAdd(false)} />
+      <Suspense fallback={<div>Loading...</div>}>
+        {openDelete && (
+          <DeletePopUp
+            openDelete={openDelete}
+            onClose={() => setOpenDelete(false)}
+            action={() => handleDelete(idToDelete.current)}
+            idToDelete={idToDelete.current}
+          />
+        )}
+        {openEdit && (
+          <EditPopUp
+            openEdit={openEdit}
+            onClose={() => setOpenEdit(false)}
+            idToEdit={idToEdit}
+            setIdToEdit={setIdToEdit}
+          />
+        )}
+        {openAdd && (
+          <AddPopUp openAdd={openAdd} onClose={() => setOpenAdd(false)} />
+        )}
+      </Suspense>
     </main>
   );
 }

@@ -3,11 +3,19 @@ import {
   useGetSubCategories,
 } from '@/src/api/category/category.queries';
 import { useGetProducts } from '@/src/api/product/product.queries';
-import Products from '@/src/components/shared/products/Products';
-import SubCategories from '@/src/components/shared/sub-categories/SubCategories';
+import { ChangeEvent, MouseEvent, useState, lazy, Suspense } from 'react';
 import Nav from '@/src/components/templates/shop/nav/Nav';
-import Sidebar from '@/src/components/templates/shop/sidebar/Sidebar';
-import { ChangeEvent, MouseEvent, useState } from 'react';
+
+// Lazy load components
+const Products = lazy(
+  () => import('@/src/components/shared/products/Products'),
+);
+const SubCategories = lazy(
+  () => import('@/src/components/shared/sub-categories/SubCategories'),
+);
+const Sidebar = lazy(
+  () => import('@/src/components/templates/shop/sidebar/Sidebar'),
+);
 
 const ShopTemplate = () => {
   // sidebar open state
@@ -72,13 +80,15 @@ const ShopTemplate = () => {
   return (
     <div className='min-h-screen overflow-y-hidden bg-white duration-200 dark:bg-gray-900 dark:text-white'>
       <div className='flex'>
-        <Sidebar
-          handleCategoryChange={handleCategoryChange}
-          handlePriceChange={handlePriceChange}
-          productCategory={categories?.data.categories || []}
-          toggleSidebar={setOpen}
-          open={open}
-        />
+        <Suspense fallback={<div>Loading sidebar...</div>}>
+          <Sidebar
+            handleCategoryChange={handleCategoryChange}
+            handlePriceChange={handlePriceChange}
+            productCategory={categories?.data.categories || []}
+            toggleSidebar={setOpen}
+            open={open}
+          />
+        </Suspense>
         <div
           className={`w-full bg-gray-100 transition-all dark:bg-gray-500 ${
             open
@@ -87,17 +97,21 @@ const ShopTemplate = () => {
           } overflow-hidden`}
         >
           <Nav query={query} handleInputChange={handleInputChange} />
-          <SubCategories
-            handleClick={handleClick}
-            show={selectedCategory === '' ? false : true}
-            subCategories={subCategories?.data.subcategories || []}
-          />
-          <Products
-            products={products?.data.products || []}
-            totalPages={products?.total_pages || 1}
-            page={page}
-            setPage={setPage}
-          />
+          <Suspense fallback={<div>Loading subcategories...</div>}>
+            <SubCategories
+              handleClick={handleClick}
+              show={selectedCategory === '' ? false : true}
+              subCategories={subCategories?.data.subcategories || []}
+            />
+          </Suspense>
+          <Suspense fallback={<div>Loading products...</div>}>
+            <Products
+              products={products?.data.products || []}
+              totalPages={products?.total_pages || 1}
+              page={page}
+              setPage={setPage}
+            />
+          </Suspense>
         </div>
       </div>
     </div>

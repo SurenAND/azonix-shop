@@ -5,10 +5,12 @@ import {
 import { ProductType } from '@/src/api/product/product.type';
 import { EmptyList } from '@/src/components/shared/empty-list/EmptyList';
 import Pagination from '@/src/components/shared/pagination/Pagination';
-import InventoryTable from '@/src/components/templates/dashboard/products-management/inventory/inventory-table/InventoryTable';
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+
+// Lazy load the InventoryTable component
+const InventoryTable = lazy(() => import('./inventory-table/InventoryTable'));
 
 function Inventory() {
   const { t, i18n } = useTranslation();
@@ -70,13 +72,15 @@ function Inventory() {
         products.data.products.length === 0 ? (
           <EmptyList />
         ) : (
-          <InventoryTable
-            list={products?.data.products || []}
-            onContainEditItem={containEditItem}
-            editedProducts={editedProducts}
-            setEditedProducts={setEditedProducts}
-            editMode={editMode}
-          />
+          <Suspense fallback={<div>{t('loading')}</div>}>
+            <InventoryTable
+              list={products?.data.products || []}
+              onContainEditItem={containEditItem}
+              editedProducts={editedProducts}
+              setEditedProducts={setEditedProducts}
+              editMode={editMode}
+            />
+          </Suspense>
         )}
       </div>
       {products && (

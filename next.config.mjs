@@ -1,13 +1,16 @@
-import path from "path";
+import path from 'path';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["localhost", ""],
+    domains: ['localhost', ''],
+  },
+  devIndicators: {
+    buildActivity: false,
   },
   webpack: (config) => {
-    config.resolve.alias["@"] = path.resolve(".");
+    config.resolve.alias['@'] = path.resolve('.');
     return config;
   },
 };

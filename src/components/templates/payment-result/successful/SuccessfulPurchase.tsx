@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 const SuccessfulPurchase = () => {
   const { t } = useTranslation();
   return (
-    <div className='flex min-h-[50vh] flex-col items-center justify-center gap-8 bg-axGray px-8'>
+    <div className='flex min-h-[50vh] flex-col items-center justify-center gap-8 bg-axGray px-8 dark:bg-gray-700'>
       <img
         src={paymentSuccess.src}
         alt='پرداخت موفقیت آمیز'

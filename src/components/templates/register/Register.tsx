@@ -1,7 +1,7 @@
 import UsFlag from '@/src/assets/images/languages/en.png';
 import IrFlag from '@/src/assets/images/languages/fa.png';
 import Loading from '@/src/components/shared/loading/Loading';
-import ToggleRegister from '@/src/components/templates/register/Toggle/ToggleRegister';
+import ToggleRegister from '@/src/components/templates/register/toggle/ToggleRegister';
 import { MainRoutes } from '@/src/constant/routes';
 import Image, { StaticImageData } from 'next/image';
 import { useSearchParams } from 'next/navigation';
@@ -13,14 +13,14 @@ import { Toaster } from 'sonner';
 import dynamic from 'next/dynamic';
 
 const LogInTemplate = dynamic(
-  () => import('@/src/components/templates/register/LogIn/LogIn'),
+  () => import('@/src/components/templates/register/login/LogIn'),
   {
     loading: () => <Loading />,
   },
 );
 
 const SignUpTemplate = dynamic(
-  () => import('@/src/components/templates/register/SignUp/SignUp'),
+  () => import('@/src/components/templates/register/signup/SignUp'),
   {
     loading: () => <Loading />,
   },

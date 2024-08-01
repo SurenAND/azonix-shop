@@ -3,8 +3,8 @@ import {
   useGetSubCategories,
 } from '@/src/api/category/category.queries';
 import { useGetProducts } from '@/src/api/product/product.queries';
-import { ChangeEvent, MouseEvent, useState, lazy, Suspense } from 'react';
 import Nav from '@/src/components/templates/shop/nav/Nav';
+import { ChangeEvent, lazy, MouseEvent, Suspense, useState } from 'react';
 
 // Lazy load components
 const Products = lazy(
@@ -23,6 +23,7 @@ const ShopTemplate = () => {
 
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSubCategory, setSelectedSubCategory] = useState('');
+  const [selectedPriceSorting, setSelectedPriceSorting] = useState('');
   const [selectedMinPrice, setSelectedMinPrice] = useState<number | undefined>(
     undefined,
   );
@@ -47,6 +48,7 @@ const ShopTemplate = () => {
     subcategory: selectedSubCategory,
     minPrice: selectedMinPrice,
     maxPrice: selectedMaxPrice,
+    sort: selectedPriceSorting,
   });
 
   // ----------- Input Filter -----------
@@ -70,6 +72,11 @@ const ShopTemplate = () => {
     setPage(1);
   };
 
+  const handlePriceSortingChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSelectedPriceSorting(event.target.value);
+    setPage(1);
+  };
+
   // ------------ Button Filtering -----------
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
@@ -84,6 +91,7 @@ const ShopTemplate = () => {
           <Sidebar
             handleCategoryChange={handleCategoryChange}
             handlePriceChange={handlePriceChange}
+            handlePriceSortingChange={handlePriceSortingChange}
             productCategory={categories?.data.categories || []}
             toggleSidebar={setOpen}
             open={open}

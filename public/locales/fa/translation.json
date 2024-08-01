@@ -178,5 +178,8 @@
   "delivery-time": "زمان تحویل",
   "product-image-limit": "عکس (حداکثر 4 عکس)",
   "product-discount-percentage": "درصد تخفیف",
-  "product-discount-percentage-input-error": "درصد تخفیف الزامی است!"
+  "product-discount-percentage-input-error": "درصد تخفیف الزامی است!",
+  "product-sort-by-price": "مرتب سازی بر اساس قیمت",
+  "low-to-high": "کم به زیاد",
+  "high-to-low": "زیاد به کم"
 }

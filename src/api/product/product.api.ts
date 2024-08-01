@@ -14,6 +14,7 @@ export const getAllProductsApi = async (params: GetProductsParamsType) => {
   if (params.maxPrice)
     _params.price = { ..._params.price, ['lt']: params.maxPrice };
   if (params.subcategory) _params.subcategory = params.subcategory;
+  if (params.sort) _params.sort = params.sort;
 
   const response = await req.get('/products', { params: _params });
   return response.data;

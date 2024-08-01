@@ -178,5 +178,8 @@
   "delivery-time": "Delivery Time",
   "product-image-limit": "Images (Max 4)",
   "product-discount-percentage": "Discount Percentage",
-  "product-discount-percentage-input-error": "Discount percentage is required!"
+  "product-discount-percentage-input-error": "Discount percentage is required!",
+  "product-sort-by-price": "Sort by price",
+  "low-to-high": "Low to High",
+  "high-to-low": "High to Low"
 }

@@ -1,13 +1,15 @@
 import { CategoryType } from '@/src/api/category/category.type';
-import Category from '@/src/components/templates/shop/sidebar/Category/Category';
-import Price from '@/src/components/templates/shop/sidebar/Price/Price';
+import Category from '@/src/components/templates/shop/sidebar/category/Category';
+import Price from '@/src/components/templates/shop/sidebar/price/Price';
 import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
+import PriceSorting from './price-sorting/PriceSorting';
 
 type SidebarProps = {
   handleCategoryChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handlePriceChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handlePriceSortingChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   productCategory: CategoryType[];
   toggleSidebar: Dispatch<SetStateAction<boolean>>;
   open: boolean;
@@ -16,6 +18,7 @@ type SidebarProps = {
 const Sidebar = ({
   handleCategoryChange,
   handlePriceChange,
+  handlePriceSortingChange,
   productCategory,
   toggleSidebar,
   open,
@@ -41,6 +44,7 @@ const Sidebar = ({
           productCategory={productCategory}
         />
         <Price handleChange={handlePriceChange} />
+        <PriceSorting handleChange={handlePriceSortingChange} />
         {/* toggle sidebar */}
         <button
           onClick={() => toggleSidebar((prev) => !prev)}

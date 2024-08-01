@@ -166,12 +166,14 @@ const PaymentFa = () => {
 
           <div className='mb-8 grid max-w-[33rem] grid-cols-3 gap-2'>
             <button
+              type='button'
               className='col-span-2 w-full rounded-lg bg-axBlue p-3 font-semibold text-white shadow-lg hover:bg-axBlue/80 focus:outline-none'
               onClick={handlePayment}
             >
               پرداخت
             </button>
             <button
+              type='button'
               className='col-span-1 w-full rounded-lg bg-primary/90 p-3 font-semibold text-white shadow-lg hover:bg-primary focus:outline-none'
               onClick={handleCancel}
             >

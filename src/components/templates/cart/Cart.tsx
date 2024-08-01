@@ -23,7 +23,7 @@ const CartTemplate = () => {
     deliveryDate,
     resetUserDeliveryDate,
   } = useCheckoutStore();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { state } = useUserContext();
 
   const {
@@ -57,8 +57,10 @@ const CartTemplate = () => {
       );
     }
 
-    if (paymentName === 'online') {
-      location.href = MainRoutes.PAYMENT;
+    if (paymentName === 'online' && i18n.language === 'en') {
+      location.href = MainRoutes.PAYMENT_EN;
+    } else if (paymentName === 'online' && i18n.language === 'fa') {
+      location.href = MainRoutes.PAYMENT_FA;
     } else {
       // add new order
       addNewOrder(

@@ -12,6 +12,6 @@ export const paymentMethodData = [
   {
     id: 'pos',
     nameEN: 'POS on Delivery',
-    nameFA: 'پرداخت با کارتخوان در محل',
+    nameFA: 'پرداخت با کارتخوان',
   },
 ];

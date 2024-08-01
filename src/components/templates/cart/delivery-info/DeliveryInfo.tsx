@@ -1,7 +1,6 @@
-import { Suspense, lazy } from 'react';
 import { UserByIdType } from '@/src/api/auth/auth.type';
 import { paymentMethodData } from '@/src/constant/paymentMethodData';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, Suspense, lazy, useEffect } from 'react';
 import {
   FieldErrors,
   FieldValues,
@@ -34,7 +33,6 @@ const DeliveryInfo = ({
   oldUser,
   reset,
 }: DeliveryInfoPropsType) => {
-  const [scheduleDelivery, setScheduleDelivery] = useState(false);
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -155,22 +153,9 @@ const DeliveryInfo = ({
           <h3 className='text-md font-semibold text-gray-900 dark:text-white'>
             {t('schedule-delivery')}
           </h3>
-          <label className='relative inline-block h-8 w-14 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-gray-700'>
-            <input
-              className='peer sr-only'
-              id='AcceptConditions'
-              type='checkbox'
-              onChange={() => setScheduleDelivery(!scheduleDelivery)}
-            />
-            <span className='absolute inset-y-0 start-0 m-1 size-6 rounded-full bg-gray-300 ring-[6px] ring-inset ring-white transition-all peer-checked:start-8 peer-checked:w-2 peer-checked:bg-white peer-checked:ring-transparent'></span>
-          </label>
         </div>
 
-        <div
-          className={`ms-2 grid-cols-1 gap-4 rounded-lg bg-white p-5 dark:bg-gray-800 ${
-            scheduleDelivery ? 'grid' : 'hidden'
-          }`}
-        >
+        <div className='ms-2 grid grid-cols-1 gap-4 rounded-lg bg-white p-5 dark:bg-gray-800'>
           {/* delivery details */}
           {/* Delivery Date */}
           <div className='flex flex-col gap-5'>

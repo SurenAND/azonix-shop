@@ -33,6 +33,7 @@ const CartCard = ({ product }: { product: ShoppingCartItem }) => {
         <div className='flex flex-col items-end gap-8'>
           <div className='mx-auto flex h-8 text-gray-600'>
             <button
+              type='button'
               onClick={() => decrementQuantity(product.userId, product._id)}
               className='flex items-center justify-center rounded-s-md bg-axLightPurple/80 px-4 text-white transition hover:bg-axDarkPurple disabled:cursor-not-allowed disabled:opacity-30'
               disabled={product.quantity === 1}
@@ -43,6 +44,7 @@ const CartCard = ({ product }: { product: ShoppingCartItem }) => {
               {product.quantity}
             </div>
             <button
+              type='button'
               onClick={() => incrementQuantity(product.userId, product._id)}
               className='flex items-center justify-center rounded-e-md bg-axLightPurple/80 px-4 text-white transition hover:bg-axDarkPurple disabled:cursor-not-allowed disabled:opacity-30'
               disabled={product.quantity === productInDB?.data.product.quantity}

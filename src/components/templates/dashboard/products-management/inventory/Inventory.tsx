@@ -22,7 +22,7 @@ function Inventory() {
 
   const { data: products, refetch } = useGetProducts({
     page,
-    limit: 20,
+    limit: 15,
   });
   const { mutate: updateProduct } = useUpdateProduct();
 

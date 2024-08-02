@@ -6,9 +6,6 @@ const nextConfig = {
   images: {
     domains: ['localhost', ''],
   },
-  devIndicators: {
-    buildActivity: false,
-  },
   webpack: (config) => {
     config.resolve.alias['@'] = path.resolve('.');
     return config;

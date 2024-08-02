@@ -9,6 +9,7 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 import { useTranslation } from 'react-i18next';
 import { CiCalendar } from 'react-icons/ci';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
+import { DayType, MonthType } from 'shamsi';
 import * as shamsi from 'shamsi-date-converter';
 
 const DataPickerInput = () => {
@@ -42,8 +43,8 @@ const DataPickerInput = () => {
       const selectedDate = shamsi
         .jalaliToGregorian(
           Number(value.persian?.split('/')[0]),
-          Number(value.persian?.split('/')[1]) as any,
-          Number(value.persian?.split('/')[2]) as any,
+          Number(value.persian?.split('/')[1]) as MonthType,
+          Number(value.persian?.split('/')[2]) as DayType,
         )
         .join('/');
       if (new Date(`${selectedDate}`).getTime() > Date.now()) {

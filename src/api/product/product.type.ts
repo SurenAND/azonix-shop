@@ -55,5 +55,9 @@ export type GetProductsParamsType = {
   subcategory?: string;
   minPrice?: number;
   maxPrice?: number;
+  price?: {
+    gte?: number;
+    lt?: number;
+  };
   sort?: string;
 };

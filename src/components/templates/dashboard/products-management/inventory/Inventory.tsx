@@ -10,7 +10,12 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 // Lazy load the InventoryTable component
-const InventoryTable = lazy(() => import('./inventory-table/InventoryTable'));
+const InventoryTable = lazy(
+  () =>
+    import(
+      '@/src/components/templates/dashboard/products-management/inventory/inventory-table/InventoryTable'
+    ),
+);
 
 function Inventory() {
   const { t, i18n } = useTranslation();
@@ -40,7 +45,7 @@ function Inventory() {
   const editHandler = () => {
     editedProducts.forEach((item) => {
       updateProduct({
-        newProduct: item,
+        productId: item._id,
         data: {
           price: item.price,
           quantity: item.quantity,

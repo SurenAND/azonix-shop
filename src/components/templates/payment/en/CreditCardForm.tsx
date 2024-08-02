@@ -1,4 +1,5 @@
 import { useAddNewOrder } from '@/src/api/orders/orders.queries';
+import { ProductInOrderResponseType } from '@/src/api/orders/orders.type';
 import { useUpdateProduct } from '@/src/api/product/product.queries';
 import CardBackground from '@/src/assets/images/card-bg.jpeg';
 import Chip from '@/src/assets/images/chip.png';
@@ -69,14 +70,16 @@ const CreditCardForm = () => {
         onSuccess: (data) => {
           if (data.status === 'success') {
             // remove orders from product
-            data?.data.order.products.forEach((item: any) => {
-              updateProduct({
-                newProduct: item.product,
-                data: {
-                  quantity: item.product.quantity - item.count,
-                },
-              });
-            });
+            data?.data.order.products.forEach(
+              (item: ProductInOrderResponseType) => {
+                updateProduct({
+                  productId: item.product._id,
+                  data: {
+                    quantity: item.product.quantity - item.count,
+                  },
+                });
+              },
+            );
             // clear user's cart
             clearUserCart(state?.userId);
             // reset user delivery date

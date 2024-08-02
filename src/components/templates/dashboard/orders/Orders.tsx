@@ -30,7 +30,7 @@ const Orders = () => {
   const { data: orders, refetch } = useGetOrders({
     page,
     sort: sortDate,
-    delivered: isDelivered,
+    deliveryStatus: isDelivered,
   });
 
   useEffect(() => {

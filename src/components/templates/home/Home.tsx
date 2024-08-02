@@ -1,6 +1,6 @@
+import Loading from '@/src/components/shared/loading/Loading';
 import { firstBannerData, secondBannerData } from '@/src/constant/bannerData';
 import { lazy, Suspense, useEffect, useState } from 'react';
-import Loading from '../../shared/loading/Loading';
 
 const Hero = lazy(() => import('@/src/components/templates/home/hero/Hero'));
 const Categories = lazy(

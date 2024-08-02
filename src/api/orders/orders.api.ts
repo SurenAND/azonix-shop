@@ -1,11 +1,11 @@
 import { req } from '@/src/api/api.config';
-import { GetOrdersParamsType, OrderType } from '@/src/api/orders/orders.type';
+import { AddNewOrderParamsType, GetOrdersParamsType, OrderType } from '@/src/api/orders/orders.type';
 
 export const getAllOrdersApi = async (params: GetOrdersParamsType) => {
-  const _params: any = {};
+  const _params: Partial<GetOrdersParamsType> = {};
   if (params.page) _params.page = params.page;
-  if (params.delivered === false) _params.deliveryStatus = 'false';
-  if (params.delivered === true) _params.deliveryStatus = 'true';
+  if (params.deliveryStatus === false) _params.deliveryStatus = 'false';
+  if (params.deliveryStatus === true) _params.deliveryStatus = 'true';
   if (params.sort === 'asc') _params.sort = 'createdAt';
   if (params.sort === 'desc') _params.sort = '-createdAt';
 
@@ -13,7 +13,7 @@ export const getAllOrdersApi = async (params: GetOrdersParamsType) => {
   return response.data;
 };
 
-export const addNewOrderApi = async (data: any) => {
+export const addNewOrderApi = async (data: AddNewOrderParamsType) => {
   const response = await req.post('/orders', data);
   return response.data;
 };
@@ -23,7 +23,7 @@ export const getOrderByIdApi = async (orderId: string) => {
   return response.data;
 };
 
-export const updateOrderApi = async (order: OrderType, data: any) => {
+export const updateOrderApi = async (order: OrderType, data: Partial<OrderType>) => {
   const response = await req.patch(`/orders/${order._id}`, data);
   return response.data;
 };

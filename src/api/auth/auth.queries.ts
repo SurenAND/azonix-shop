@@ -119,8 +119,13 @@ export const useGetUserById = (id: string) => {
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ newUser, data }: { newUser: UserDataType; data: any }) =>
-      updateUserApi(newUser, data),
+    mutationFn: ({
+      newUser,
+      data,
+    }: {
+      newUser: UserDataType;
+      data: Partial<UserDataType>;
+    }) => updateUserApi(newUser, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['users'],

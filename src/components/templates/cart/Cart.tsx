@@ -1,10 +1,14 @@
 import { useGetUserById, useUpdateUser } from '@/src/api/auth/auth.queries';
 import { useAddNewOrder } from '@/src/api/orders/orders.queries';
+import {
+  AddOrderResponseType,
+  ProductInOrderResponseType,
+} from '@/src/api/orders/orders.type';
 import { useUpdateProduct } from '@/src/api/product/product.queries';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
-import { useState, lazy, Suspense } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -85,17 +89,19 @@ const CartTemplate = () => {
               ?.date.split('T')[0] || '',
         },
         {
-          onSuccess: (data) => {
+          onSuccess: (data: AddOrderResponseType) => {
             if (data.status === 'success') {
               // remove orders from product
-              data?.data.order.products.forEach((item: any) => {
-                updateProduct({
-                  newProduct: item.product,
-                  data: {
-                    quantity: item.product.quantity - item.count,
-                  },
-                });
-              });
+              data?.data.order.products.forEach(
+                (item: ProductInOrderResponseType) => {
+                  updateProduct({
+                    productId: item.product._id,
+                    data: {
+                      quantity: item.product.quantity - item.count,
+                    },
+                  });
+                },
+              );
               // clear user's cart
               clearUserCart(state?.userId);
               // reset user delivery date

@@ -48,8 +48,13 @@ export const useGetOrderById = (orderId: string) => {
 export const useUpdateOrder = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ newOrder, data }: { newOrder: OrderType; data: any }) =>
-      updateOrderApi(newOrder, data),
+    mutationFn: ({
+      newOrder,
+      data,
+    }: {
+      newOrder: OrderType;
+      data: Partial<OrderType>;
+    }) => updateOrderApi(newOrder, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['orders'],

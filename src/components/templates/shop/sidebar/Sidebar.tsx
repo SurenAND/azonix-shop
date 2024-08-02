@@ -1,10 +1,10 @@
 import { CategoryType } from '@/src/api/category/category.type';
 import Category from '@/src/components/templates/shop/sidebar/category/Category';
+import PriceSorting from '@/src/components/templates/shop/sidebar/price-sorting/PriceSorting';
 import Price from '@/src/components/templates/shop/sidebar/price/Price';
 import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
-import PriceSorting from './price-sorting/PriceSorting';
 
 type SidebarProps = {
   handleCategoryChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

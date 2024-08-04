@@ -21,7 +21,7 @@ export const getAllProductsApi = async (params: GetProductsParamsType) => {
 
 export const updateProductApi = async (
   productId: string,
-  data: Partial<ProductType>,
+  data: Partial<ProductType> | FormData,
 ) => {
   const response = await req.patch(`/products/${productId}`, data);
   return response.data;

@@ -7,8 +7,10 @@ import { useTranslation } from 'react-i18next';
 type InventoryTableProps = {
   list: ProductType[];
   onContainEditItem: (a: boolean) => void;
-  editedProducts: ProductType[];
-  setEditedProducts: Dispatch<SetStateAction<ProductType[]>>;
+  editedProducts: Record<string, Partial<ProductType>>;
+  setEditedProducts: Dispatch<
+    SetStateAction<Record<string, Partial<ProductType>>>
+  >;
   editMode: string;
 };
 
@@ -30,12 +32,12 @@ function InventoryTable({
   // reset lists for changing colorful background
   useEffect(() => {
     if (editMode === 'done') {
-      setEditedProducts([]);
+      setEditedProducts({});
     }
   }, [editMode]);
 
   useEffect(() => {
-    if (editedProducts.length > 0) {
+    if (Object.keys(editedProducts).length > 0) {
       onContainEditItem(true);
     } else {
       onContainEditItem(false);
@@ -77,28 +79,19 @@ function InventoryTable({
                 {product.priceAfterDiscount.toFixed(2)}
               </td>
               <EditableTd
-                index={index}
                 product={product}
-                products={products}
-                setProducts={setProducts}
                 editedProducts={editedProducts}
                 setEditedProducts={setEditedProducts}
                 field='price'
               />
               <EditableTd
-                index={index}
                 product={product}
-                products={products}
-                setProducts={setProducts}
                 editedProducts={editedProducts}
                 setEditedProducts={setEditedProducts}
                 field='quantity'
               />
               <EditableTd
-                index={index}
                 product={product}
-                products={products}
-                setProducts={setProducts}
                 editedProducts={editedProducts}
                 setEditedProducts={setEditedProducts}
                 field='discountPercentage'

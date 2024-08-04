@@ -1,51 +1,45 @@
 import { ProductType } from '@/src/api/product/product.type';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 type EditableTdProps = {
-  index: number;
   product: ProductType;
   field: string;
-  products: ProductType[];
-  setProducts: Dispatch<SetStateAction<ProductType[]>>;
-  editedProducts: ProductType[];
-  setEditedProducts: Dispatch<SetStateAction<ProductType[]>>;
+  editedProducts: Record<string, Partial<ProductType>>;
+  setEditedProducts: React.Dispatch<
+    React.SetStateAction<Record<string, Partial<ProductType>>>
+  >;
 };
 
 function EditableTd({
-  index,
   product,
-  products,
-  setProducts,
+  field,
   editedProducts,
   setEditedProducts,
-  field,
 }: EditableTdProps) {
   const { t } = useTranslation();
-  const [isEdit, setIsEdit] = useState<string | null>(null);
-  const [isModified, setIsModified] = useState(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const editHandler = (editedProduct: ProductType) => {
-    const updatedEditedProducts = editedProducts.map((item) =>
-      item._id === editedProduct._id ? editedProduct : item,
-    );
-    if (!editedProducts.some((item) => item._id === editedProduct._id)) {
-      setEditedProducts([...editedProducts, editedProduct]);
-    } else {
-      setEditedProducts(updatedEditedProducts);
-    }
+  const getValue = () => {
+    return (editedProducts[product._id]?.[field as keyof ProductType] ??
+      product[field as keyof ProductType]) as number;
+  };
+
+  const isEdited = () => {
+    const editKey =
+      `is${field.charAt(0).toUpperCase() + field.slice(1)}Edit` as keyof Partial<ProductType>;
+    return editedProducts[product._id]?.[editKey] ?? false;
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         inputRef.current &&
-        !inputRef.current.contains(event.target as Node) &&
-        !isModified
+        !inputRef.current.contains(event.target as Node)
       ) {
-        setIsEdit(null);
+        setIsEdit(false);
       }
     };
 
@@ -53,80 +47,64 @@ function EditableTd({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isModified]);
+  }, []);
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const updatedProduct = {
-      ...product,
-      [field]: +e.target.value,
-      [`is${field.charAt(0).toUpperCase() + field.slice(1)}Edit`]: true,
-    };
-    const updatedProducts = products.map((item, idx) =>
-      idx === index ? updatedProduct : item,
-    );
+  const handleChange = (value: number) => {
+    setEditedProducts((prev) => ({
+      ...prev,
+      [product._id]: {
+        ...prev[product._id],
+        [field]: value,
+        [`is${field.charAt(0).toUpperCase() + field.slice(1)}Edit`]: true,
+      },
+    }));
+  };
 
-    editHandler(updatedProduct);
-    setIsEdit(null);
-    setProducts(updatedProducts);
-    setIsModified(false);
+  const handleBlur = () => {
+    setIsEdit(false);
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') {
-      setIsEdit(null);
-      setIsModified(false);
+    if (e.key === 'Enter') {
+      handleBlur();
+    } else if (e.key === 'Escape') {
+      setIsEdit(false);
+      handleChange(product[field as keyof ProductType] as number);
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value === '' || /^\d*\.?\d*$/.test(value)) {
-      setIsModified(true);
-      e.target.value = value;
+      handleChange(Number(value));
     } else {
       e.preventDefault();
       toast.error(t('error-invalid-number'));
     }
   };
 
-  const renderInput = (value: number) => (
+  const renderInput = () => (
     <input
       className='w-full text-center font-bold text-black'
       ref={inputRef}
-      defaultValue={value}
+      value={getValue()}
       onChange={handleInputChange}
       onBlur={handleBlur}
       onKeyUp={handleKeyUp}
     />
   );
 
-  const renderSpan = (value: number, isEdited: boolean) => (
+  const renderSpan = () => (
     <span
-      className={`block p-1 ${
-        isEdited ? 'bg-axLightPurple/60 text-white' : ''
-      }`}
+      className={`block p-1 ${isEdited() ? 'bg-axLightPurple/60 text-white' : ''}`}
     >
-      {value}
+      {getValue()}
     </span>
   );
 
-  const value = product[field as keyof ProductType] as number;
-  const isEdited = product[
-    `is${
-      field.charAt(0).toUpperCase() + field.slice(1)
-    }Edit` as keyof ProductType
-  ] as unknown as boolean;
-
   return (
-    <td
-      className='truncate border p-1'
-      onClick={() => {
-        setIsEdit(product._id);
-      }}
-    >
-      {isEdit === product._id
-        ? renderInput(value)
-        : renderSpan(value, isEdited)}
+    <td className='truncate border p-1' onClick={() => setIsEdit(true)}>
+      {isEdit ? renderInput() : renderSpan()}
     </td>
   );
 }

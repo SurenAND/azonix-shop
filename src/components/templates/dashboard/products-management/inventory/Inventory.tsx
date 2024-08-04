@@ -22,7 +22,9 @@ function Inventory() {
 
   const [page, setPage] = useState(1);
   const [hasEditItem, setHasEditItem] = useState(false);
-  const [editedProducts, setEditedProducts] = useState<ProductType[]>([]);
+  const [editedProducts, setEditedProducts] = useState<
+    Record<string, Partial<ProductType>>
+  >({});
   const [editMode, setEditMode] = useState('doing');
 
   const { data: products, refetch } = useGetProducts({
@@ -43,17 +45,18 @@ function Inventory() {
   };
 
   const editHandler = () => {
-    editedProducts.forEach((item) => {
+    Object.entries(editedProducts).forEach(([productId, changes]) => {
       updateProduct({
-        productId: item._id,
+        productId,
         data: {
-          price: item.price,
-          quantity: item.quantity,
-          discountPercentage: item.discountPercentage,
+          price: changes.price,
+          quantity: changes.quantity,
+          discountPercentage: changes.discountPercentage,
         },
       });
     });
     setEditMode('done');
+    setEditedProducts({}); // Clear edited products after update
     toast.success(t('changes-saved'));
   };
 

@@ -128,7 +128,7 @@ const EditPopUp = ({
     if (oldProduct) {
       updateProduct(
         {
-          newProduct: oldProduct.data.product,
+          productId: oldProduct.data.product._id,
           data: FD,
         },
         {

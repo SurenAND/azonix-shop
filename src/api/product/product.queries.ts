@@ -30,7 +30,7 @@ export const useUpdateProduct = () => {
       data,
     }: {
       productId: string;
-      data: Partial<ProductType>;
+      data: Partial<ProductType> | FormData;
     }) => updateProductApi(productId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({

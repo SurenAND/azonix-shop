@@ -3,6 +3,9 @@ import {
   useGetSubCategories,
 } from '@/src/api/category/category.queries';
 import { useGetProducts } from '@/src/api/product/product.queries';
+import ProductSkeleton from '@/src/components/shared/skeletons/product-skeleton/ProductSkeleton';
+import ShopSidebarSkeleton from '@/src/components/shared/skeletons/shop-sidebar/ShopSidebarSkeleton';
+import SubCategorySkeleton from '@/src/components/shared/skeletons/sub-category-skeleton/SubCategorySkeleton';
 import Nav from '@/src/components/templates/shop/nav/Nav';
 import { ChangeEvent, lazy, MouseEvent, Suspense, useState } from 'react';
 
@@ -87,7 +90,7 @@ const ShopTemplate = () => {
   return (
     <div className='min-h-screen overflow-y-hidden bg-white duration-200 dark:bg-gray-900 dark:text-white'>
       <div className='flex'>
-        <Suspense fallback={<div>Loading sidebar...</div>}>
+        <Suspense fallback={<ShopSidebarSkeleton />}>
           <Sidebar
             handleCategoryChange={handleCategoryChange}
             handlePriceChange={handlePriceChange}
@@ -105,14 +108,14 @@ const ShopTemplate = () => {
           } overflow-hidden`}
         >
           <Nav query={query} handleInputChange={handleInputChange} />
-          <Suspense fallback={<div>Loading subcategories...</div>}>
+          <Suspense fallback={<SubCategorySkeleton />}>
             <SubCategories
               handleClick={handleClick}
               show={selectedCategory === '' ? false : true}
               subCategories={subCategories?.data.subcategories || []}
             />
           </Suspense>
-          <Suspense fallback={<div>Loading products...</div>}>
+          <Suspense fallback={<ProductSkeleton />}>
             <Products
               products={products?.data.products || []}
               totalPages={products?.total_pages || 1}

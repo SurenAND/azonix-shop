@@ -2,9 +2,10 @@ import {
   useDeleteProduct,
   useGetProducts,
 } from '@/src/api/product/product.queries';
+import Loading from '@/src/components/shared/loading/Loading';
 import Pagination from '@/src/components/shared/pagination/Pagination';
 import { ProductsTable } from '@/src/components/templates/dashboard/products-management/product-manager/product-table/ProductTable';
-import { useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -90,7 +91,7 @@ function ProductManager() {
           OnSetPage={(pageNo) => setPage(pageNo)}
         />
       )}
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading />}>
         {openDelete && (
           <DeletePopUp
             openDelete={openDelete}

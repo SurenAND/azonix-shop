@@ -5,6 +5,8 @@ import {
   ProductInOrderResponseType,
 } from '@/src/api/orders/orders.type';
 import { useUpdateProduct } from '@/src/api/product/product.queries';
+import CheckoutSkeleton from '@/src/components/shared/skeletons/checkout-skeleton/CheckoutSkeleton';
+import DeliveryInfoSkeleton from '@/src/components/shared/skeletons/delivery-info-skeleton/DeliveryInfoSkeleton';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
@@ -121,7 +123,7 @@ const CartTemplate = () => {
       >
         <div className='mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-6 xl:gap-10'>
           {/* delivery info */}
-          <Suspense fallback={<div>Loading delivery info...</div>}>
+          <Suspense fallback={<DeliveryInfoSkeleton />}>
             <DeliveryInfo
               register={register}
               errors={errors}
@@ -133,7 +135,7 @@ const CartTemplate = () => {
             />
           </Suspense>
           {/* order's summary */}
-          <Suspense fallback={<div>Loading checkout...</div>}>
+          <Suspense fallback={<CheckoutSkeleton />}>
             <Checkout
               shoppingCartInfo={shoppingCartInfo}
               paymentName={paymentName}

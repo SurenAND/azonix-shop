@@ -1,3 +1,4 @@
+import PaymentFaSkeleton from '@/src/components/shared/skeletons/paymentfa-skeleton/PaymentFaSkeleton';
 import { lazy, Suspense } from 'react';
 
 const PaymentForm = lazy(
@@ -6,7 +7,7 @@ const PaymentForm = lazy(
 
 const PaymentFa = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<PaymentFaSkeleton />}>
       <PaymentForm />
     </Suspense>
   );

@@ -3,9 +3,11 @@ import {
   useGetSubCategories,
 } from '@/src/api/category/category.queries';
 import { useGetProducts } from '@/src/api/product/product.queries';
-import { Suspense, lazy, MouseEvent, useState } from 'react';
-import { useRouter } from 'next/router';
+import ProductSkeleton from '@/src/components/shared/skeletons/product-skeleton/ProductSkeleton';
+import SubCategorySkeleton from '@/src/components/shared/skeletons/sub-category-skeleton/SubCategorySkeleton';
 import { MainRoutes } from '@/src/constant/routes';
+import { useRouter } from 'next/router';
+import { lazy, MouseEvent, Suspense, useState } from 'react';
 
 // Lazy load components
 const Products = lazy(
@@ -53,7 +55,7 @@ const CategoryTemplate = ({ category }: CategoryTemplateProps) => {
       <h2 className='mx-20 border-b-2 border-gray-400 pb-5 text-center text-5xl font-bold uppercase'>
         {categories?.data.categories[0].name}
       </h2>
-      <Suspense fallback={<div>Loading subcategories...</div>}>
+      <Suspense fallback={<SubCategorySkeleton />}>
         <div className='flex justify-center text-center'>
           <SubCategories
             handleClick={handleClick}
@@ -62,7 +64,7 @@ const CategoryTemplate = ({ category }: CategoryTemplateProps) => {
           />
         </div>
       </Suspense>
-      <Suspense fallback={<div>Loading products...</div>}>
+      <Suspense fallback={<ProductSkeleton />}>
         <Products
           products={products?.data.products || []}
           totalPages={products?.total_pages || 1}

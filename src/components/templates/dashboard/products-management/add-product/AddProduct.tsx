@@ -3,6 +3,7 @@ import {
   useGetSubCategories,
 } from '@/src/api/category/category.queries';
 import { useAddProduct } from '@/src/api/product/product.queries';
+import Loading from '@/src/components/shared/loading/Loading';
 import dynamic from 'next/dynamic';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -271,7 +272,7 @@ function AddProduct() {
             {t('product-description')} :
           </label>
           <div className='mb-5 flex h-40 flex-col rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'>
-            <Suspense fallback={<div>Loading editor...</div>}>
+            <Suspense fallback={<Loading />}>
               <ReactQuill
                 theme='snow'
                 value={description}
@@ -296,11 +297,11 @@ function AddProduct() {
             <label className='mb-2 dark:text-gray-300'>
               {t('product-image-limit')} :
             </label>
-            <Suspense fallback={<div>Loading file input...</div>}>
+            <Suspense fallback={<Loading />}>
               <MyFileInput changeHandler={handleImageChange} />
             </Suspense>
           </div>
-          <Suspense fallback={<div>Loading image uploader...</div>}>
+          <Suspense fallback={<Loading />}>
             <DragDropImageUploader
               images={images}
               setImages={setImages}

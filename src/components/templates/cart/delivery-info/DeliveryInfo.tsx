@@ -1,4 +1,5 @@
 import { UserByIdType } from '@/src/api/auth/auth.type';
+import Loading from '@/src/components/shared/loading/Loading';
 import { paymentMethodData } from '@/src/constant/paymentMethodData';
 import { Dispatch, SetStateAction, Suspense, lazy, useEffect } from 'react';
 import {
@@ -163,7 +164,7 @@ const DeliveryInfo = ({
               <label className='mb-2 dark:text-gray-300'>
                 {t('delivery-date')}
               </label>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loading />}>
                 <DataPickerInput />
               </Suspense>
             </div>

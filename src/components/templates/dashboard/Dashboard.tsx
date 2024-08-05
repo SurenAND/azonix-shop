@@ -1,6 +1,6 @@
-import { lazy, Suspense } from 'react';
+import DashboardSkeleton from '@/src/components/shared/skeletons/dashboard-skeleton/DashboardSkeleton';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Toaster } from 'sonner';
 
@@ -47,7 +47,7 @@ function DashboardTemplate() {
       <>
         <Toaster richColors />
         <div className='my-6 flex items-center justify-center'>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<DashboardSkeleton />}>
             {searchParams === 'inventory' && <Inventory />}
             {searchParams === 'add-product' && <AddProduct />}
             {searchParams === 'product-manager' && <ProductManager />}

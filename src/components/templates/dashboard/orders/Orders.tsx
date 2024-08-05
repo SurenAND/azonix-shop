@@ -1,5 +1,6 @@
 import { useGetOrders } from '@/src/api/orders/orders.queries';
 import { EmptyList } from '@/src/components/shared/empty-list/EmptyList';
+import Loading from '@/src/components/shared/loading/Loading';
 import Pagination from '@/src/components/shared/pagination/Pagination';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -78,7 +79,7 @@ const Orders = () => {
       </header>
 
       <div className='mx-auto flex min-h-[calc(100vh-100px)] w-full items-center px-3 py-8 sm:justify-center md:w-[760px]'>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loading />}>
           {orders &&
           orders.status === 'success' &&
           orders.data.orders.length === 0 ? (
@@ -101,7 +102,7 @@ const Orders = () => {
           OnSetPage={(pageNo) => setPage(pageNo)}
         />
       )}
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading />}>
         <OrderInfoPopup
           openInfo={openOrderInfo}
           onClose={() => setOpenOrderInfo(false)}

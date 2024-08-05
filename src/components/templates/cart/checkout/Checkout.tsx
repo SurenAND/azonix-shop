@@ -1,9 +1,9 @@
-import { lazy, Suspense } from 'react';
+import Loading from '@/src/components/shared/loading/Loading';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import { ShoppingCartItem } from '@/src/store/checkout/checkout.type';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const CartCard = lazy(
@@ -53,7 +53,7 @@ const Checkout = ({
       <div className='ms-2 flex flex-col gap-12 rounded-lg bg-white p-5 dark:bg-gray-800'>
         {/* cart items */}
         <div className='max-h-[300px] space-y-3 overflow-y-auto p-3'>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loading />}>
             {shoppingCartInfo
               .filter((item) => item.userId === state.userId)
               .map((item) => (

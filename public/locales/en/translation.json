@@ -181,5 +181,8 @@
   "product-discount-percentage-input-error": "Discount percentage is required!",
   "product-sort-by-price": "Sort by price",
   "low-to-high": "Low to High",
-  "high-to-low": "High to Low"
+  "high-to-low": "High to Low",
+  "about-us": "About Us",
+  "our-shop": "Our Shop",
+  "about-us-description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, commodi doloremque, fugiat illum magni minus nisi nulla numquam obcaecati placeat quia, repellat tempore voluptatum."
 }

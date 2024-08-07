@@ -12,6 +12,9 @@ import DatePicker, { DateObject } from 'react-multi-date-picker';
 import { DayType, MonthType } from 'shamsi';
 import * as shamsi from 'shamsi-date-converter';
 
+const minDate = new Date();
+minDate.setDate(minDate.getDate() + 3);
+
 const DataPickerInput = () => {
   const { t, i18n } = useTranslation();
   const [value, setValue] = useState<{
@@ -71,6 +74,7 @@ const DataPickerInput = () => {
           locale={i18n.language === 'fa' ? persian_fa : gregorian_en}
           value={value.date}
           onChange={convert}
+          minDate={minDate}
           required
           style={{
             backgroundColor: 'transparent',

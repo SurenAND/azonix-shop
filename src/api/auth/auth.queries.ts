@@ -18,8 +18,8 @@ import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
 import { AuthReducerAction } from '@/src/types/enums';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'sonner';
 
 export const useLogin = () => {

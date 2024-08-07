@@ -11,8 +11,8 @@ import {
   ProductByIdType,
   ProductType,
 } from '@/src/api/product/product.type';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'sonner';
 
 export const useGetProducts = (params: GetProductsParamsType) => {

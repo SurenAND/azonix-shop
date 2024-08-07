@@ -11,7 +11,7 @@ import {
   OrderType,
   SingleOrderType,
 } from '@/src/api/orders/orders.type';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useGetOrders = (params: GetOrdersParamsType) => {

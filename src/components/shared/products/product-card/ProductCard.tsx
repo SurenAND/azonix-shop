@@ -26,7 +26,7 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
   const { setShoppingCartInfo } = useCheckoutStore();
 
   const addToCardHandler = () => {
-    if (product && state.isLogin) {
+    if (product) {
       setShoppingCartInfo({
         _id: product._id,
         userId: state.userId,
@@ -36,8 +36,6 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
         priceAfterDiscount: product.priceAfterDiscount,
         quantity: 0,
       });
-    } else {
-      toast.warning(t('please-login-to-add-to-cart'));
     }
   };
 

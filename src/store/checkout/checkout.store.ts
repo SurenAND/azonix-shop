@@ -15,6 +15,7 @@ const initialState: CheckoutState = {
   incrementQuantity: () => {},
   decrementQuantity: () => {},
   removeFromCart: () => {},
+  assignCartToUser: () => {},
   clearUserCart: () => {},
 };
 
@@ -97,6 +98,14 @@ const useCheckoutStore = create<CheckoutState>()(
         set((prev) => ({
           shoppingCartInfo: prev.shoppingCartInfo.filter(
             (item) => item._id !== productId || item.userId !== userId,
+          ),
+        }));
+      },
+
+      assignCartToUser: (userId: string) => {
+        set((prev) => ({
+          shoppingCartInfo: prev.shoppingCartInfo.map((item) =>
+            item.userId === '' ? { ...item, userId } : item,
           ),
         }));
       },

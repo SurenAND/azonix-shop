@@ -1,6 +1,6 @@
 import DashboardSkeleton from '@/src/components/shared/skeletons/dashboard-skeleton/DashboardSkeleton';
 import { useSearchParams } from 'next/navigation';
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Toaster } from 'sonner';
 
@@ -36,37 +36,30 @@ const UsersManager = lazy(
 function DashboardTemplate() {
   const { t } = useTranslation();
   const searchParams = useSearchParams().get('view');
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
-    isClient && (
-      <>
-        <Toaster richColors />
-        <div className='my-6 flex items-center justify-center'>
-          <Suspense fallback={<DashboardSkeleton />}>
-            {searchParams === 'inventory' && <Inventory />}
-            {searchParams === 'add-product' && <AddProduct />}
-            {searchParams === 'product-manager' && <ProductManager />}
-            {searchParams === 'users-manager' && <UsersManager />}
-            {searchParams === 'orders' && <Orders />}
-            {!searchParams && (
-              <div className='flex h-screen flex-col items-center justify-center gap-10'>
-                <h3 className='text-7xl font-black uppercase'>
-                  {t('hi') + ', Admin'}
-                </h3>
-                <h4 className='text-center text-6xl capitalize'>
-                  {t('welcome-to-your-dashboard')}
-                </h4>
-              </div>
-            )}
-          </Suspense>
-        </div>
-      </>
-    )
+    <>
+      <Toaster richColors />
+      <div className='my-6 flex items-center justify-center'>
+        <Suspense fallback={<DashboardSkeleton />}>
+          {searchParams === 'inventory' && <Inventory />}
+          {searchParams === 'add-product' && <AddProduct />}
+          {searchParams === 'product-manager' && <ProductManager />}
+          {searchParams === 'users-manager' && <UsersManager />}
+          {searchParams === 'orders' && <Orders />}
+          {!searchParams && (
+            <div className='flex h-screen flex-col items-center justify-center gap-10'>
+              <h3 className='text-7xl font-black uppercase'>
+                {t('hi') + ', Admin'}
+              </h3>
+              <h4 className='text-center text-6xl capitalize'>
+                {t('welcome-to-your-dashboard')}
+              </h4>
+            </div>
+          )}
+        </Suspense>
+      </div>
+    </>
   );
 }
 

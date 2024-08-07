@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next';
 
 const Header = dynamic(
   () => import('@/src/components/layout/main-layout/header/Header'),
-  { ssr: false },
+  { ssr: true },
 );
 
 const Footer = dynamic(
   () => import('@/src/components/layout/main-layout/footer/Footer'),
-  { ssr: false },
+  { ssr: true },
 );
 
 export default function Layout({ children }: PropsWithChildren) {

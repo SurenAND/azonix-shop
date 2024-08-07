@@ -1,17 +1,17 @@
-import { AuthContextProvider } from "@/src/context/authContext";
-import "@/src/lib/i18next";
-import { NextPage } from "next";
-import type { AppProps } from "next/app";
-import { ReactElement, ReactNode, useEffect } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { AuthContextProvider } from '@/src/context/authContext';
+import '@/src/lib/i18next';
+import { NextPage } from 'next';
+import type { AppProps } from 'next/app';
+import { ReactElement, ReactNode, useEffect } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 // css
-import "@/styles/globals.css";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
+import '@/styles/globals.css';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 
 // AOS
-import AOS from "aos";
-import "aos/dist/aos.css";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -40,7 +40,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   useEffect(() => {
     AOS.init({
       duration: 800,
-      easing: "ease-in-sine",
+      easing: 'ease-in-sine',
       delay: 100,
       offset: 100,
     });

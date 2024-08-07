@@ -1,12 +1,10 @@
 import Header from '@/src/components/layout/dashboard-layout/header/Header';
 import Sidebar from '@/src/components/layout/dashboard-layout/sidebar/SideBar';
-import LoadingPage from '@/src/components/shared/loading-page/LoadingPage';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
   const [open, setOpen] = useState(true);
-  const [layoutLoaded, setLayoutLoaded] = useState(false);
 
   // change direction of the layout based on the language
   const [dir, setDir] = useState('ltr');
@@ -14,13 +12,6 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
   useEffect(() => {
     setDir(i18n.dir());
   }, [i18n.resolvedLanguage]);
-
-  useEffect(() => {
-    Promise.all([
-      import('@/src/components/layout/dashboard-layout/header/Header'),
-      import('@/src/components/layout/dashboard-layout/sidebar/SideBar'),
-    ]).then(() => setLayoutLoaded(true));
-  }, []);
 
   return (
     <div
@@ -37,7 +28,7 @@ export default function DashboardLayout({ children }: PropsWithChildren) {
               : 'ms-[-250px] w-full duration-[195ms] ease-in'
           } overflow-hidden`}
         >
-          {layoutLoaded ? children : <LoadingPage />}
+          {children}
         </div>
       </div>
     </div>

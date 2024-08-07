@@ -6,7 +6,7 @@ const DrawerList = dynamic(
     import(
       '@/src/components/layout/dashboard-layout/sidebar/drawer-list/DrawerList'
     ),
-  { ssr: false },
+  { ssr: true },
 );
 export default function Sidebar({ open }: { open: boolean }) {
   const { i18n } = useTranslation();

@@ -6,10 +6,10 @@ import {
   DropdownLinks,
   MenuLinks,
 } from '@/src/components/layout/main-layout/header/data';
-import DarkMode from '@/src/components/shared/dark-mode/DarkMode';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import dynamic from 'next/dynamic';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -18,6 +18,11 @@ import { useTranslation } from 'react-i18next';
 import { FaCaretDown, FaCartShopping } from 'react-icons/fa6';
 import { IoMdLogIn, IoMdSearch } from 'react-icons/io';
 import { IoMenu } from 'react-icons/io5';
+
+const DarkMode = dynamic(
+  () => import('@/src/components/shared/dark-mode/DarkMode'),
+  { ssr: false },
+);
 
 const lngs: Record<'en' | 'fa', { flag: StaticImageData }> = {
   en: { flag: UsFlag },

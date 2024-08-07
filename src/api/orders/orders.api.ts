@@ -1,5 +1,9 @@
 import { req } from '@/src/api/api.config';
-import { AddNewOrderParamsType, GetOrdersParamsType, OrderType } from '@/src/api/orders/orders.type';
+import {
+  AddNewOrderParamsType,
+  GetOrdersParamsType,
+  OrderType,
+} from '@/src/api/orders/orders.type';
 
 export const getAllOrdersApi = async (params: GetOrdersParamsType) => {
   const _params: Partial<GetOrdersParamsType> = {};
@@ -9,7 +13,7 @@ export const getAllOrdersApi = async (params: GetOrdersParamsType) => {
   if (params.sort === 'asc') _params.sort = 'createdAt';
   if (params.sort === 'desc') _params.sort = '-createdAt';
 
-  const response = await req.get('/orders', { params: _params });
+  const response = await req.get('/orders?limit=15', { params: _params });
   return response.data;
 };
 
@@ -23,7 +27,10 @@ export const getOrderByIdApi = async (orderId: string) => {
   return response.data;
 };
 
-export const updateOrderApi = async (order: OrderType, data: Partial<OrderType>) => {
+export const updateOrderApi = async (
+  order: OrderType,
+  data: Partial<OrderType>,
+) => {
   const response = await req.patch(`/orders/${order._id}`, data);
   return response.data;
 };

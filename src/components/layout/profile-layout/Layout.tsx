@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next';
 
 const Header = dynamic(
   () => import('@/src/components/layout/profile-layout/header/Header'),
-  { ssr: false },
+  { ssr: true },
 );
 
 const UserSidebar = dynamic(
   () => import('@/src/components/layout/profile-layout/sidebar/SideBar'),
-  { ssr: false },
+  { ssr: true },
 );
 
 const ProfileLayout = ({ children }: PropsWithChildren) => {

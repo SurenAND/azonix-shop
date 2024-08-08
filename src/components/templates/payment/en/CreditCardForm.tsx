@@ -16,6 +16,13 @@ const CreditCardForm = () => {
   const [cardCvv, setCardCvv] = useState('');
   const [isCardFlipped, setIsCardFlipped] = useState(false);
 
+  // error state
+  const [cardNumberError, setCardNumberError] = useState('');
+  const [cardHolderError, setCardHolderError] = useState('');
+  const [cardMonthError, setCardMonthError] = useState('');
+  const [cardYearError, setCardYearError] = useState('');
+  const [cardCvvError, setCardCvvError] = useState('');
+
   const minCardYear = new Date().getFullYear();
 
   const { mutate: addNewOrder } = useAddNewOrder();
@@ -49,46 +56,73 @@ const CreditCardForm = () => {
     return maskedNumber;
   };
 
+  const validation = () => {
+    if (cardNumber.length !== 16 || !/^\d+$/.test(cardNumber)) {
+      setCardNumberError('Card number is invalid!');
+      return false;
+    } else if (cardHolder === '' || !/^[a-zA-Z ]+$/.test(cardHolder)) {
+      setCardHolderError('Card holder is required!');
+      return false;
+    } else if (cardMonth === '') {
+      setCardMonthError('Expiration date is required!');
+      return false;
+    } else if (cardYear === '') {
+      setCardYearError('Expiration date is required!');
+      return false;
+    } else if (cardCvv.length !== 4 || !/^\d+$/.test(cardCvv)) {
+      setCardCvvError('CVV is invalid!');
+      return false;
+    }
+    setCardYearError('');
+    setCardMonthError('');
+    setCardHolderError('');
+    setCardNumberError('');
+    setCardCvvError('');
+    return true;
+  };
+
   const handlePayment = () => {
-    // add new order
-    addNewOrder(
-      {
-        user: state?.userId,
-        products: shoppingCartInfo
-          .filter((item) => item.userId === state.userId)
-          .map((item) => ({
-            product: item._id,
-            count: item.quantity,
-          })),
-        deliveryStatus: false,
-        deliveryDate:
-          deliveryDate
-            .find((item) => item.userId === state.userId)
-            ?.date.split('T')[0] || '',
-      },
-      {
-        onSuccess: (data) => {
-          if (data.status === 'success') {
-            // remove orders from product
-            data?.data.order.products.forEach(
-              (item: ProductInOrderResponseType) => {
-                updateProduct({
-                  productId: item.product._id,
-                  data: {
-                    quantity: item.product.quantity - item.count,
-                  },
-                });
-              },
-            );
-            // clear user's cart
-            clearUserCart(state?.userId);
-            // reset user delivery date
-            resetUserDeliveryDate(state?.userId);
-            location.href = MainRoutes.PAYMENT_RESULT + '?result=successful';
-          }
+    if (validation()) {
+      // add new order
+      addNewOrder(
+        {
+          user: state?.userId,
+          products: shoppingCartInfo
+            .filter((item) => item.userId === state.userId)
+            .map((item) => ({
+              product: item._id,
+              count: item.quantity,
+            })),
+          deliveryStatus: false,
+          deliveryDate:
+            deliveryDate
+              .find((item) => item.userId === state.userId)
+              ?.date.split('T')[0] || '',
         },
-      },
-    );
+        {
+          onSuccess: (data) => {
+            if (data.status === 'success') {
+              // remove orders from product
+              data?.data.order.products.forEach(
+                (item: ProductInOrderResponseType) => {
+                  updateProduct({
+                    productId: item.product._id,
+                    data: {
+                      quantity: item.product.quantity - item.count,
+                    },
+                  });
+                },
+              );
+              // clear user's cart
+              clearUserCart(state?.userId);
+              // reset user delivery date
+              resetUserDeliveryDate(state?.userId);
+              location.href = MainRoutes.PAYMENT_RESULT + '?result=successful';
+            }
+          },
+        },
+      );
+    }
   };
 
   return (
@@ -161,6 +195,13 @@ const CreditCardForm = () => {
               maxLength={16}
               autoComplete='off'
             />
+            <p
+              className={`text-xs text-rose-400 ${
+                cardNumberError ? 'visible' : 'invisible'
+              }`}
+            >
+              {cardNumberError}
+            </p>
           </div>
           <div className='mb-6'>
             <label
@@ -178,6 +219,13 @@ const CreditCardForm = () => {
               maxLength={30}
               autoComplete='off'
             />
+            <p
+              className={`text-xs text-rose-400 ${
+                cardHolderError ? 'visible' : 'invisible'
+              }`}
+            >
+              {cardHolderError}
+            </p>
           </div>
           <div className='mb-6 flex'>
             <div className='mr-2 flex-1'>
@@ -202,6 +250,13 @@ const CreditCardForm = () => {
                   </option>
                 ))}
               </select>
+              <p
+                className={`text-xs text-rose-400 ${
+                  cardMonthError ? 'visible' : 'invisible'
+                }`}
+              >
+                {cardMonthError}
+              </p>
             </div>
             <div className='ml-2 flex-1'>
               <label
@@ -225,6 +280,13 @@ const CreditCardForm = () => {
                   </option>
                 ))}
               </select>
+              <p
+                className={`text-xs text-rose-400 ${
+                  cardYearError ? 'visible' : 'invisible'
+                }`}
+              >
+                {cardYearError}
+              </p>
             </div>
           </div>
           <div className='mb-6'>
@@ -245,6 +307,13 @@ const CreditCardForm = () => {
               maxLength={4}
               autoComplete='off'
             />
+            <p
+              className={`text-xs text-rose-400 ${
+                cardCvvError ? 'visible' : 'invisible'
+              }`}
+            >
+              {cardCvvError}
+            </p>
           </div>
           <div className='flex justify-between gap-5'>
             <button

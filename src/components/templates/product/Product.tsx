@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast, Toaster } from 'sonner';
+import { Toaster } from 'sonner';
 
 type ProductTemplateProps = {
   productId: string;

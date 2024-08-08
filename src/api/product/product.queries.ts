@@ -73,7 +73,7 @@ export const useDeleteProduct = () => {
 
 export const useGetProductById = (productId: string) => {
   return useQuery<ProductByIdType>({
-    queryKey: ['products', 'single'],
+    queryKey: ['products', 'single', productId],
     queryFn: () => getProductByIdApi(productId),
     refetchOnMount: 'always',
     enabled: !!productId,

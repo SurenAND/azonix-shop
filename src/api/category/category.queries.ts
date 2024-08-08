@@ -12,7 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export const useGetCategories = (params?: GetCategoriesParamsType) => {
   return useQuery<AllCategoriesType>({
-    queryKey: ['categories', params],
+    queryKey: ['categories'],
     queryFn: () => getAllCategoriesApi(params),
   });
 };

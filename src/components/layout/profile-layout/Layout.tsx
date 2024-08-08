@@ -10,25 +10,16 @@ const Header = dynamic(
 
 const UserSidebar = dynamic(
   () => import('@/src/components/layout/profile-layout/sidebar/SideBar'),
-  { ssr: true },
+  { ssr: true, loading: () => <LoadingPage /> },
 );
 
 const ProfileLayout = ({ children }: PropsWithChildren) => {
-  const [layoutLoaded, setLayoutLoaded] = useState(false);
-
   // change direction of the layout based on the language
   const [dir, setDir] = useState('ltr');
   const { i18n } = useTranslation();
   useEffect(() => {
     setDir(i18n.dir());
   }, [i18n.resolvedLanguage]);
-
-  useEffect(() => {
-    Promise.all([
-      import('@/src/components/layout/profile-layout/header/Header'),
-      import('@/src/components/layout/profile-layout/sidebar/SideBar'),
-    ]).then(() => setLayoutLoaded(true));
-  }, []);
 
   return (
     <div className='min-h-screen bg-axGray pb-5 dark:bg-gray-700' dir={dir}>
@@ -37,7 +28,7 @@ const ProfileLayout = ({ children }: PropsWithChildren) => {
         <div className='w-full rounded-lg md:min-h-[50vh] md:w-1/5'>
           <UserSidebar />
         </div>
-        {layoutLoaded ? children : <LoadingPage />}
+        {children}
       </div>
     </div>
   );

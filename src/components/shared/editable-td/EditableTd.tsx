@@ -23,14 +23,14 @@ function EditableTd({
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const getValue = () => {
-    return (editedProducts[product._id]?.[field as keyof ProductType] ??
+    return (editedProducts[product?._id]?.[field as keyof ProductType] ??
       product[field as keyof ProductType]) as number;
   };
 
   const isEdited = () => {
     const editKey =
       `is${field.charAt(0).toUpperCase() + field.slice(1)}Edit` as keyof Partial<ProductType>;
-    return editedProducts[product._id]?.[editKey] ?? false;
+    return editedProducts[product?._id]?.[editKey] ?? false;
   };
 
   useEffect(() => {
@@ -52,8 +52,8 @@ function EditableTd({
   const handleChange = (value: number) => {
     setEditedProducts((prev) => ({
       ...prev,
-      [product._id]: {
-        ...prev[product._id],
+      [product?._id]: {
+        ...prev[product?._id],
         [field]: value,
         [`is${field.charAt(0).toUpperCase() + field.slice(1)}Edit`]: true,
       },

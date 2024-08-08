@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 
 export const useGetProducts = (params: GetProductsParamsType) => {
   return useQuery<AllProductsType>({
-    queryKey: ['products', params],
+    queryKey: ['products'],
     queryFn: () => getAllProductsApi(params),
   });
 };
@@ -73,7 +73,7 @@ export const useDeleteProduct = () => {
 
 export const useGetProductById = (productId: string) => {
   return useQuery<ProductByIdType>({
-    queryKey: ['products', 'single', productId],
+    queryKey: ['products', 'single'],
     queryFn: () => getProductByIdApi(productId),
     refetchOnMount: 'always',
     enabled: !!productId,

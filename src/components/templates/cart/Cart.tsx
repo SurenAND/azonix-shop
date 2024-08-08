@@ -10,17 +10,20 @@ import DeliveryInfoSkeleton from '@/src/components/shared/skeletons/delivery-inf
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
-import { lazy, Suspense, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 // Lazy load components
-const Checkout = lazy(
+const Checkout = dynamic(
   () => import('@/src/components/templates/cart/checkout/Checkout'),
+  { loading: () => <CheckoutSkeleton /> },
 );
-const DeliveryInfo = lazy(
+const DeliveryInfo = dynamic(
   () => import('@/src/components/templates/cart/delivery-info/DeliveryInfo'),
+  { loading: () => <DeliveryInfoSkeleton /> },
 );
 
 const CartTemplate = () => {
@@ -123,25 +126,23 @@ const CartTemplate = () => {
       >
         <div className='mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-6 xl:gap-10'>
           {/* delivery info */}
-          <Suspense fallback={<DeliveryInfoSkeleton />}>
-            <DeliveryInfo
-              register={register}
-              errors={errors}
-              setPaymentMethodSelected={setPaymentMethodSelected}
-              setPaymentName={setPaymentName}
-              paymentMethodSelected={paymentMethodSelected}
-              oldUser={oldUser}
-              reset={reset}
-            />
-          </Suspense>
+
+          <DeliveryInfo
+            register={register}
+            errors={errors}
+            setPaymentMethodSelected={setPaymentMethodSelected}
+            setPaymentName={setPaymentName}
+            paymentMethodSelected={paymentMethodSelected}
+            oldUser={oldUser}
+            reset={reset}
+          />
+
           {/* order's summary */}
-          <Suspense fallback={<CheckoutSkeleton />}>
-            <Checkout
-              shoppingCartInfo={shoppingCartInfo}
-              paymentName={paymentName}
-              paymentMethodSelected={paymentMethodSelected}
-            />
-          </Suspense>
+          <Checkout
+            shoppingCartInfo={shoppingCartInfo}
+            paymentName={paymentName}
+            paymentMethodSelected={paymentMethodSelected}
+          />
         </div>
       </form>
     </section>

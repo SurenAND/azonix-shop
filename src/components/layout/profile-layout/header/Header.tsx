@@ -13,7 +13,7 @@ import { IoSearch } from 'react-icons/io5';
 import { MdFavoriteBorder, MdOutlineLocalMall } from 'react-icons/md';
 const DarkMode = dynamic(
   () => import('@/src/components/shared/dark-mode/DarkMode'),
-  { ssr: false },
+  { ssr: true },
 );
 
 const lngs: Record<'en' | 'fa', { flag: StaticImageData }> = {

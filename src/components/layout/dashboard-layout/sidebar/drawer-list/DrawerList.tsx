@@ -42,81 +42,81 @@ export default function DrawerList() {
       </div>
       <div className='mb-4 flex flex-col gap-1'>
         <h6 className='text-lg font-bold'>{t('products-management')}</h6>
-        {drawerProductsItems.map((item, index) => (
+        {drawerProductsItems?.map((item, index) => (
           <div
             key={index}
             className={`my-2 rounded-2xl p-4 ${
-              searchParams === item.view ? 'bg-axWhite text-axLightPurple' : ''
+              searchParams === item?.view ? 'bg-axWhite text-axLightPurple' : ''
             }`}
           >
             <button
               onClick={() =>
-                pushRouter(`${MainRoutes.DASHBOARD}?view=${item.view}`)
+                pushRouter(`${MainRoutes.DASHBOARD}?view=${item?.view}`)
               }
               className='flex w-full items-center rounded-2xl'
             >
               <div
                 className={`${
-                  searchParams === item.view ? 'text-axLightPurple' : ''
+                  searchParams === item?.view ? 'text-axLightPurple' : ''
                 }`}
               >
-                {item.icon}
+                {item?.icon}
               </div>
-              <span className='ms-3 font-semibold'>{t(item.title)}</span>
+              <span className='ms-3 font-semibold'>{t(item?.title)}</span>
             </button>
           </div>
         ))}
       </div>
       <div className='mb-4 flex flex-col gap-1'>
         <h6 className='text-lg font-bold'>{t('orders-management')}</h6>
-        {drawerOrdersItems.map((item, index) => (
+        {drawerOrdersItems?.map((item, index) => (
           <div
             key={index}
             className={`my-2 rounded-2xl p-4 ${
-              searchParams === item.view ? 'bg-axWhite text-axLightPurple' : ''
+              searchParams === item?.view ? 'bg-axWhite text-axLightPurple' : ''
             }`}
           >
             <button
               onClick={() =>
-                pushRouter(`${MainRoutes.DASHBOARD}?view=${item.view}`)
+                pushRouter(`${MainRoutes.DASHBOARD}?view=${item?.view}`)
               }
               className='flex w-full items-center rounded-2xl'
             >
               <div
                 className={`${
-                  searchParams === item.view ? 'text-axLightPurple' : ''
+                  searchParams === item?.view ? 'text-axLightPurple' : ''
                 }`}
               >
-                {item.icon}
+                {item?.icon}
               </div>
-              <span className='ms-3 font-semibold'>{t(item.title)}</span>
+              <span className='ms-3 font-semibold'>{t(item?.title)}</span>
             </button>
           </div>
         ))}
       </div>
       <div className='mb-4 flex flex-col gap-1'>
         <h6 className='text-lg font-bold'>{t('user-management')}</h6>
-        {drawerUserItems.map((item, index) => (
+        {drawerUserItems?.map((item, index) => (
           <div
             key={index}
             className={`my-2 rounded-2xl p-4 ${
-              searchParams === item.view ? 'bg-axWhite text-axLightPurple' : ''
+              searchParams === item?.view ? 'bg-axWhite text-axLightPurple' : ''
             }`}
           >
             <button
               onClick={() =>
-                pushRouter(`${MainRoutes.DASHBOARD}?view=${item.view}`)
+                pushRouter(`${MainRoutes.DASHBOARD}?view=${item?.view}`)
               }
               className='flex w-full items-center rounded-2xl'
             >
               <div
                 className={`${
-                  searchParams === item.view ? 'text-axLightPurple' : ''
+                  searchParams === item?.view ? 'text-axLightPurple' : ''
                 }`}
               >
-                {item.icon}
+                {item?.icon}
               </div>
-              <span className='ms-3 font-semibold'>{t(item.title)}</span>
+              <span className='ms-3 font-semibold'>{t(item?.title)}</span>
             </button>
           </div>
         ))}

@@ -1,7 +1,8 @@
 import { UserByIdType } from '@/src/api/auth/auth.type';
 import Loading from '@/src/components/shared/loading/Loading';
 import { paymentMethodData } from '@/src/constant/paymentMethodData';
-import { Dispatch, SetStateAction, Suspense, lazy, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import {
   FieldErrors,
   FieldValues,
@@ -10,9 +11,9 @@ import {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-// Lazy load the DataPickerInput component
-const DataPickerInput = lazy(
+const DataPickerInput = dynamic(
   () => import('@/src/components/shared/date-picker-input/DataPickerInput'),
+  { loading: () => <Loading /> },
 );
 
 type DeliveryInfoPropsType = {
@@ -164,9 +165,7 @@ const DeliveryInfo = ({
               <label className='mb-2 dark:text-gray-300'>
                 {t('delivery-date')}
               </label>
-              <Suspense fallback={<Loading />}>
-                <DataPickerInput />
-              </Suspense>
+              <DataPickerInput />
             </div>
             {/* Note */}
             <div className='flex flex-col'>
@@ -188,18 +187,18 @@ const DeliveryInfo = ({
 
         <div className='ms-2 grid grid-cols-1 gap-4 rounded-lg bg-white p-5 dark:bg-gray-800 sm:grid-cols-3'>
           {/* payment method details */}
-          {paymentMethodData.map((method, index) => (
+          {paymentMethodData?.map((method, index) => (
             <label
               className='relative flex cursor-pointer items-center justify-center gap-[1em] text-black'
-              htmlFor={method.id}
-              key={method.id}
+              htmlFor={method?.id}
+              key={method?.id}
             >
               <input
                 className='peer appearance-none'
-                id={method.id}
+                id={method?.id}
                 name='tick'
                 type='checkbox'
-                onChange={() => paymentMethodChange(index, method.id)}
+                onChange={() => paymentMethodChange(index, method?.id)}
                 checked={paymentMethodSelected === index}
               />
               <span className='absolute start-0 top-1/2 h-5 w-5 -translate-y-1/2 rounded-[0.25em] border-[2px] border-black'></span>
@@ -220,7 +219,7 @@ const DeliveryInfo = ({
               </svg>
 
               <p className='text-[1em] font-bold [user-select:none]'>
-                {i18n.language === 'en' ? method.nameEN : method.nameFA}
+                {i18n.language === 'en' ? method?.nameEN : method?.nameFA}
               </p>
             </label>
           ))}

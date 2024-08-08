@@ -1,61 +1,61 @@
 import {
   ImportantLinks,
   QuickLinks,
-} from "@/src/components/layout/main-layout/footer/data";
-import Link from "next/link";
-import { useTranslation } from "react-i18next";
-import { FaMobileAlt } from "react-icons/fa";
+} from '@/src/components/layout/main-layout/footer/data';
+import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
+import { FaMobileAlt } from 'react-icons/fa';
 import {
   FaFacebook,
   FaInstagram,
   FaLinkedin,
   FaLocationArrow,
-} from "react-icons/fa6";
+} from 'react-icons/fa6';
 
 export default function Footer() {
   const { t, i18n } = useTranslation();
   return (
-    <div className="dark:bg-gray-950">
-      <div className="container">
-        <div className="grid md:grid-cols-3 pb-20 pt-5">
+    <div className='dark:bg-gray-950'>
+      <div className='container'>
+        <div className='grid pb-20 pt-5 md:grid-cols-3'>
           {/* company details */}
-          <div className="py-9 px-4">
+          <div className='px-4 py-9'>
             <Link
-              href="#"
-              className={`text-primary font-bold text-2xl uppercase sm:text-3xl ${
-                i18n.dir() === "ltr" ? "tracking-widest" : ""
+              href='#'
+              className={`text-2xl font-bold uppercase text-primary sm:text-3xl ${
+                i18n.dir() === 'ltr' ? 'tracking-widest' : ''
               }`}
             >
-              {t("company-name")}
+              {t('company-name')}
             </Link>
-            <p className="text-gray-600 dark:text-white/70 lg:pe-24 pt-3">
-              {t("company-info")}
+            <p className='pt-3 text-gray-600 dark:text-white/70 lg:pe-24'>
+              {t('company-info')}
             </p>
-            <p className="text-gray-500 mt-4">{t("made-by")}</p>
+            <p className='mt-4 text-gray-500'>{t('made-by')}</p>
             <Link
-              href="https://github.com/SurenAND"
-              target="_blank"
-              className="inline-block bg-primary/90 text-white py-2 px-4 text-sm rounded-full mt-4"
+              href='https://github.com/SurenAND'
+              target='_blank'
+              className='mt-4 inline-block rounded-full bg-primary/90 px-4 py-2 text-sm text-white'
             >
-              {t("more-projects")}
+              {t('more-projects')}
             </Link>
           </div>
 
           {/* Footer links */}
-          <div className="col-span-2 grid grid-cols-2 sm:grid-cols-3 md:ps-10">
+          <div className='col-span-2 grid grid-cols-2 sm:grid-cols-3 md:ps-10'>
             {/* Important links */}
-            <div className="py-8 px-4">
-              <h1 className="text-xl dark:text-white font-bold sm:text-start mb-3">
-                {t("important-links")}
+            <div className='px-4 py-8'>
+              <h1 className='mb-3 text-xl font-bold dark:text-white sm:text-start'>
+                {t('important-links')}
               </h1>
-              <ul className="space-y-3">
-                {ImportantLinks.map((data) => (
-                  <li key={data.id}>
+              <ul className='space-y-3'>
+                {ImportantLinks?.map((data) => (
+                  <li key={data?.id}>
                     <Link
-                      href={data.links}
-                      className="text-gray-600 dark:text-gray-400 hover:dark:text-white hover:text-black duration-300"
+                      href={data?.links}
+                      className='text-gray-600 duration-300 hover:text-black dark:text-gray-400 hover:dark:text-white'
                     >
-                      {t(data.title)}
+                      {t(data?.title)}
                     </Link>
                   </li>
                 ))}
@@ -63,18 +63,18 @@ export default function Footer() {
             </div>
 
             {/* Quick links */}
-            <div className="py-8 px-4">
-              <h1 className="text-xl dark:text-white font-bold sm:text-start mb-3">
-                {t("quick-links")}
+            <div className='px-4 py-8'>
+              <h1 className='mb-3 text-xl font-bold dark:text-white sm:text-start'>
+                {t('quick-links')}
               </h1>
-              <ul className="space-y-3">
-                {QuickLinks.map((data) => (
-                  <li key={data.id}>
+              <ul className='space-y-3'>
+                {QuickLinks?.map((data) => (
+                  <li key={data?.id}>
                     <Link
-                      href={data.links}
-                      className="text-gray-600 dark:text-gray-400 hover:dark:text-white hover:text-black duration-300"
+                      href={data?.links}
+                      className='text-gray-600 duration-300 hover:text-black dark:text-gray-400 hover:dark:text-white'
                     >
-                      {t(data.title)}
+                      {t(data?.title)}
                     </Link>
                   </li>
                 ))}
@@ -82,30 +82,30 @@ export default function Footer() {
             </div>
 
             {/* Company Address */}
-            <div className="py-8 px-4 col-span-2 sm:col-auto">
-              <h1 className="text-xl dark:text-white font-bold sm:text-start mb-3">
-                {t("address")}
+            <div className='col-span-2 px-4 py-8 sm:col-auto'>
+              <h1 className='mb-3 text-xl font-bold dark:text-white sm:text-start'>
+                {t('address')}
               </h1>
               <div>
-                <div className="flex dark:text-gray-400 items-center  gap-3">
+                <div className='flex items-center gap-3  dark:text-gray-400'>
                   <FaLocationArrow />
-                  <p>{t("company-address")}</p>
+                  <p>{t('company-address')}</p>
                 </div>
-                <div className="flex dark:text-gray-400 items-center gap-3 mt-6">
+                <div className='mt-6 flex items-center gap-3 dark:text-gray-400'>
                   <FaMobileAlt />
-                  <p>{t("company-phone")}</p>
+                  <p>{t('company-phone')}</p>
                 </div>
 
                 {/* Social links */}
-                <div className="flex dark:text-gray-400 items-center gap-3 mt-6">
-                  <Link href="#">
-                    <FaInstagram className="text-3xl hover:text-primary duration-300" />
+                <div className='mt-6 flex items-center gap-3 dark:text-gray-400'>
+                  <Link href='#'>
+                    <FaInstagram className='text-3xl duration-300 hover:text-primary' />
                   </Link>
-                  <Link href="#">
-                    <FaFacebook className="text-3xl hover:text-primary duration-300" />
+                  <Link href='#'>
+                    <FaFacebook className='text-3xl duration-300 hover:text-primary' />
                   </Link>
-                  <Link href="https://www.linkedin.com/in/ashkan-zojaji/">
-                    <FaLinkedin className="text-3xl hover:text-primary duration-300" />
+                  <Link href='https://www.linkedin.com/in/ashkan-zojaji/'>
+                    <FaLinkedin className='text-3xl duration-300 hover:text-primary' />
                   </Link>
                 </div>
               </div>

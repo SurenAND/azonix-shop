@@ -1,30 +1,31 @@
-import { PropsWithChildren, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import dynamic from "next/dynamic";
+import LoadingPage from '@/src/components/shared/loading-page/LoadingPage';
+import dynamic from 'next/dynamic';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Header = dynamic(
-  () => import("@/src/components/layout/profile-layout/header/Header"),
-  { ssr: false }
+  () => import('@/src/components/layout/profile-layout/header/Header'),
+  { ssr: true },
 );
 
 const UserSidebar = dynamic(
-  () => import("@/src/components/layout/profile-layout/sidebar/SideBar"),
-  { ssr: false }
+  () => import('@/src/components/layout/profile-layout/sidebar/SideBar'),
+  { ssr: true, loading: () => <LoadingPage /> },
 );
 
 const ProfileLayout = ({ children }: PropsWithChildren) => {
   // change direction of the layout based on the language
-  const [dir, setDir] = useState("ltr");
+  const [dir, setDir] = useState('ltr');
   const { i18n } = useTranslation();
   useEffect(() => {
     setDir(i18n.dir());
   }, [i18n.resolvedLanguage]);
 
   return (
-    <div className="min-h-screen bg-axGray dark:bg-gray-700 pb-5" dir={dir}>
+    <div className='min-h-screen bg-axGray pb-5 dark:bg-gray-700' dir={dir}>
       <Header />
-      <div className="flex flex-col md:flex-row justify-center w-full mt-[5vh] max-md:h-[80vh]">
-        <div className="w-full md:w-1/5 rounded-lg md:min-h-[50vh]">
+      <div className='mt-[5vh] flex w-full flex-col justify-center max-md:h-[80vh] md:flex-row'>
+        <div className='w-full rounded-lg md:min-h-[50vh] md:w-1/5'>
           <UserSidebar />
         </div>
         {children}

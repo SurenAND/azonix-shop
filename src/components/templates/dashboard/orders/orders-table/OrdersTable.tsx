@@ -1,16 +1,29 @@
 import { OrderType } from '@/src/api/orders/orders.type';
+import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BsClipboard2CheckFill } from 'react-icons/bs';
 
-export const OrdersTable = ({
-  list,
-  onFilteredList,
-}: {
+type OrdersTableProps = {
   list: OrderType[];
   onFilteredList: (e: string) => void;
-}) => {
+  setInfoId: Dispatch<SetStateAction<string>>;
+  setOpenInfo: Dispatch<SetStateAction<boolean>>;
+  isDelivered: boolean;
+};
+
+const OrdersTable = ({
+  list,
+  onFilteredList,
+  setInfoId,
+  setOpenInfo,
+  isDelivered,
+}: OrdersTableProps) => {
   const { t } = useTranslation();
-  const showOrdersInfo = (id: string) => {};
+
+  const showOrdersInfo = (id: string) => {
+    setInfoId(id);
+    setOpenInfo(true);
+  };
 
   return (
     <table className='w-full border-collapse self-start rounded border text-center'>
@@ -24,11 +37,13 @@ export const OrdersTable = ({
           </th>
           <th className='text-md w-full border px-1 py-3 md:w-[20%]'>
             <select
-              name='category'
+              name='time'
               className='w-full bg-gray-500 text-center outline-none'
               onChange={(e) => onFilteredList(e.target.value)}
             >
-              <option className='hidden'>{t('order-time')}</option>
+              <option className='hidden'>
+                {isDelivered ? t('delivery-time') : t('order-time')}
+              </option>
               <option value='desc'>{t('newest')}</option>
               <option value='asc'>{t('oldest')}</option>
             </select>
@@ -51,16 +66,17 @@ export const OrdersTable = ({
                 {item?.user.firstname} {item?.user.lastname}
               </td>
               <td className='truncate border p-1'>
-                {item.totalPrice.toLocaleString('en')}
+                {item.totalPrice.toFixed(2)}
               </td>
               <td className='truncate border p-1'>
-                {new Date(item.createdAt).toLocaleDateString('en')}
+                {new Date(item.deliveryDate).toLocaleDateString('en')}
               </td>
               <td className='truncate border p-1'>
                 <div className='flex justify-center'>
                   <BsClipboard2CheckFill
                     width='20'
                     color='#525252'
+                    className='cursor-pointer'
                     onClick={() => showOrdersInfo(item._id)}
                   />
                 </div>
@@ -72,3 +88,4 @@ export const OrdersTable = ({
     </table>
   );
 };
+export default OrdersTable;

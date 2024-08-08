@@ -8,6 +8,8 @@ import HalfStar from '@/src/assets/images/rating/star-half-fill.svg';
 import EmptyStar from '@/src/assets/images/rating/star-no-fill.svg';
 import FullStar from '@/src/assets/images/rating/star.svg';
 import { MainRoutes } from '@/src/constant/routes';
+import { useUserContext } from '@/src/context/authContext';
+import useCheckoutStore from '@/src/store/checkout/checkout.store';
 import { useRouter } from 'next/router';
 
 type ProductCardPropsType = {
@@ -18,9 +20,27 @@ type ProductCardPropsType = {
 const ProductCard = ({ product, index }: ProductCardPropsType) => {
   const { t, i18n } = useTranslation();
   const { push: pushRouter } = useRouter();
+
+  const { state } = useUserContext();
+  const { setShoppingCartInfo } = useCheckoutStore();
+
+  const addToCardHandler = () => {
+    if (product) {
+      setShoppingCartInfo({
+        _id: product?._id,
+        userId: state.userId,
+        name: product?.name,
+        image: product?.images[0],
+        price: product?.price,
+        priceAfterDiscount: product?.priceAfterDiscount,
+        quantity: 0,
+      });
+    }
+  };
+
   return (
     <div
-      key={product._id}
+      key={product?._id}
       className='min-h-[10rem] w-72 overflow-hidden rounded-md bg-white text-gray-700 shadow-lg'
     >
       <div
@@ -29,8 +49,8 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
         }`}
       >
         <Image
-          src={`http://${product.images[0]}`}
-          alt={product.name}
+          src={`http://${product?.images[0]}`}
+          alt={product?.name}
           width={150}
           height={150}
           className='drop-shadow-[-8px_4px_6px_rgba(0,0,0,.4)]'
@@ -40,31 +60,31 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
         {/* brand */}
         <div className='flex items-center gap-2'>
           <span className='rounded-full bg-gray-100 px-3 py-1 text-xs'>
-            {product.brand}
+            {product?.brand}
           </span>
         </div>
 
         {/* product title */}
         <h2
           className='overflow-hidden overflow-ellipsis whitespace-nowrap text-2xl font-semibold'
-          title={product.name}
+          title={product?.name}
         >
-          {product.name}
+          {product?.name}
         </h2>
 
         {/* product price */}
         <div>
           {/* after discount price */}
           <span className='text-xl font-bold'>
-            ${product.priceAfterDiscount.toFixed(2)}
+            ${product?.priceAfterDiscount.toFixed(2)}
           </span>
           {/* before discount price */}
           <div className='mt-1 flex items-center gap-2'>
             <span className='text-sm line-through opacity-50'>
-              ${product.price}
+              ${product?.price}
             </span>
             <span className='rounded-md bg-axGreen px-1.5 py-0.5 text-xs text-white'>
-              {t('discount-save')} {product.discountPercentage}%
+              {t('discount-save')} {product?.discountPercentage}%
             </span>
           </div>
         </div>
@@ -103,6 +123,7 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
         <div className='mt-5 flex gap-2'>
           {/* add to cart button */}
           <button
+            onClick={addToCardHandler}
             className={`rounded-md px-6 py-2 font-medium text-white transition ${
               i18n.dir() === 'ltr' ? 'tracking-wider' : ''
             } ${
@@ -122,7 +143,7 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
             className='flex flex-grow items-center justify-center rounded-md bg-gray-300/60 transition hover:bg-gray-300/80'
             onClick={() => {
               pushRouter(
-                `${MainRoutes.SHOP}/${product.category.slugname}/${product._id}`,
+                `${MainRoutes.SHOP}/${product?.category.slugname}/${product?._id}`,
               );
             }}
           >

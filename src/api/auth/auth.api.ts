@@ -17,7 +17,7 @@ export const logoutApi = async () => {
 };
 
 export const getAllUsersApi = async (params: GetUsersParamsType) => {
-  const _params: any = {};
+  const _params: Partial<GetUsersParamsType> = {};
   if (params.page) _params.page = params.page;
   if (params.role) _params.role = params.role;
   if (params.limit) _params.limit = params.limit;
@@ -33,5 +33,13 @@ export const deleteUserApi = async (id: string) => {
 
 export const getUserByIdApi = async (id: string) => {
   const response = await req.get(`/users/${id}`);
+  return response.data;
+};
+
+export const updateUserApi = async (
+  user: UserDataType,
+  data: Partial<UserDataType>,
+) => {
+  const response = await req.patch(`/users/${user._id}`, data);
   return response.data;
 };

@@ -5,22 +5,25 @@ import {
 } from '@/src/api/product/product.type';
 
 export const getAllProductsApi = async (params: GetProductsParamsType) => {
-  const _params: any = {};
+  const _params: Partial<GetProductsParamsType> = {};
   if (params.page) _params.page = params.page;
   if (params.category) _params.category = params.category;
   if (params.limit) _params.limit = params.limit;
-  if (params.minPrice)
-    _params.price = { ..._params.price, ['gte']: params.minPrice };
-  if (params.maxPrice)
-    _params.price = { ..._params.price, ['lt']: params.maxPrice };
+  _params.price = _params.price || {};
+  if (params.minPrice) _params.price.gte = params.minPrice;
+  if (params.maxPrice) _params.price.lt = params.maxPrice;
   if (params.subcategory) _params.subcategory = params.subcategory;
+  if (params.sort) _params.sort = params.sort;
 
   const response = await req.get('/products', { params: _params });
   return response.data;
 };
 
-export const updateProductApi = async (product: ProductType, data: any) => {
-  const response = await req.patch(`/products/${product._id}`, data);
+export const updateProductApi = async (
+  productId: string,
+  data: Partial<ProductType> | FormData,
+) => {
+  const response = await req.patch(`/products/${productId}`, data);
   return response.data;
 };
 

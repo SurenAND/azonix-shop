@@ -1,27 +1,47 @@
-import { Orders } from '@/src/components/templates/dashboard/orders/Orders';
-import AddProduct from '@/src/components/templates/dashboard/products-management/add-product/AddProduct';
-import Inventory from '@/src/components/templates/dashboard/products-management/inventory/Inventory';
-import ProductManager from '@/src/components/templates/dashboard/products-management/product-manager/ProductManager';
-import UsersManager from '@/src/components/templates/dashboard/user-manager/users/UsersManager';
+import DashboardSkeleton from '@/src/components/shared/skeletons/dashboard-skeleton/DashboardSkeleton';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Toaster } from 'sonner';
+
+// Lazy load components
+const Orders = lazy(
+  () => import('@/src/components/templates/dashboard/orders/Orders'),
+);
+const AddProduct = lazy(
+  () =>
+    import(
+      '@/src/components/templates/dashboard/products-management/add-product/AddProduct'
+    ),
+);
+const Inventory = lazy(
+  () =>
+    import(
+      '@/src/components/templates/dashboard/products-management/inventory/Inventory'
+    ),
+);
+const ProductManager = lazy(
+  () =>
+    import(
+      '@/src/components/templates/dashboard/products-management/product-manager/ProductManager'
+    ),
+);
+const UsersManager = lazy(
+  () =>
+    import(
+      '@/src/components/templates/dashboard/user-manager/users/UsersManager'
+    ),
+);
 
 function DashboardTemplate() {
   const { t } = useTranslation();
   const searchParams = useSearchParams().get('view');
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
-    isClient && (
-      <>
-        <Toaster richColors />
-        <div className='my-6 flex items-center justify-center'>
+    <>
+      <Toaster richColors />
+      <div className='my-6 flex items-center justify-center'>
+        <Suspense fallback={<DashboardSkeleton />}>
           {searchParams === 'inventory' && <Inventory />}
           {searchParams === 'add-product' && <AddProduct />}
           {searchParams === 'product-manager' && <ProductManager />}
@@ -37,9 +57,9 @@ function DashboardTemplate() {
               </h4>
             </div>
           )}
-        </div>
-      </>
-    )
+        </Suspense>
+      </div>
+    </>
   );
 }
 

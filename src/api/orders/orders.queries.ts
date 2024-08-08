@@ -11,7 +11,7 @@ import {
   OrderType,
   SingleOrderType,
 } from '@/src/api/orders/orders.type';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useGetOrders = (params: GetOrdersParamsType) => {
@@ -48,8 +48,13 @@ export const useGetOrderById = (orderId: string) => {
 export const useUpdateOrder = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ newOrder, data }: { newOrder: OrderType; data: any }) =>
-      updateOrderApi(newOrder, data),
+    mutationFn: ({
+      newOrder,
+      data,
+    }: {
+      newOrder: OrderType;
+      data: Partial<OrderType>;
+    }) => updateOrderApi(newOrder, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['orders'],

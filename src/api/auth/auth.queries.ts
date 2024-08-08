@@ -16,14 +16,16 @@ import {
 } from '@/src/api/auth/auth.type';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
+import useCheckoutStore from '@/src/store/checkout/checkout.store';
 import { AuthReducerAction } from '@/src/types/enums';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'sonner';
 
 export const useLogin = () => {
   const { push: pushRouter } = useRouter();
   const { dispatch } = useUserContext();
+  const { assignCartToUser } = useCheckoutStore();
   return useMutation({
     mutationFn: ({
       username,
@@ -33,15 +35,16 @@ export const useLogin = () => {
       password: string;
     }) => LoginApi(username, password),
     onSuccess(data) {
-      if (data.status === 'success') {
+      if (data?.status === 'success') {
         dispatch({
           type: AuthReducerAction.SET_USER,
           payload: {
-            ...data.data.user,
-            accessToken: data.token.accessToken,
-            refreshToken: data.token.refreshToken,
+            ...data?.data.user,
+            accessToken: data?.token.accessToken,
+            refreshToken: data?.token.refreshToken,
           },
         });
+        assignCartToUser(data?.data.user._id);
         pushRouter(MainRoutes.HOME);
       }
     },
@@ -56,22 +59,24 @@ export const useLogin = () => {
 export const useSignup = () => {
   const { push: pushRouter } = useRouter();
   const { dispatch } = useUserContext();
+  const { assignCartToUser } = useCheckoutStore();
   return useMutation({
     mutationFn: (newUser: newUserType) => SignupApi(newUser),
     onSuccess(data) {
-      if (data.status === 'success') {
+      if (data?.status === 'success') {
         dispatch({
           type: AuthReducerAction.SET_USER,
           payload: {
-            ...data.data.user,
-            accessToken: data.token.accessToken,
-            refreshToken: data.token.refreshToken,
+            ...data?.data.user,
+            accessToken: data?.token.accessToken,
+            refreshToken: data?.token.refreshToken,
           },
         });
+        assignCartToUser(data?.data.user._id);
         pushRouter(MainRoutes.HOME);
       }
-      if (data.status === 'fail') {
-        toast.error(data.message);
+      if (data?.status === 'fail') {
+        toast.error(data?.message);
       }
     },
   });
@@ -119,8 +124,13 @@ export const useGetUserById = (id: string) => {
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ newUser, data }: { newUser: UserDataType; data: any }) =>
-      updateUserApi(newUser, data),
+    mutationFn: ({
+      newUser,
+      data,
+    }: {
+      newUser: UserDataType;
+      data: Partial<UserDataType>;
+    }) => updateUserApi(newUser, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['users'],

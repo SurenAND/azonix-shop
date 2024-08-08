@@ -22,5 +22,6 @@ export interface CheckoutState {
   incrementQuantity: (userId: string, productId: string) => void;
   decrementQuantity: (userId: string, productId: string) => void;
   removeFromCart: (userId: string, productId: string) => void;
+  assignCartToUser: (userId: string) => void;
   clearUserCart: (userId: string) => void;
 }

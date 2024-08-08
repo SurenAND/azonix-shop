@@ -11,7 +11,7 @@ type UsersTableProps = {
   setOpenEdit: Dispatch<SetStateAction<boolean>>;
 };
 
-export const UsersTable = ({
+const UsersTable = ({
   list,
   idToDelete,
   setOpenDelete,
@@ -83,3 +83,5 @@ export const UsersTable = ({
     </table>
   );
 };
+
+export default UsersTable;

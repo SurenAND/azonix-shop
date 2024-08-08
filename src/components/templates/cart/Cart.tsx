@@ -1,15 +1,30 @@
 import { useGetUserById, useUpdateUser } from '@/src/api/auth/auth.queries';
 import { useAddNewOrder } from '@/src/api/orders/orders.queries';
+import {
+  AddOrderResponseType,
+  ProductInOrderResponseType,
+} from '@/src/api/orders/orders.type';
 import { useUpdateProduct } from '@/src/api/product/product.queries';
-import Checkout from '@/src/components/templates/cart/checkout/Checkout';
-import DeliveryInfo from '@/src/components/templates/cart/delivery-info/DeliveryInfo';
+import CheckoutSkeleton from '@/src/components/shared/skeletons/checkout-skeleton/CheckoutSkeleton';
+import DeliveryInfoSkeleton from '@/src/components/shared/skeletons/delivery-info-skeleton/DeliveryInfoSkeleton';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+
+// Lazy load components
+const Checkout = dynamic(
+  () => import('@/src/components/templates/cart/checkout/Checkout'),
+  { loading: () => <CheckoutSkeleton /> },
+);
+const DeliveryInfo = dynamic(
+  () => import('@/src/components/templates/cart/delivery-info/DeliveryInfo'),
+  { loading: () => <DeliveryInfoSkeleton /> },
+);
 
 const CartTemplate = () => {
   const [paymentMethodSelected, setPaymentMethodSelected] = useState<
@@ -23,7 +38,7 @@ const CartTemplate = () => {
     deliveryDate,
     resetUserDeliveryDate,
   } = useCheckoutStore();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { state } = useUserContext();
 
   const {
@@ -57,8 +72,10 @@ const CartTemplate = () => {
       );
     }
 
-    if (paymentName === 'online') {
-      location.href = MainRoutes.PAYMENT;
+    if (paymentName === 'online' && i18n.language === 'en') {
+      location.href = MainRoutes.PAYMENT_EN;
+    } else if (paymentName === 'online' && i18n.language === 'fa') {
+      location.href = MainRoutes.PAYMENT_FA;
     } else {
       // add new order
       addNewOrder(
@@ -77,17 +94,19 @@ const CartTemplate = () => {
               ?.date.split('T')[0] || '',
         },
         {
-          onSuccess: (data) => {
+          onSuccess: (data: AddOrderResponseType) => {
             if (data.status === 'success') {
               // remove orders from product
-              data?.data.order.products.forEach((item: any) => {
-                updateProduct({
-                  newProduct: item.product,
-                  data: {
-                    quantity: item.product.quantity - item.count,
-                  },
-                });
-              });
+              data?.data.order.products.forEach(
+                (item: ProductInOrderResponseType) => {
+                  updateProduct({
+                    productId: item.product._id,
+                    data: {
+                      quantity: item.product.quantity - item.count,
+                    },
+                  });
+                },
+              );
               // clear user's cart
               clearUserCart(state?.userId);
               // reset user delivery date
@@ -107,6 +126,7 @@ const CartTemplate = () => {
       >
         <div className='mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-6 xl:gap-10'>
           {/* delivery info */}
+
           <DeliveryInfo
             register={register}
             errors={errors}
@@ -116,6 +136,7 @@ const CartTemplate = () => {
             oldUser={oldUser}
             reset={reset}
           />
+
           {/* order's summary */}
           <Checkout
             shoppingCartInfo={shoppingCartInfo}

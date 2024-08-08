@@ -11,13 +11,13 @@ import {
   ProductByIdType,
   ProductType,
 } from '@/src/api/product/product.type';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'sonner';
 
 export const useGetProducts = (params: GetProductsParamsType) => {
   return useQuery<AllProductsType>({
-    queryKey: ['products', params],
+    queryKey: ['products'],
     queryFn: () => getAllProductsApi(params),
   });
 };
@@ -26,12 +26,12 @@ export const useUpdateProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
-      newProduct,
+      productId,
       data,
     }: {
-      newProduct: ProductType;
-      data: any;
-    }) => updateProductApi(newProduct, data),
+      productId: string;
+      data: Partial<ProductType> | FormData;
+    }) => updateProductApi(productId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['products'],

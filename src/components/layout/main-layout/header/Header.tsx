@@ -6,10 +6,10 @@ import {
   DropdownLinks,
   MenuLinks,
 } from '@/src/components/layout/main-layout/header/data';
-import DarkMode from '@/src/components/shared/dark-mode/DarkMode';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import dynamic from 'next/dynamic';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -18,6 +18,11 @@ import { useTranslation } from 'react-i18next';
 import { FaCaretDown, FaCartShopping } from 'react-icons/fa6';
 import { IoMdLogIn, IoMdSearch } from 'react-icons/io';
 import { IoMenu } from 'react-icons/io5';
+
+const DarkMode = dynamic(
+  () => import('@/src/components/shared/dark-mode/DarkMode'),
+  { ssr: true },
+);
 
 const lngs: Record<'en' | 'fa', { flag: StaticImageData }> = {
   en: { flag: UsFlag },
@@ -50,13 +55,13 @@ export default function Header() {
             {/* Menu Items */}
             <div className='hidden lg:block'>
               <ul className='flex items-center gap-4'>
-                {MenuLinks.map((data) => (
-                  <li key={data.id}>
+                {MenuLinks?.map((data) => (
+                  <li key={data?.id}>
                     <Link
-                      href={data.link}
+                      href={data?.link}
                       className='inline-block px-4 font-semibold text-gray-500 duration-200 hover:text-black dark:hover:text-white'
                     >
-                      {t(data.name)}
+                      {t(data?.name)}
                     </Link>
                   </li>
                 ))}
@@ -75,20 +80,20 @@ export default function Header() {
                     {/* Dropdown Menu */}
                     <div className='absolute z-[999] hidden w-[200px] rounded-md bg-axGray p-2 group-hover:block dark:bg-gray-700 dark:text-white'>
                       <ul className='space-y-2'>
-                        {DropdownLinks.map((data) => (
+                        {DropdownLinks?.map((data) => (
                           <li
-                            key={data.id}
+                            key={data?.id}
                             className={`${
-                              data.roleToAccess.includes(state.role)
+                              data?.roleToAccess.includes(state.role)
                                 ? 'flex'
                                 : 'hidden'
                             }`}
                           >
                             <Link
-                              href={data.link}
+                              href={data?.link}
                               className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'
                             >
-                              {t(data.name)}
+                              {t(data?.name)}
                             </Link>
                           </li>
                         ))}
@@ -118,20 +123,20 @@ export default function Header() {
                 }`}
               >
                 <ul className='space-y-2'>
-                  {DropdownLinks.map((data) => (
+                  {DropdownLinks?.map((data) => (
                     <li
-                      key={data.id}
+                      key={data?.id}
                       className={`${
-                        data.roleToAccess.includes(state.role)
+                        data?.roleToAccess.includes(state.role)
                           ? 'flex'
                           : 'hidden'
                       }`}
                     >
                       <Link
-                        href={data.link}
+                        href={data?.link}
                         className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'
                       >
-                        {t(data.name)}
+                        {t(data?.name)}
                       </Link>
                     </li>
                   ))}
@@ -179,12 +184,12 @@ export default function Header() {
               onClick={() => pushRouter(MainRoutes.CART)}
             >
               <FaCartShopping className='text-xl text-gray-600 dark:text-gray-400' />
-              {shoppingCartInfo.filter((item) => item.userId === state.userId)
+              {shoppingCartInfo?.filter((item) => item?.userId === state.userId)
                 .length > 0 && (
                 <div className='absolute end-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white'>
                   {
-                    shoppingCartInfo.filter(
-                      (item) => item.userId === state.userId,
+                    shoppingCartInfo?.filter(
+                      (item) => item?.userId === state.userId,
                     ).length
                   }
                 </div>

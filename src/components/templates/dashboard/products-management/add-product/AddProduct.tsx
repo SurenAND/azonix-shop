@@ -3,13 +3,23 @@ import {
   useGetSubCategories,
 } from '@/src/api/category/category.queries';
 import { useAddProduct } from '@/src/api/product/product.queries';
-import DragDropImageUploader from '@/src/components/shared/dragdrop-image-uploader/DragDropImageUploader';
-import MyFileInput from '@/src/components/shared/file-input/FileInput';
+import Loading from '@/src/components/shared/loading/Loading';
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import 'react-quill/dist/quill.snow.css';
+
+// Lazy load components
+const DragDropImageUploader = lazy(
+  () =>
+    import(
+      '@/src/components/shared/dragdrop-image-uploader/DragDropImageUploader'
+    ),
+);
+const MyFileInput = lazy(
+  () => import('@/src/components/shared/file-input/FileInput'),
+);
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 function AddProduct() {
@@ -262,15 +272,17 @@ function AddProduct() {
             {t('product-description')} :
           </label>
           <div className='mb-5 flex h-40 flex-col rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'>
-            <ReactQuill
-              theme='snow'
-              value={description}
-              onChange={setDescription}
-              style={{
-                height: 100,
-                maxHeight: 100,
-              }}
-            />
+            <Suspense fallback={<Loading />}>
+              <ReactQuill
+                theme='snow'
+                value={description}
+                onChange={setDescription}
+                style={{
+                  height: 100,
+                  maxHeight: 100,
+                }}
+              />
+            </Suspense>
             {/* description error message */}
             <p
               className={`text-xs text-rose-400 ${
@@ -285,13 +297,17 @@ function AddProduct() {
             <label className='mb-2 dark:text-gray-300'>
               {t('product-image-limit')} :
             </label>
-            <MyFileInput changeHandler={handleImageChange} />
+            <Suspense fallback={<Loading />}>
+              <MyFileInput changeHandler={handleImageChange} />
+            </Suspense>
           </div>
-          <DragDropImageUploader
-            images={images}
-            setImages={setImages}
-            deleteImage={deleteImage}
-          />
+          <Suspense fallback={<Loading />}>
+            <DragDropImageUploader
+              images={images}
+              setImages={setImages}
+              deleteImage={deleteImage}
+            />
+          </Suspense>
           {/* Add Product Button */}
           <button
             type='submit'

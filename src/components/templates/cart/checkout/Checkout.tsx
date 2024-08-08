@@ -1,10 +1,16 @@
-import CartCard from '@/src/components/templates/cart/cart-card/CartCard';
+import Loading from '@/src/components/shared/loading/Loading';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import { ShoppingCartItem } from '@/src/store/checkout/checkout.type';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+const CartCard = dynamic(
+  () => import('@/src/components/templates/cart/cart-card/CartCard'),
+  { loading: () => <Loading /> },
+);
 
 type CheckoutPropsType = {
   shoppingCartInfo: ShoppingCartItem[];
@@ -27,14 +33,14 @@ const Checkout = ({
   useEffect(() => {
     setSubtotal(
       shoppingCartInfo
-        .filter((item) => item.userId === state?.userId)
-        .reduce((acc, item) => acc + item.price * item.quantity, 0),
+        ?.filter((item) => item?.userId === state.userId)
+        ?.reduce((acc, item) => acc + item?.price * item.quantity, 0),
     );
     setTotal(
       shoppingCartInfo
-        .filter((item) => item.userId === state?.userId)
-        .reduce(
-          (acc, item) => acc + item.priceAfterDiscount * item.quantity,
+        ?.filter((item) => item?.userId === state.userId)
+        ?.reduce(
+          (acc, item) => acc + item?.priceAfterDiscount * item.quantity,
           0,
         ),
     );
@@ -50,10 +56,8 @@ const Checkout = ({
         {/* cart items */}
         <div className='max-h-[300px] space-y-3 overflow-y-auto p-3'>
           {shoppingCartInfo
-            .filter((item) => item.userId === state.userId)
-            .map((item) => (
-              <CartCard key={item._id} product={item} />
-            ))}
+            ?.filter((item) => item?.userId === state.userId)
+            ?.map((item) => <CartCard key={item?._id} product={item} />)}
         </div>
         {/* prices */}
         <div className='flow-root'>
@@ -97,8 +101,8 @@ const Checkout = ({
             disabled={
               !state.isLogin ||
               paymentMethodSelected === null ||
-              shoppingCartInfo.filter((item) => item.userId === state?.userId)
-                .length === 0
+              shoppingCartInfo?.filter((item) => item?.userId === state?.userId)
+                ?.length === 0
             }
           >
             {paymentName === 'online'

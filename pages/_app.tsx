@@ -1,29 +1,21 @@
-import { AuthContextProvider } from "@/src/context/authContext";
-import "@/src/lib/i18next";
-import { NextPage } from "next";
-import type { AppProps } from "next/app";
-import { ReactElement, ReactNode, useEffect } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { AuthContextProvider } from '@/src/context/authContext';
+import '@/src/lib/i18next';
+import {
+  HydrationBoundary,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
+import { NextPage } from 'next';
+import type { AppProps } from 'next/app';
+import { ReactElement, ReactNode, useEffect, useState } from 'react';
 // css
-import "@/styles/globals.css";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
+import '@/styles/globals.css';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 
 // AOS
-import AOS from "aos";
-import "aos/dist/aos.css";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      retry: false,
-      retryOnMount: false,
-      refetchInterval: false,
-    },
-  },
-});
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -40,18 +32,35 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   useEffect(() => {
     AOS.init({
       duration: 800,
-      easing: "ease-in-sine",
+      easing: 'ease-in-sine',
       delay: 100,
       offset: 100,
     });
     AOS.refresh();
   }, []);
 
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnMount: false,
+            refetchOnWindowFocus: false,
+            retry: false,
+            retryOnMount: false,
+            refetchInterval: false,
+          },
+        },
+      }),
+  );
+
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>
-        {getLayout(<Component {...pageProps} />)}
-      </AuthContextProvider>
+      <HydrationBoundary state={pageProps.dehydratedState}>
+        <AuthContextProvider>
+          {getLayout(<Component {...pageProps} />)}
+        </AuthContextProvider>
+      </HydrationBoundary>
     </QueryClientProvider>
   );
 }

@@ -178,5 +178,11 @@
   "delivery-time": "زمان تحویل",
   "product-image-limit": "عکس (حداکثر 4 عکس)",
   "product-discount-percentage": "درصد تخفیف",
-  "product-discount-percentage-input-error": "درصد تخفیف الزامی است!"
+  "product-discount-percentage-input-error": "درصد تخفیف الزامی است!",
+  "product-sort-by-price": "مرتب سازی بر اساس قیمت",
+  "low-to-high": "کم به زیاد",
+  "high-to-low": "زیاد به کم",
+  "about-us": "درباره ما",
+  "our-shop": "فروشگاه ما",
+  "about-us-description": "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد،"
 }

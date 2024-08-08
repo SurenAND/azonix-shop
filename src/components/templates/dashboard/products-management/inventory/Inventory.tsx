@@ -5,22 +5,31 @@ import {
 import { ProductType } from '@/src/api/product/product.type';
 import { EmptyList } from '@/src/components/shared/empty-list/EmptyList';
 import Pagination from '@/src/components/shared/pagination/Pagination';
-import InventoryTable from '@/src/components/templates/dashboard/products-management/inventory/inventory-table/InventoryTable';
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+
+// Lazy load the InventoryTable component
+const InventoryTable = lazy(
+  () =>
+    import(
+      '@/src/components/templates/dashboard/products-management/inventory/inventory-table/InventoryTable'
+    ),
+);
 
 function Inventory() {
   const { t, i18n } = useTranslation();
 
   const [page, setPage] = useState(1);
   const [hasEditItem, setHasEditItem] = useState(false);
-  const [editedProducts, setEditedProducts] = useState<ProductType[]>([]);
+  const [editedProducts, setEditedProducts] = useState<
+    Record<string, Partial<ProductType>>
+  >({});
   const [editMode, setEditMode] = useState('doing');
 
   const { data: products, refetch } = useGetProducts({
     page,
-    limit: 20,
+    limit: 15,
   });
   const { mutate: updateProduct } = useUpdateProduct();
 
@@ -36,17 +45,18 @@ function Inventory() {
   };
 
   const editHandler = () => {
-    editedProducts.forEach((item) => {
+    Object.entries(editedProducts).forEach(([productId, changes]) => {
       updateProduct({
-        newProduct: item,
+        productId,
         data: {
-          price: item.price,
-          quantity: item.quantity,
-          discountPercentage: item.discountPercentage,
+          price: changes.price,
+          quantity: changes.quantity,
+          discountPercentage: changes.discountPercentage,
         },
       });
     });
     setEditMode('done');
+    setEditedProducts({}); // Clear edited products after update
     toast.success(t('changes-saved'));
   };
 
@@ -70,13 +80,15 @@ function Inventory() {
         products.data.products.length === 0 ? (
           <EmptyList />
         ) : (
-          <InventoryTable
-            list={products?.data.products || []}
-            onContainEditItem={containEditItem}
-            editedProducts={editedProducts}
-            setEditedProducts={setEditedProducts}
-            editMode={editMode}
-          />
+          <Suspense fallback={<div>{t('loading')}</div>}>
+            <InventoryTable
+              list={products?.data.products || []}
+              onContainEditItem={containEditItem}
+              editedProducts={editedProducts}
+              setEditedProducts={setEditedProducts}
+              editMode={editMode}
+            />
+          </Suspense>
         )}
       </div>
       {products && (

@@ -11,7 +11,7 @@ type OrdersTableProps = {
   isDelivered: boolean;
 };
 
-export const OrdersTable = ({
+const OrdersTable = ({
   list,
   onFilteredList,
   setInfoId,
@@ -88,3 +88,4 @@ export const OrdersTable = ({
     </table>
   );
 };
+export default OrdersTable;

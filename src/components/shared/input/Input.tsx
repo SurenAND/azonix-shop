@@ -1,3 +1,6 @@
+import { ReactElement } from 'react';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
+
 export default function MyInput({
   type,
   placeholder,
@@ -10,21 +13,21 @@ export default function MyInput({
   type: string;
   placeholder: string;
   name: string;
-  register: any;
+  register: UseFormRegister<FieldValues>;
   required: boolean;
   pattern?: RegExp;
-  icon?: any;
+  icon?: ReactElement;
 }) {
   return (
-    <div className="w-7/10 rounded-md my-1 relative">
+    <div className='w-7/10 relative my-1 rounded-md'>
       <input
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-axLightPurple"
+        className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:border-axLightPurple focus:outline-none'
         type={type}
         placeholder={placeholder}
-        autoComplete="off"
+        autoComplete='off'
         {...register(name, { required, pattern: pattern })}
       />
-      <div className="absolute end-3 top-3 text-gray-500 cursor-pointer">
+      <div className='absolute end-3 top-3 cursor-pointer text-gray-500'>
         {icon}
       </div>
     </div>

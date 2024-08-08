@@ -1,114 +1,114 @@
-import { stringAvatar } from "@/src/lib/utils";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
-import { useTranslation } from "react-i18next";
-import { MainRoutes } from "@/src/constant/routes";
-import { IoPersonSharp } from "react-icons/io5";
-import { UserSideBarItems } from "@/src/components/layout/profile-layout/sidebar/data";
-import { useUserContext } from "@/src/context/authContext";
+import { UserSideBarItems } from '@/src/components/layout/profile-layout/sidebar/data';
+import { MainRoutes } from '@/src/constant/routes';
+import { useUserContext } from '@/src/context/authContext';
+import { stringAvatar } from '@/src/lib/utils';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
+import { IoPersonSharp } from 'react-icons/io5';
 
 const UserSidebar = () => {
-  const activePage: string | null = useSearchParams().get("view");
+  const activePage: string | null = useSearchParams().get('view');
   const { pathname, push: pushRouter } = useRouter();
   const { t, i18n } = useTranslation();
   const { state } = useUserContext();
 
   return (
-    <div className="flex flex-row items-end md:items-stretch md:flex-col">
+    <div className='flex flex-row items-end md:flex-col md:items-stretch'>
       <div
-        className={`flex flex-col flex-grow items-center gap-2 ${
-          i18n.dir() === "ltr"
-            ? "md:bg-gradient-to-tr bg-gradient-to-br rounded-tl-lg md:rounded-bl-2xl rounded-tr-lg md:rounded-tr-none"
-            : "md:bg-gradient-to-tl bg-gradient-to-bl rounded-tr-lg md:rounded-br-2xl rounded-tl-lg md:rounded-tl-none"
-        } from-20% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700 p-5`}
+        className={`flex flex-grow flex-col items-center gap-2 ${
+          i18n.dir() === 'ltr'
+            ? 'rounded-tl-lg rounded-tr-lg bg-gradient-to-br md:rounded-bl-2xl md:rounded-tr-none md:bg-gradient-to-tr'
+            : 'rounded-tl-lg rounded-tr-lg bg-gradient-to-bl md:rounded-br-2xl md:rounded-tl-none md:bg-gradient-to-tl'
+        } from-white from-20% to-gray-200 p-5 dark:from-gray-400 dark:to-gray-700`}
       >
-        <div className="bg-axDarkPurple rounded-full w-[70px] h-[70px] flex items-center justify-center text-axWhite font-bold uppercase text-xl">
+        <div className='flex h-[70px] w-[70px] items-center justify-center rounded-full bg-axDarkPurple text-xl font-bold uppercase text-axWhite'>
           {stringAvatar(`${state.username}`)}
         </div>
-        <h4 className="text-2xl">{`${state.username}`}</h4>
-        <h6 className="text-xl">{`38.00${t("currency")}`}</h6>
-        <p className="text-sm">{t("balance")}</p>
+        <h4 className='text-2xl'>{`${state.username}`}</h4>
+        <h6 className='text-xl'>{`38.00${t('currency')}`}</h6>
+        <p className='text-sm'>{t('balance')}</p>
       </div>
-      <div className="flex flex-row items-end md:items-stretch md:flex-col flex-wrap-reverse">
+      <div className='flex flex-row flex-wrap-reverse items-end md:flex-col md:items-stretch'>
         <div
-          className={`md:my-2 p-4 ${
-            i18n.dir() === "ltr"
-              ? "rounded-tl-lg md:rounded-bl-2xl"
-              : "rounded-tr-lg md:rounded-br-2xl"
+          className={`p-4 md:my-2 ${
+            i18n.dir() === 'ltr'
+              ? 'rounded-tl-lg md:rounded-bl-2xl'
+              : 'rounded-tr-lg md:rounded-br-2xl'
           } ${
             pathname === MainRoutes.PROFILE && !activePage
-              ? i18n.dir() === "ltr"
-                ? "bg-gradient-to-r from-70% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700 border-l-4 border-axLightPurple"
-                : "bg-gradient-to-l from-70% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700 border-r-4 border-axLightPurple"
-              : "bg-gradient-to-r from-20% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700"
+              ? i18n.dir() === 'ltr'
+                ? 'border-l-4 border-axLightPurple bg-gradient-to-r from-white from-70% to-gray-200 dark:from-gray-400 dark:to-gray-700'
+                : 'border-r-4 border-axLightPurple bg-gradient-to-l from-white from-70% to-gray-200 dark:from-gray-400 dark:to-gray-700'
+              : 'bg-gradient-to-r from-white from-20% to-gray-200 dark:from-gray-400 dark:to-gray-700'
           }`}
         >
           <button
             onClick={() => pushRouter(MainRoutes.PROFILE)}
-            className={`flex items-center w-full ${
-              i18n.dir() === "ltr"
-                ? "rounded-tl-lg rounded-bl-2xl"
-                : "rounded-tr-lg rounded-br-2xl"
+            className={`flex w-full items-center ${
+              i18n.dir() === 'ltr'
+                ? 'rounded-bl-2xl rounded-tl-lg'
+                : 'rounded-br-2xl rounded-tr-lg'
             }`}
           >
             <div
-              className={`w-6 h-6 ${
+              className={`h-6 w-6 ${
                 pathname === MainRoutes.PROFILE && !activePage
-                  ? "text-axLightPurple"
-                  : ""
+                  ? 'text-axLightPurple'
+                  : ''
               }`}
             >
               <IoPersonSharp />
             </div>
             <span
-              className={`ml-3 hidden md:block font-semibold ${
+              className={`ml-3 hidden font-semibold md:block ${
                 pathname === MainRoutes.PROFILE && !activePage
-                  ? "font-bold"
-                  : ""
+                  ? 'font-bold'
+                  : ''
               }`}
             >
-              {t("profile")}
+              {t('profile')}
             </span>
           </button>
         </div>
-        {UserSideBarItems.map((data) => (
+        {UserSideBarItems?.map((data) => (
           <div
-            key={data.id}
-            className={`md:my-2 p-4 ${
-              i18n.dir() === "ltr"
-                ? "rounded-tl-lg rounded-bl-2xl"
-                : "rounded-tr-lg rounded-br-2xl"
+            key={data?.id}
+            className={`p-4 md:my-2 ${
+              i18n.dir() === 'ltr'
+                ? 'rounded-bl-2xl rounded-tl-lg'
+                : 'rounded-br-2xl rounded-tr-lg'
             } ${
-              activePage === data.view
-                ? i18n.dir() === "ltr"
-                  ? "bg-gradient-to-r from-70% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700 border-l-4 border-axLightPurple"
-                  : "bg-gradient-to-l from-70% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700 border-r-4 border-axLightPurple"
-                : "bg-gradient-to-r from-20% from-white dark:from-gray-400 to-gray-200 dark:to-gray-700"
+              activePage === data?.view
+                ? i18n.dir() === 'ltr'
+                  ? 'border-l-4 border-axLightPurple bg-gradient-to-r from-white from-70% to-gray-200 dark:from-gray-400 dark:to-gray-700'
+                  : 'border-r-4 border-axLightPurple bg-gradient-to-l from-white from-70% to-gray-200 dark:from-gray-400 dark:to-gray-700'
+                : 'bg-gradient-to-r from-white from-20% to-gray-200 dark:from-gray-400 dark:to-gray-700'
             }`}
           >
             <button
               onClick={() =>
-                pushRouter(`${MainRoutes.PROFILE}?view=${data.view}`)
+                pushRouter(`${MainRoutes.PROFILE}?view=${data?.view}`)
               }
-              className={`flex items-center w-full ${
-                i18n.dir() === "ltr"
-                  ? "rounded-tl-lg rounded-bl-2xl"
-                  : "rounded-tr-lg rounded-br-2xl"
+              className={`flex w-full items-center ${
+                i18n.dir() === 'ltr'
+                  ? 'rounded-bl-2xl rounded-tl-lg'
+                  : 'rounded-br-2xl rounded-tr-lg'
               }`}
             >
               <div
-                className={`w-6 h-6 ${
-                  activePage === data.view ? "text-axLightPurple" : ""
+                className={`h-6 w-6 ${
+                  activePage === data?.view ? 'text-axLightPurple' : ''
                 }`}
               >
-                {data.icon}
+                {data?.icon}
               </div>
               <span
-                className={`ml-3 hidden md:block font-semibold ${
-                  activePage === data.view ? "font-bold" : ""
+                className={`ml-3 hidden font-semibold md:block ${
+                  activePage === data?.view ? 'font-bold' : ''
                 }`}
               >
-                {t(data.title)}
+                {t(data?.title)}
               </span>
             </button>
           </div>

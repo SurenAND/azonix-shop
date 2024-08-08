@@ -66,7 +66,7 @@ export type SingleOrderType = {
 export type GetOrdersParamsType = {
   page?: number;
   sort?: string;
-  delivered?: boolean;
+  deliveryStatus?: boolean | string;
 };
 
 export type AddNewOrderParamsType = {
@@ -75,3 +75,34 @@ export type AddNewOrderParamsType = {
   deliveryStatus: boolean;
   deliveryDate: string;
 };
+
+export type AddOrderResponseType = {
+  status: string;
+  data: {
+    order: {
+      user: string;
+      products: [
+        {
+          product: {
+            _id: string;
+            price: number;
+            quantity: number;
+            priceAfterDiscount: number;
+          };
+          count: number;
+          _id: string;
+        },
+      ];
+      totalPrice: number;
+      deliveryDate: string;
+      deliveryStatus: boolean;
+      _id: string;
+      createdAt: string;
+      updatedAt: string;
+      __v: number;
+    };
+  };
+};
+
+export type ProductInOrderResponseType =
+  AddOrderResponseType['data']['order']['products'][0];

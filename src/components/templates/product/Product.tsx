@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast, Toaster } from 'sonner';
+import { Toaster } from 'sonner';
 
 type ProductTemplateProps = {
   productId: string;
@@ -30,7 +30,7 @@ const ProductTemplate = ({ productId }: ProductTemplateProps) => {
   }, [product]);
 
   const addToCardHandler = () => {
-    if (product && state.isLogin) {
+    if (product) {
       setShoppingCartInfo({
         _id: product?.data.product._id,
         userId: state.userId,
@@ -40,8 +40,6 @@ const ProductTemplate = ({ productId }: ProductTemplateProps) => {
         priceAfterDiscount: product?.data.product.priceAfterDiscount,
         quantity: amount,
       });
-    } else {
-      toast.warning(t('please-login-to-add-to-cart'));
     }
   };
 

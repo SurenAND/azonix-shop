@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 function DragDropImageUploader({
   images,
@@ -25,16 +25,16 @@ function DragDropImageUploader({
   const onFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
-    if (images.length + files.length > 4) {
-      toast.error("You can only upload up to 4 images");
+    if (images?.length + files.length > 4) {
+      toast.error('You can only upload up to 4 images');
       return;
     }
     for (let i = 0; i < files.length; i++) {
-      if (files[i].type.split("/")[0] !== "image") {
-        toast.error("Only image files are allowed");
+      if (files[i].type.split('/')[0] !== 'image') {
+        toast.error('Only image files are allowed');
         return;
       }
-      if (!images.some((e) => e.name === files[i].name)) {
+      if (!images?.some((e) => e.name === files[i].name)) {
         setImages((prev) => [...prev, files[i]]);
       }
     }
@@ -43,7 +43,7 @@ function DragDropImageUploader({
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(true);
-    e.dataTransfer.dropEffect = "copy";
+    e.dataTransfer.dropEffect = 'copy';
   };
   const onDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -54,74 +54,74 @@ function DragDropImageUploader({
     setIsDragging(false);
     const files = e.dataTransfer.files;
     if (!files || files.length === 0) return;
-    if (images.length + files.length > 4) {
-      toast.error(t("image-upload-limitation-error"));
+    if (images?.length + files.length > 4) {
+      toast.error(t('image-upload-limitation-error'));
       return;
     }
     for (let i = 0; i < files.length; i++) {
-      if (files[i].type.split("/")[0] !== "image") {
-        toast.error(t("image-upload-type-error"));
+      if (files[i].type.split('/')[0] !== 'image') {
+        toast.error(t('image-upload-type-error'));
         return;
       }
-      if (!images.some((e) => e.name === files[i].name)) {
+      if (!images?.some((e) => e.name === files[i].name)) {
         setImages((prev) => [...prev, files[i]]);
       }
     }
   };
 
   return (
-    <div className="hidden lg:block p-3 shadow rounded-md overflow-hidden dark:bg-gray-800">
-      <div className="text-center">
-        <p className="font-bold text-axLightPurple dark:text-white">
-          {t("drag-drop-images")}
+    <div className='hidden overflow-hidden rounded-md p-3 shadow dark:bg-gray-800 lg:block'>
+      <div className='text-center'>
+        <p className='font-bold text-axLightPurple dark:text-white'>
+          {t('drag-drop-images')}
         </p>
       </div>
       <div
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
-        className={`h-36 rounded-md border-2 border-dashed border-axLightPurple bg-white dark:border-gray-600 dark:bg-gray-700 flex items-center justify-center select-none mt-3 ${
-          isDragging ? "text-lg" : ""
+        className={`mt-3 flex h-36 select-none items-center justify-center rounded-md border-2 border-dashed border-axLightPurple bg-white dark:border-gray-600 dark:bg-gray-700 ${
+          isDragging ? 'text-lg' : ''
         }`}
       >
         {isDragging ? (
-          <span className="text-axLightPurple ml-1 cursor-pointer duration-500 hover:opacity-60 dark:text-white">
-            {t("drop-images-here")}
+          <span className='ml-1 cursor-pointer text-axLightPurple duration-500 hover:opacity-60 dark:text-white'>
+            {t('drop-images-here')}
           </span>
         ) : (
           <>
-            {t("drag-drop-image-here")}
+            {t('drag-drop-image-here')}
             <span
-              role="button"
+              role='button'
               onClick={selectFiles}
-              className="text-axLightPurple ms-1 cursor-pointer duration-500 hover:opacity-60 dark:text-violet-400 dark:font-bold"
+              className='ms-1 cursor-pointer text-axLightPurple duration-500 hover:opacity-60 dark:font-bold dark:text-violet-400'
             >
-              {t("browse")}
+              {t('browse')}
             </span>
           </>
         )}
         <input
-          type="file"
-          className="file"
+          type='file'
+          className='file'
           multiple
-          style={{ display: "none" }}
+          style={{ display: 'none' }}
           ref={fileInputRef}
           onChange={onFileSelect}
         />
       </div>
-      <div className="w-full h-auto flex justify-start items-center flex-wrap max-h-52 overflow-y-auto mt-3">
-        {images.map((image, index) => (
-          <div className="w-20 mr-1 h-20 relative mb-2" key={index}>
+      <div className='mt-3 flex h-auto max-h-52 w-full flex-wrap items-center justify-start overflow-y-auto'>
+        {images?.map((image, index) => (
+          <div className='relative mb-2 mr-1 h-20 w-20' key={index}>
             <span
-              className="absolute -top-[2px] -end-2 text-xl cursor-pointer z-50 text-axLightPurple dark:text-violet-400 dark:bg-red-600 dark:rounded-full dark:w-6 dark:h-6 dark:flex dark:items-end dark:justify-center dark:top-[2px]"
+              className='absolute -end-2 -top-[2px] z-50 cursor-pointer text-xl text-axLightPurple dark:top-[2px] dark:flex dark:h-6 dark:w-6 dark:items-end dark:justify-center dark:rounded-full dark:bg-red-600 dark:text-violet-400'
               onClick={() => deleteImage(index)}
             >
               &times;
             </span>
             <img
-              className="w-full h-full rounded-md"
+              className='h-full w-full rounded-md'
               src={URL.createObjectURL(image)}
-              alt={image.name}
+              alt={image?.name}
             />
           </div>
         ))}

@@ -13,7 +13,7 @@ const MyButton = ({
   return (
     <button
       onClick={handler}
-      className={`${bgColor} ${textColor} cursor-pointer hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10`}
+      className={`${bgColor} ${textColor} relative z-10 cursor-pointer rounded-full px-8 py-2 duration-300 hover:scale-105`}
     >
       {text}
     </button>

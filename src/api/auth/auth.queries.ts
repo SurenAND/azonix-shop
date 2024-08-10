@@ -17,6 +17,7 @@ import {
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import { useUserStore } from '@/src/store/user/user.store';
 import { AuthReducerAction } from '@/src/types/enums';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
@@ -26,6 +27,7 @@ export const useLogin = () => {
   const { push: pushRouter } = useRouter();
   const { dispatch } = useUserContext();
   const { assignCartToUser } = useCheckoutStore();
+  const { setUserData } = useUserStore();
   return useMutation({
     mutationFn: ({
       username,
@@ -44,6 +46,13 @@ export const useLogin = () => {
             refreshToken: data?.token.refreshToken,
           },
         });
+        setUserData({
+          firstname: data?.data.user.firstname,
+          lastname: data?.data.user.lastname,
+          username: data?.data.user.username,
+          phoneNumber: data?.data.user.phoneNumber,
+          address: data?.data.user.address,
+        });
         assignCartToUser(data?.data.user._id);
         pushRouter(MainRoutes.HOME);
       }
@@ -60,6 +69,7 @@ export const useSignup = () => {
   const { push: pushRouter } = useRouter();
   const { dispatch } = useUserContext();
   const { assignCartToUser } = useCheckoutStore();
+  const { setUserData } = useUserStore();
   return useMutation({
     mutationFn: (newUser: newUserType) => SignupApi(newUser),
     onSuccess(data) {
@@ -71,6 +81,13 @@ export const useSignup = () => {
             accessToken: data?.token.accessToken,
             refreshToken: data?.token.refreshToken,
           },
+        });
+        setUserData({
+          firstname: data?.data.user.firstname,
+          lastname: data?.data.user.lastname,
+          username: data?.data.user.username,
+          phoneNumber: data?.data.user.phoneNumber,
+          address: data?.data.user.address,
         });
         assignCartToUser(data?.data.user._id);
         pushRouter(MainRoutes.HOME);

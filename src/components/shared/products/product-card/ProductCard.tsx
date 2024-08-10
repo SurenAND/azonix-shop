@@ -33,7 +33,7 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
         image: product?.images[0],
         price: product?.price,
         priceAfterDiscount: product?.priceAfterDiscount,
-        quantity: 0,
+        quantity: 1,
       });
     }
   };

@@ -75,14 +75,22 @@ const OrderInfoPopup = ({
         {oldOrder ? (
           <div className='mx-auto flex w-full max-w-xl flex-col gap-4 p-4'>
             <p>
-              {t('customer-name')} : {oldOrder?.data.order.user.firstname}{' '}
-              {oldOrder?.data.order.user.lastname}
+              {t('customer-name')} :{' '}
+              {oldOrder?.data.order.user !== null
+                ? `${oldOrder?.data.order.user.firstname} ${oldOrder?.data.order.user.lastname}`
+                : t('user-deleted')}
             </p>
             <p>
-              {t('address')} : {oldOrder?.data.order.user.address}
+              {t('address')} :{' '}
+              {oldOrder?.data.order.user !== null
+                ? oldOrder?.data.order.user.address
+                : t('user-deleted')}
             </p>
             <p>
-              {t('phone')} : {oldOrder?.data.order.user.phoneNumber}
+              {t('phone')} :{' '}
+              {oldOrder?.data.order.user !== null
+                ? oldOrder?.data.order.user.phoneNumber
+                : t('user-deleted')}
             </p>
             <p>
               {t('delivery-time')} :{' '}

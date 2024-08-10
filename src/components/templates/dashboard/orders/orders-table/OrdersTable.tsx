@@ -63,7 +63,13 @@ const OrdersTable = ({
               } ${Math.floor(index % 2) !== 0 ? 'dark:text-black' : ''}`}
             >
               <td className='truncate border p-1'>
-                {item?.user.firstname} {item?.user.lastname}
+                {item?.user !== null ? (
+                  <>
+                    {item?.user.firstname} {item?.user.lastname}
+                  </>
+                ) : (
+                  <>{t('user-deleted')}</>
+                )}
               </td>
               <td className='truncate border p-1'>
                 {item.totalPrice.toFixed(2)}

@@ -3,16 +3,24 @@ import {
   useGetSubCategories,
 } from '@/src/api/category/category.queries';
 import { useGetProducts } from '@/src/api/product/product.queries';
-import Products from '@/src/components/shared/products/Products';
 import ProductSkeleton from '@/src/components/shared/skeletons/product-skeleton/ProductSkeleton';
 import ShopSidebarSkeleton from '@/src/components/shared/skeletons/shop-sidebar/ShopSidebarSkeleton';
 import SubCategorySkeleton from '@/src/components/shared/skeletons/sub-category-skeleton/SubCategorySkeleton';
 import SubCategories from '@/src/components/shared/sub-categories/SubCategories';
 import Nav from '@/src/components/templates/shop/nav/Nav';
 import Sidebar from '@/src/components/templates/shop/sidebar/Sidebar';
+import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { ChangeEvent, MouseEvent, useEffect, useMemo, useState } from 'react';
+
+// Dynamic import
+const Products = dynamic(
+  () => import('@/src/components/shared/products/Products'),
+  {
+    ssr: true,
+  },
+);
 
 export default function ShopTemplate() {
   // sidebar open state

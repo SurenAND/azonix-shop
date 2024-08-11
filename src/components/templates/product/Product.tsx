@@ -14,21 +14,27 @@ type ProductTemplateProps = {
 };
 
 const ProductTemplate = ({ productId }: ProductTemplateProps) => {
+  // libraries
   const { t } = useTranslation();
   const { push: pushRouter } = useRouter();
+
+  // states
+  const [activeImg, setActiveImage] = useState<string>('');
+  const [amount, setAmount] = useState<number>(1);
+
+  // queries
   const { data: product } = useGetProductById(productId);
-  const [activeImg, setActiveImage] = useState('');
-  const [amount, setAmount] = useState(1);
-
-  const { setShoppingCartInfo } = useCheckoutStore();
-  const { state } = useUserContext();
-
   useEffect(() => {
     if (product) {
       setActiveImage(product?.data.product.images[0]);
     }
   }, [product]);
 
+  // contexts & stores
+  const { state } = useUserContext();
+  const { setShoppingCartInfo } = useCheckoutStore();
+
+  // functions
   const addToCardHandler = () => {
     if (product) {
       setShoppingCartInfo({
@@ -43,8 +49,23 @@ const ProductTemplate = ({ productId }: ProductTemplateProps) => {
     }
   };
 
+  // Update this function to handle URL formatting and empty strings
+  const formatImageUrl = (url: string) => {
+    if (!url) return ''; // Return empty string if url is falsy
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    return `http://${url.replace(/^\//, '')}`;
+  };
+
+  // redirect to 404 if product not found
   if (product && product?.status !== 'success') {
     pushRouter(MainRoutes.NOTFOUND);
+  }
+
+  // Add this check before rendering
+  if (!product || !activeImg) {
+    return <div>Loading...</div>; // Or any other loading state
   }
 
   return (
@@ -52,16 +73,23 @@ const ProductTemplate = ({ productId }: ProductTemplateProps) => {
       <Toaster richColors />
       <div className='flex flex-col justify-between gap-16 p-14 lg:flex-row lg:items-center'>
         <div className='flex flex-col gap-6 lg:w-2/4'>
-          <img
-            src={`http://${activeImg}`}
-            alt={product?.data.product.name}
-            className='aspect-square h-full w-full rounded-xl border border-gray-400 object-cover dark:border-gray-200'
-          />
+          {/* product active image */}
+          {activeImg && (
+            <Image
+              src={formatImageUrl(activeImg)}
+              alt={product.data.product.name || ''}
+              width={500}
+              height={500}
+              className='aspect-square h-full w-full rounded-xl border border-gray-400 object-cover dark:border-gray-200'
+            />
+          )}
+          {/* product images */}
           <div className='flex h-24 flex-row justify-between'>
-            {product?.data.product.images.map((image) => (
+            {product.data.product.images.map((image, index) => (
               <Image
-                src={`http://${image}`}
-                alt={product?.data.product.name}
+                key={index}
+                src={formatImageUrl(image)}
+                alt={product.data.product.name}
                 width={100}
                 height={100}
                 className='cursor-pointer rounded-md border border-gray-400 object-cover dark:border-gray-200'
@@ -128,11 +156,16 @@ const ProductTemplate = ({ productId }: ProductTemplateProps) => {
               >
                 -
               </button>
-              <span className='rounded-lg px-6 py-4'>{amount}</span>
+              <span className='rounded-lg px-6 py-4'>
+                {product?.data.product.quantity === 0 ? '-' : amount}
+              </span>
               <button
                 className='rounded-lg bg-gray-200 px-4 py-2 text-3xl text-axDarkPurple disabled:cursor-not-allowed disabled:opacity-50'
                 onClick={() => setAmount((prev) => prev + 1)}
-                disabled={amount === product?.data.product.quantity}
+                disabled={
+                  amount === product?.data.product.quantity ||
+                  product?.data.product.quantity === 0
+                }
               >
                 +
               </button>
@@ -149,13 +182,21 @@ const ProductTemplate = ({ productId }: ProductTemplateProps) => {
               </button>
               {/* stock */}
               {product?.data.product.quantity &&
-                product?.data.product.quantity < 10 && (
-                  <span className='absolute top-14 text-sm text-red-500'>
-                    {t('stock', {
-                      amount: product?.data.product.quantity,
-                    })}
-                  </span>
-                )}
+              product?.data.product.quantity < 10 &&
+              product?.data.product.quantity !== 0 ? (
+                <span className='absolute top-14 text-sm text-red-500'>
+                  {t('stock', {
+                    amount: product?.data.product.quantity,
+                  })}
+                </span>
+              ) : null}
+
+              {/* out of stock */}
+              {product?.data.product.quantity === 0 ? (
+                <span className='absolute top-14 text-sm text-red-500'>
+                  {t('out-of-stock')}
+                </span>
+              ) : null}
             </div>
           </div>
         </div>

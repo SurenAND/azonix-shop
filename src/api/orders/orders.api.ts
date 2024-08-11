@@ -10,8 +10,8 @@ export const getAllOrdersApi = async (params: GetOrdersParamsType) => {
   if (params.page) _params.page = params.page;
   if (params.deliveryStatus === false) _params.deliveryStatus = 'false';
   if (params.deliveryStatus === true) _params.deliveryStatus = 'true';
-  if (params.sort === 'asc') _params.sort = 'createdAt';
-  if (params.sort === 'desc') _params.sort = '-createdAt';
+  if (params.sort === 'asc') _params.sort = 'deliveryDate';
+  if (params.sort === 'desc') _params.sort = '-deliveryDate';
 
   const response = await req.get('/orders?limit=15', { params: _params });
   return response.data;

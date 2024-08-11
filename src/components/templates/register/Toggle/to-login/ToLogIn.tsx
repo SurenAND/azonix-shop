@@ -2,16 +2,17 @@ import { MainRoutes } from '@/src/constant/routes';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-export default function ToLogIn({
-  setActive,
-  active,
-}: {
+type ToLogInProps = {
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
   active: boolean;
-}) {
-  const { push: pushRouter } = useRouter();
-  const { t, i18n } = useTranslation();
+};
 
+export default function ToLogIn({ setActive, active }: ToLogInProps) {
+  // libraries
+  const { t, i18n } = useTranslation();
+  const { push: pushRouter } = useRouter();
+
+  // functions
   const handleClick = () => {
     setActive(false);
     pushRouter(`${MainRoutes.REGISTER}?view=login`);

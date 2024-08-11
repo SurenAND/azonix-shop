@@ -16,7 +16,10 @@ const minDate = new Date();
 minDate.setDate(minDate.getDate() + 3);
 
 const DataPickerInput = () => {
+  // libraries
   const { t, i18n } = useTranslation();
+
+  // states
   const [value, setValue] = useState<{
     format?: string;
     persian?: string;
@@ -25,13 +28,15 @@ const DataPickerInput = () => {
   }>({
     format: 'MM/DD/YYYY',
   });
-  const [hasDate, setHasDate] = useState(false);
-  const [isValidDate, setIsValidDate] = useState<null | boolean>(null);
+  const [hasDate, setHasDate] = useState<boolean>(false);
+  const [isValidDate, setIsValidDate] = useState<boolean | null>(null);
 
+  // contexts & stores
   const { setDeliveryDate } = useCheckoutStore();
   const { state } = useUserContext();
 
-  const convert = (date: DateObject | null) => {
+  // functions
+  const dateChange = (date: DateObject | null) => {
     if (date) {
       setValue({
         persian: date.convert(persian, persian_en).format(),
@@ -41,6 +46,7 @@ const DataPickerInput = () => {
     }
   };
 
+  // convert date to gregorian and check if it is valid
   useEffect(() => {
     if (hasDate) {
       const selectedDate = shamsi
@@ -73,7 +79,7 @@ const DataPickerInput = () => {
           calendar={i18n.language === 'fa' ? persian : gregorian}
           locale={i18n.language === 'fa' ? persian_fa : gregorian_en}
           value={value.date}
-          onChange={convert}
+          onChange={dateChange}
           minDate={minDate}
           required
           style={{

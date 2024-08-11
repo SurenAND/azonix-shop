@@ -4,11 +4,11 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 const PaymentResultTemplate = () => {
+  // libraries
   const router = useRouter();
   const { result } = router.query;
 
   useEffect(() => {
-    console.log('result:', result);
     if (
       router.isReady &&
       (!result || (result !== 'successful' && result !== 'failed'))

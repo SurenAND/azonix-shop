@@ -67,7 +67,7 @@ const useCheckoutStore = create<CheckoutState>()(
             return {
               shoppingCartInfo: [
                 ...prev.shoppingCartInfo,
-                { ...info, quantity: info.quantity || 1 },
+                { ...info, quantity: info.quantity },
               ],
             };
           }

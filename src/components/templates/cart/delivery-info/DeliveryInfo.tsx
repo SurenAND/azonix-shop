@@ -1,14 +1,8 @@
-import { UserByIdType } from '@/src/api/auth/auth.type';
 import Loading from '@/src/components/shared/loading/Loading';
 import { paymentMethodData } from '@/src/constant/paymentMethodData';
 import dynamic from 'next/dynamic';
-import { Dispatch, SetStateAction, useEffect } from 'react';
-import {
-  FieldErrors,
-  FieldValues,
-  UseFormRegister,
-  UseFormReset,
-} from 'react-hook-form';
+import { Dispatch, SetStateAction } from 'react';
+import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 const DataPickerInput = dynamic(
@@ -22,8 +16,6 @@ type DeliveryInfoPropsType = {
   paymentMethodSelected: number | null;
   setPaymentName: Dispatch<SetStateAction<string>>;
   setPaymentMethodSelected: Dispatch<SetStateAction<number | null>>;
-  oldUser: UserByIdType | undefined;
-  reset: UseFormReset<FieldValues>;
 };
 
 const DeliveryInfo = ({
@@ -32,23 +24,11 @@ const DeliveryInfo = ({
   setPaymentName,
   setPaymentMethodSelected,
   paymentMethodSelected,
-  oldUser,
-  reset,
 }: DeliveryInfoPropsType) => {
+  // libraries
   const { t, i18n } = useTranslation();
 
-  useEffect(() => {
-    if (oldUser) {
-      reset({
-        firstname: oldUser?.data?.user?.firstname || '',
-        lastname: oldUser?.data?.user?.lastname || '',
-        username: oldUser?.data?.user?.username || '',
-        phoneNumber: oldUser?.data?.user?.phoneNumber || '',
-        address: oldUser?.data?.user?.address || '',
-      });
-    }
-  }, [oldUser, reset]);
-
+  // change the payment method
   function paymentMethodChange(i: number, name: string) {
     setPaymentMethodSelected(i);
     setPaymentName(name);

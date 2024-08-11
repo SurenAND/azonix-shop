@@ -1,16 +1,15 @@
 import PaymentFaSkeleton from '@/src/components/shared/skeletons/paymentfa-skeleton/PaymentFaSkeleton';
-import { lazy, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 
-const PaymentForm = lazy(
+const PaymentForm = dynamic(
   () => import('@/src/components/templates/payment/fa/PaymentForm'),
+  {
+    loading: () => <PaymentFaSkeleton />,
+  },
 );
 
 const PaymentFa = () => {
-  return (
-    <Suspense fallback={<PaymentFaSkeleton />}>
-      <PaymentForm />
-    </Suspense>
-  );
+  return <PaymentForm />;
 };
 
 export default PaymentFa;

@@ -8,13 +8,17 @@ import { useTranslation } from 'react-i18next';
 import { IoPersonSharp } from 'react-icons/io5';
 
 const UserSidebar = () => {
-  const activePage: string | null = useSearchParams().get('view');
-  const { pathname, push: pushRouter } = useRouter();
+  // libraries
   const { t, i18n } = useTranslation();
+  const { pathname, push: pushRouter } = useRouter();
+  const activePage: string | null = useSearchParams().get('view');
+
+  // contexts
   const { state } = useUserContext();
 
   return (
     <div className='flex flex-row items-end md:flex-col md:items-stretch'>
+      {/* User section */}
       <div
         className={`flex flex-grow flex-col items-center gap-2 ${
           i18n.dir() === 'ltr'
@@ -23,12 +27,14 @@ const UserSidebar = () => {
         } from-white from-20% to-gray-200 p-5 dark:from-gray-400 dark:to-gray-700`}
       >
         <div className='flex h-[70px] w-[70px] items-center justify-center rounded-full bg-axDarkPurple text-xl font-bold uppercase text-axWhite'>
-          {stringAvatar(`${state.username}`)}
+          {stringAvatar(`${state?.username}`)}
         </div>
-        <h4 className='text-2xl'>{`${state.username}`}</h4>
+        <h4 className='text-2xl'>{`${state?.username}`}</h4>
         <h6 className='text-xl'>{`38.00${t('currency')}`}</h6>
         <p className='text-sm'>{t('balance')}</p>
       </div>
+
+      {/* Sidebar section */}
       <div className='flex flex-row flex-wrap-reverse items-end md:flex-col md:items-stretch'>
         <div
           className={`p-4 md:my-2 ${
@@ -71,6 +77,8 @@ const UserSidebar = () => {
             </span>
           </button>
         </div>
+
+        {/* Sidebar items */}
         {UserSideBarItems?.map((data) => (
           <div
             key={data?.id}

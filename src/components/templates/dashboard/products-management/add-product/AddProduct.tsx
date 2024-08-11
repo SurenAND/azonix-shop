@@ -5,49 +5,46 @@ import {
 import { useAddProduct } from '@/src/api/product/product.queries';
 import Loading from '@/src/components/shared/loading/Loading';
 import dynamic from 'next/dynamic';
-import { Suspense, lazy, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import 'react-quill/dist/quill.snow.css';
 
-// Lazy load components
-const DragDropImageUploader = lazy(
+// dynamic import components
+const DragDropImageUploader = dynamic(
   () =>
     import(
       '@/src/components/shared/dragdrop-image-uploader/DragDropImageUploader'
     ),
 );
-const MyFileInput = lazy(
+const MyFileInput = dynamic(
   () => import('@/src/components/shared/file-input/FileInput'),
 );
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 function AddProduct() {
+  // libraries
   const { t } = useTranslation();
-
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
+
+  // states
   const [images, setImages] = useState<File[]>([]);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState<string>('');
+  const [productCategory, setProductCategory] = useState<string>('');
+
+  // mutations
   const { mutate: addNewProduct } = useAddProduct();
+
+  // queries
   const { data: categories } = useGetCategories();
-  const [productCategory, setProductCategory] = useState('');
   const { data: subCategories, refetch } = useGetSubCategories({
     category: productCategory,
   });
-
-  const filteredList = (id: string) => {
-    setProductCategory(id);
-  };
-
-  const deleteImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
   useEffect(() => {
     if (categories) {
       setProductCategory(categories.data.categories[0]._id);
@@ -57,6 +54,15 @@ function AddProduct() {
   useEffect(() => {
     refetch();
   }, [productCategory]);
+
+  // functions
+  const filteredList = (id: string) => {
+    setProductCategory(id);
+  };
+
+  const deleteImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
 
   // handle mage change on mobile and tablets
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,9 +99,11 @@ function AddProduct() {
 
   return (
     <div className='flex min-h-screen w-2/3 select-none flex-col items-center justify-center space-y-5'>
+      {/* Add Product Title */}
       <h4 className='text-4xl font-black uppercase dark:text-white'>
         {t('add-product')}
       </h4>
+      {/* Add Product Form */}
       <div className='w-full max-w-3xl rounded bg-white p-6 shadow-md dark:bg-gray-800'>
         <form
           onSubmit={handleSubmit(handleForm)}
@@ -227,7 +235,9 @@ function AddProduct() {
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               >
                 {categories?.data.categories.map((category) => (
-                  <option value={category._id}>{category.name}</option>
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>
                 ))}
               </select>
               {/* category error message */}
@@ -251,7 +261,7 @@ function AddProduct() {
                 >
                   {productCategory &&
                     subCategories?.data.subcategories.map((subCategory) => (
-                      <option value={subCategory._id}>
+                      <option key={subCategory._id} value={subCategory._id}>
                         {subCategory.name}
                       </option>
                     ))}

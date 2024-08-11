@@ -1,11 +1,14 @@
 import { OrderType } from '@/src/api/orders/orders.type';
+import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 
 type OrderedProductProps = {
   products: OrderType['products'];
 };
 const OrderedProduct = ({ products }: OrderedProductProps) => {
+  // libraries
   const { t, i18n } = useTranslation();
+
   return (
     <div className='max-h-52 overflow-y-auto'>
       <table className='w-full border-collapse self-start rounded border text-center'>
@@ -34,19 +37,28 @@ const OrderedProduct = ({ products }: OrderedProductProps) => {
                   Math.floor(index % 2) !== 0 ? 'bg-gray-400 text-white' : ''
                 } ${Math.floor(index % 2) !== 0 ? 'dark:text-black' : ''}`}
               >
+                {/* ----------- Product image ----------- */}
                 <td className='hidden border p-1 md:table-cell'>
                   <div className='flex select-none justify-center'>
-                    <img
+                    <Image
                       src={`http://${product.product.images[0]}`}
                       alt={product.product.name}
-                      className='max-w-[2rem] rounded bg-white/90 sm:max-w-[3rem]'
+                      width={48}
+                      height={48}
+                      className='rounded bg-white/90'
                     />
                   </div>
                 </td>
+
+                {/* ----------- Product name ----------- */}
                 <td className='truncate border p-1'>{product.product.name}</td>
+
+                {/* ----------- Product quantity ----------- */}
                 <td className='truncate border p-1'>
                   <span> {product.count.toLocaleString(i18n.language)}</span>
                 </td>
+
+                {/* ----------- Product price ----------- */}
                 <td className='truncate border p-1'>
                   {product.product.price.toLocaleString(i18n.language)}
                 </td>

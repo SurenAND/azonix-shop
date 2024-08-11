@@ -1,16 +1,14 @@
 import { ProductType } from '@/src/api/product/product.type';
-import Image from 'next/image';
-import { useTranslation } from 'react-i18next';
-import { FaEye, FaHeart } from 'react-icons/fa';
-
-// rating image import
 import HalfStar from '@/src/assets/images/rating/star-half-fill.svg';
 import EmptyStar from '@/src/assets/images/rating/star-no-fill.svg';
 import FullStar from '@/src/assets/images/rating/star.svg';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
+import { FaEye, FaHeart } from 'react-icons/fa';
 
 type ProductCardPropsType = {
   product: ProductType;
@@ -18,12 +16,15 @@ type ProductCardPropsType = {
 };
 
 const ProductCard = ({ product, index }: ProductCardPropsType) => {
+  // libraries
   const { t, i18n } = useTranslation();
   const { push: pushRouter } = useRouter();
 
+  // contexts & stores
   const { state } = useUserContext();
   const { setShoppingCartInfo } = useCheckoutStore();
 
+  // functions
   const addToCardHandler = () => {
     if (product) {
       setShoppingCartInfo({
@@ -33,7 +34,7 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
         image: product?.images[0],
         price: product?.price,
         priceAfterDiscount: product?.priceAfterDiscount,
-        quantity: 0,
+        quantity: 1,
       });
     }
   };
@@ -43,10 +44,11 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
       key={product?._id}
       className='min-h-[10rem] w-72 overflow-hidden rounded-md bg-white text-gray-700 shadow-lg'
     >
+      {/* product image */}
       <div
-        className={`flex h-[180px] w-full items-center justify-center ${
+        className={`relative flex h-[180px] w-full items-center justify-center ${
           index % 2 === 0 ? 'bg-axYellow/80' : 'bg-primary/80'
-        }`}
+        }  ${product?.quantity === 0 ? 'opacity-50' : ''}`}
       >
         <Image
           src={`http://${product?.images[0]}`}
@@ -55,7 +57,16 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
           height={150}
           className='drop-shadow-[-8px_4px_6px_rgba(0,0,0,.4)]'
         />
+        {product?.quantity === 0 && (
+          <div className='absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black/50'>
+            <p className='text-center text-2xl font-bold text-axGray'>
+              {t('out-of-stock')}
+            </p>
+          </div>
+        )}
       </div>
+
+      {/* product info */}
       <div className='flex flex-col gap-3 p-5'>
         {/* brand */}
         <div className='flex items-center gap-2'>
@@ -124,13 +135,14 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
           {/* add to cart button */}
           <button
             onClick={addToCardHandler}
-            className={`rounded-md px-6 py-2 font-medium text-white transition ${
+            className={`rounded-md px-6 py-2 font-medium text-white transition disabled:cursor-not-allowed ${
               i18n.dir() === 'ltr' ? 'tracking-wider' : ''
             } ${
               index % 2 === 0
                 ? 'bg-axYellow/80 hover:bg-axYellow/90'
                 : 'bg-primary/80 hover:bg-primary/90'
             }`}
+            disabled={product?.quantity === 0}
           >
             {t('add-to-cart')}
           </button>

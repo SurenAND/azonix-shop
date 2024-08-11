@@ -22,10 +22,16 @@ const OrderInfoPopup = ({
   infoId,
   setInfoId,
 }: OrderInfoPopupProps) => {
+  // libraries
   const { t } = useTranslation();
+
+  // mutations
   const { mutate: updateOrder } = useUpdateOrder();
+
+  // queries
   const { data: oldOrder } = useGetOrderById(infoId);
 
+  // functions
   const deliveredData = () => {
     if (oldOrder) {
       updateOrder(
@@ -74,29 +80,50 @@ const OrderInfoPopup = ({
         {/* order info */}
         {oldOrder ? (
           <div className='mx-auto flex w-full max-w-xl flex-col gap-4 p-4'>
+            {/* ----------- Customer name ----------- */}
             <p>
-              {t('customer-name')} : {oldOrder?.data.order.user.firstname}{' '}
-              {oldOrder?.data.order.user.lastname}
+              {t('customer-name')} :{' '}
+              {oldOrder?.data.order.user !== null
+                ? `${oldOrder?.data.order.user.firstname} ${oldOrder?.data.order.user.lastname}`
+                : t('user-deleted')}
             </p>
+
+            {/* ----------- Customer address ----------- */}
             <p>
-              {t('address')} : {oldOrder?.data.order.user.address}
+              {t('address')} :{' '}
+              {oldOrder?.data.order.user !== null
+                ? oldOrder?.data.order.user.address
+                : t('user-deleted')}
             </p>
+
+            {/* ----------- Customer phone number ----------- */}
             <p>
-              {t('phone')} : {oldOrder?.data.order.user.phoneNumber}
+              {t('phone')} :{' '}
+              {oldOrder?.data.order.user !== null
+                ? oldOrder?.data.order.user.phoneNumber
+                : t('user-deleted')}
             </p>
+
+            {/* ----------- Order time ----------- */}
             <p>
               {t('delivery-time')} :{' '}
               {new Date(oldOrder?.data.order.createdAt).toLocaleDateString(
                 'EN',
               )}
             </p>
+
+            {/* ----------- Order time ----------- */}
             <p>
               {t('order-time')} :{' '}
               {new Date(oldOrder?.data.order.createdAt).toLocaleDateString(
                 'EN',
               )}
             </p>
+
+            {/* ----------- Ordered products ----------- */}
             <OrderedProduct products={oldOrder?.data.order.products} />
+
+            {/* ----------- Delivery status ----------- */}
             <div className='mx-auto flex w-1/2 justify-center'>
               {oldOrder?.data.order.deliveryStatus ? (
                 <p>

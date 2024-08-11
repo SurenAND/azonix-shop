@@ -9,6 +9,7 @@ const DrawerList = dynamic(
   { ssr: true },
 );
 export default function Sidebar({ open }: { open: boolean }) {
+  // libraries
   const { i18n } = useTranslation();
   return (
     <div

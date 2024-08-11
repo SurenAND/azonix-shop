@@ -19,11 +19,15 @@ const Products = ({
   return (
     <>
       <Toaster richColors />
+
+      {/* products */}
       <section className='ms-14 mt-8 flex flex-wrap justify-center gap-5'>
         {products?.map((product, index) => (
-          <ProductCard product={product} index={index} />
+          <ProductCard key={product._id} product={product} index={index} />
         ))}
       </section>
+
+      {/* pagination */}
       {products && (
         <Pagination
           page={page}

@@ -1,6 +1,5 @@
 import { ProductType } from '@/src/api/product/product.type';
 import EditableTd from '@/src/components/shared/editable-td/EditableTd';
-
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -21,8 +20,10 @@ function InventoryTable({
   setEditedProducts,
   editMode,
 }: InventoryTableProps) {
+  // libraries
   const { t } = useTranslation();
 
+  // states
   const [products, setProducts] = useState<ProductType[]>([]);
 
   useEffect(() => {
@@ -46,6 +47,7 @@ function InventoryTable({
 
   return (
     <table className='w-full border-collapse self-start rounded border text-center'>
+      {/* Table Head */}
       <thead className='select-none'>
         <tr className='mb-4 flex flex-col bg-gray-500 text-white dark:text-black sm:table-row'>
           <th className='text-md w-full border px-1 py-3 md:w-[40%]'>
@@ -65,6 +67,7 @@ function InventoryTable({
           </th>
         </tr>
       </thead>
+      {/* Table Body */}
       <tbody>
         {products.map((product, index) => {
           return (
@@ -74,22 +77,27 @@ function InventoryTable({
                 Math.floor(index % 2) !== 0 ? 'bg-gray-400 text-white' : ''
               } ${Math.floor(index % 2) !== 0 ? 'dark:text-black' : ''}`}
             >
+              {/* Product Name */}
               <td className='truncate border p-1'>{product.name}</td>
+              {/* Product Price With Discount */}
               <td className='truncate border p-1'>
                 {product.priceAfterDiscount.toFixed(2)}
               </td>
+              {/* Product Price */}
               <EditableTd
                 product={product}
                 editedProducts={editedProducts}
                 setEditedProducts={setEditedProducts}
                 field='price'
               />
+              {/* Product Quantity */}
               <EditableTd
                 product={product}
                 editedProducts={editedProducts}
                 setEditedProducts={setEditedProducts}
                 field='quantity'
               />
+              {/* Product Discount */}
               <EditableTd
                 product={product}
                 editedProducts={editedProducts}

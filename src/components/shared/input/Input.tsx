@@ -1,6 +1,16 @@
 import { ReactElement } from 'react';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
 
+type InputProps = {
+  type: string;
+  placeholder: string;
+  name: string;
+  register: UseFormRegister<FieldValues>;
+  required: boolean;
+  pattern?: RegExp;
+  icon?: ReactElement;
+};
+
 export default function MyInput({
   type,
   placeholder,
@@ -9,15 +19,7 @@ export default function MyInput({
   required,
   pattern,
   icon,
-}: {
-  type: string;
-  placeholder: string;
-  name: string;
-  register: UseFormRegister<FieldValues>;
-  required: boolean;
-  pattern?: RegExp;
-  icon?: ReactElement;
-}) {
+}: InputProps) {
   return (
     <div className='w-7/10 relative my-1 rounded-md'>
       <input

@@ -1,5 +1,6 @@
 import { useGetCategories } from '@/src/api/category/category.queries';
 import { ProductType } from '@/src/api/product/product.type';
+import Image from 'next/image';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdDelete, MdEdit } from 'react-icons/md';
@@ -21,10 +22,13 @@ export const ProductsTable = ({
   setIdToEdit,
   setOpenEdit,
 }: ProductsTableProps) => {
+  // libraries
   const { t } = useTranslation();
 
+  // queries
   const { data: categories } = useGetCategories();
 
+  // functions
   const setDeleteProductModal = (id: string) => {
     idToDelete.current = id;
     setOpenDelete(true);
@@ -37,6 +41,7 @@ export const ProductsTable = ({
 
   return (
     <table className='w-full border-collapse self-start rounded border text-center'>
+      {/* table header */}
       <thead className='select-none'>
         <tr className='mb-4 flex flex-col bg-gray-500 text-white dark:text-black sm:table-row'>
           <th className='text-md hidden w-full border px-1 py-3 md:table-cell md:w-[15%]'>
@@ -53,7 +58,9 @@ export const ProductsTable = ({
             >
               <option value=''>{t('all-category')}</option>
               {categories?.data.categories.map((category) => (
-                <option value={category._id}>{category.name}</option>
+                <option key={category?._id} value={category?._id}>
+                  {category.name}
+                </option>
               ))}
             </select>
           </th>
@@ -62,6 +69,7 @@ export const ProductsTable = ({
           </th>
         </tr>
       </thead>
+      {/* table body */}
       <tbody>
         {list.map((product, index) => {
           return (
@@ -71,19 +79,25 @@ export const ProductsTable = ({
                 Math.floor(index % 2) !== 0 ? 'bg-gray-400 text-white' : ''
               } ${Math.floor(index % 2) !== 0 ? 'dark:text-black' : ''}`}
             >
+              {/* product image */}
               <td className='hidden border p-1 md:table-cell'>
                 <div className='flex select-none justify-center'>
-                  <img
+                  <Image
                     src={`http://${product.images[0]}`}
                     alt={product.name}
-                    className='max-w-[2rem] rounded bg-white/90 sm:max-w-[3rem]'
+                    width={48}
+                    height={48}
+                    className='rounded bg-white/90'
                   />
                 </div>
               </td>
+              {/* product name */}
               <td className='truncate border p-1'>{product.name}</td>
+              {/* product category */}
               <td className='truncate border p-1'>
                 {product.category.name}/{product.subcategory.name}
               </td>
+              {/* delete and edit button */}
               <td className='border p-1'>
                 <div className='flex select-none items-center justify-center gap-4'>
                   <MdDelete

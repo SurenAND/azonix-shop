@@ -7,17 +7,26 @@ import { useTranslation } from 'react-i18next';
 import { CgEye } from 'react-icons/cg';
 import { TbEyeClosed } from 'react-icons/tb';
 
-export default function SignUpTemplate({ active }: { active: boolean }) {
-  const [showPassword, setShowPassword] = useState(false);
+type SignUpTemplateProps = {
+  active: boolean;
+};
+
+export default function SignUpTemplate({ active }: SignUpTemplateProps) {
+  // libraries
+  const { t, i18n } = useTranslation();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { t, i18n } = useTranslation();
 
+  // states
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  // mutations
   const { mutate: signupMutate } = useSignup();
 
+  // functions
   const handleSignUp = (data: FieldValues) => {
     const newUser = data as newUserType;
     signupMutate(newUser);

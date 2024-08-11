@@ -8,7 +8,6 @@ type OrdersTableProps = {
   onFilteredList: (e: string) => void;
   setInfoId: Dispatch<SetStateAction<string>>;
   setOpenInfo: Dispatch<SetStateAction<boolean>>;
-  isDelivered: boolean;
 };
 
 const OrdersTable = ({
@@ -16,10 +15,11 @@ const OrdersTable = ({
   onFilteredList,
   setInfoId,
   setOpenInfo,
-  isDelivered,
 }: OrdersTableProps) => {
+  // libraries
   const { t } = useTranslation();
 
+  // functions
   const showOrdersInfo = (id: string) => {
     setInfoId(id);
     setOpenInfo(true);
@@ -41,9 +41,7 @@ const OrdersTable = ({
               className='w-full bg-gray-500 text-center outline-none'
               onChange={(e) => onFilteredList(e.target.value)}
             >
-              <option className='hidden'>
-                {isDelivered ? t('delivery-time') : t('order-time')}
-              </option>
+              <option className='hidden'>{t('delivery-time')}</option>
               <option value='desc'>{t('newest')}</option>
               <option value='asc'>{t('oldest')}</option>
             </select>
@@ -53,6 +51,8 @@ const OrdersTable = ({
           </th>
         </tr>
       </thead>
+
+      {/* ----------- Table body ----------- */}
       <tbody>
         {list.map((item: OrderType, index: number) => {
           return (
@@ -62,15 +62,28 @@ const OrdersTable = ({
                 Math.floor(index % 2) !== 0 ? 'bg-gray-400 text-white' : ''
               } ${Math.floor(index % 2) !== 0 ? 'dark:text-black' : ''}`}
             >
+              {/* ----------- Customer name ----------- */}
               <td className='truncate border p-1'>
-                {item?.user.firstname} {item?.user.lastname}
+                {item?.user !== null ? (
+                  <>
+                    {item?.user.firstname} {item?.user.lastname}
+                  </>
+                ) : (
+                  <>{t('user-deleted')}</>
+                )}
               </td>
+
+              {/* ----------- Total price ----------- */}
               <td className='truncate border p-1'>
                 {item.totalPrice.toFixed(2)}
               </td>
+
+              {/* ----------- Delivery time ----------- */}
               <td className='truncate border p-1'>
                 {new Date(item.deliveryDate).toLocaleDateString('en')}
               </td>
+
+              {/* ----------- Review button ----------- */}
               <td className='truncate border p-1'>
                 <div className='flex justify-center'>
                   <BsClipboard2CheckFill

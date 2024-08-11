@@ -23,13 +23,18 @@ const Checkout = ({
   paymentName,
   paymentMethodSelected,
 }: CheckoutPropsType) => {
-  const [subtotal, setSubtotal] = useState(0);
-  const [savings, setSavings] = useState(0);
-  const [total, setTotal] = useState(0);
-
-  const { state } = useUserContext();
+  // libraries
   const { t } = useTranslation();
 
+  // states
+  const [subtotal, setSubtotal] = useState<number>(0);
+  const [savings, setSavings] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
+
+  // contexts
+  const { state } = useUserContext();
+
+  // calculate the total price and savings of the cart
   useEffect(() => {
     setSubtotal(
       shoppingCartInfo
@@ -59,6 +64,7 @@ const Checkout = ({
             ?.filter((item) => item?.userId === state.userId)
             ?.map((item) => <CartCard key={item?._id} product={item} />)}
         </div>
+
         {/* prices */}
         <div className='flow-root'>
           <div className='-my-3 divide-y divide-gray-200 dark:divide-gray-800'>
@@ -93,6 +99,7 @@ const Checkout = ({
             </dl>
           </div>
         </div>
+
         {/* proceed to payment */}
         <div className='space-y-3'>
           <button
@@ -110,6 +117,7 @@ const Checkout = ({
               : t('confirm-order')}
           </button>
 
+          {/* if the user is not logged in, redirect to the login page */}
           {!state.isLogin && (
             <p className='text-sm font-normal text-gray-500 dark:text-gray-400'>
               {t('cart-require-account-part-1')}

@@ -4,14 +4,17 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function DashboardLayout({ children }: PropsWithChildren) {
-  const [open, setOpen] = useState(true);
+  // libraries
+  const { i18n } = useTranslation();
+
+  // states
+  const [open, setOpen] = useState<boolean>(true);
+  const [dir, setDir] = useState<string>('ltr');
 
   // change direction of the layout based on the language
-  const [dir, setDir] = useState('ltr');
-  const { i18n } = useTranslation();
   useEffect(() => {
     setDir(i18n.dir());
-  }, [i18n.resolvedLanguage]);
+  }, [i18n, i18n.resolvedLanguage]);
 
   return (
     <div

@@ -1,4 +1,4 @@
-export interface ShoppingCartItem {
+export type ShoppingCartItem = {
   _id: string;
   userId: string;
   name: string;
@@ -6,14 +6,14 @@ export interface ShoppingCartItem {
   price: number;
   priceAfterDiscount: number;
   quantity: number;
-}
+};
 
-export interface DeliveryDate {
+export type DeliveryDate = {
   date: string;
   userId: string;
-}
+};
 
-export interface CheckoutState {
+export type CheckoutState = {
   deliveryDate: DeliveryDate[];
   setDeliveryDate: (data: DeliveryDate) => void;
   resetUserDeliveryDate: (userId: string) => void;
@@ -24,4 +24,4 @@ export interface CheckoutState {
   removeFromCart: (userId: string, productId: string) => void;
   assignCartToUser: (userId: string) => void;
   clearUserCart: (userId: string) => void;
-}
+};

@@ -26,21 +26,19 @@ type CategoryTemplateProps = {
 };
 
 const CategoryTemplate = ({ categorySlug }: CategoryTemplateProps) => {
+  // libraries
   const { push: pushRouter } = useRouter();
-  // search params
   const searchParams = useSearchParams();
+
+  // search params
   const page = searchParams.get('p') || '1';
   const subcategory = searchParams.get('sc') || '';
-
-  // router
-  const router = useRouter();
   const params = new URLSearchParams(searchParams);
 
   // get categories
   const { data: categories, refetch: refetchCategories } = useGetCategories({
     slugname: categorySlug,
   });
-
   useEffect(() => {
     refetchCategories();
   }, [categorySlug, refetchCategories]);
@@ -51,6 +49,7 @@ const CategoryTemplate = ({ categorySlug }: CategoryTemplateProps) => {
       category: categories?.data.categories[0]?._id,
     });
 
+  // get products
   const newParams = useMemo(
     () => ({
       page: +page,
@@ -60,25 +59,24 @@ const CategoryTemplate = ({ categorySlug }: CategoryTemplateProps) => {
     }),
     [page, categories, subcategory],
   );
-
-  // get products
   const {
     data: products,
     isFetching: productFetching,
     refetch,
   } = useGetProducts(newParams);
 
+  // refetch products
   useEffect(() => {
     refetch();
-  }, [newParams, refetch]);
+  }, [newParams]);
 
-  // ------------ Button Filtering -----------
+  // ------------ Filter by subcategory -----------
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
     const value = target.value;
     params.set('sc', value);
     params.set('p', '1');
-    router.push({
+    pushRouter({
       pathname: '/shop/[category]',
       query: { category: categorySlug, ...Object.fromEntries(params) },
     });
@@ -87,21 +85,25 @@ const CategoryTemplate = ({ categorySlug }: CategoryTemplateProps) => {
   // ----------- Pagination -----------
   const setPage = (page: number) => {
     params.set('p', page.toString());
-    router.push({
+    pushRouter({
       pathname: '/shop/[category]',
       query: { category: categorySlug, ...Object.fromEntries(params) },
     });
   };
 
+  // ----------- Redirect to 404 if category not found -----------
   if (categories && categories?.status !== 'success') {
     pushRouter(MainRoutes.NOTFOUND);
   }
 
   return (
     <div className='mx-auto my-20 flex max-w-6xl flex-col gap-10'>
+      {/* ----------- Category title ----------- */}
       <h2 className='mx-20 border-b-2 border-gray-400 pb-5 text-center text-5xl font-bold uppercase'>
         {categories?.data.categories[0].name}
       </h2>
+
+      {/* ----------- Subcategories ----------- */}
       <div className='flex justify-center text-center'>
         {!subCategoryFetching ? (
           <SubCategories
@@ -114,6 +116,7 @@ const CategoryTemplate = ({ categorySlug }: CategoryTemplateProps) => {
         )}
       </div>
 
+      {/* ----------- Products ----------- */}
       {!productFetching ? (
         <Products
           products={products?.data.products || []}

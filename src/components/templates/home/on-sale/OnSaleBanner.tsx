@@ -1,5 +1,5 @@
-import Image, { StaticImageData } from "next/image";
-import { useTranslation } from "react-i18next";
+import Image, { StaticImageData } from 'next/image';
+import { useTranslation } from 'react-i18next';
 type OnSaleBannerProps = {
   data: {
     discountEN: string;
@@ -20,61 +20,63 @@ type OnSaleBannerProps = {
 };
 
 const OnSaleBanner = ({ data }: OnSaleBannerProps) => {
+  // libraries
   const { t, i18n } = useTranslation();
+
   return (
-    <div className="min-h-[550px] flex justify-center items-center py-12">
-      <div className="container">
+    <div className='flex min-h-[550px] items-center justify-center py-12'>
+      <div className='container'>
         <div
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-white rounded-3xl"
+          className='grid grid-cols-1 items-center gap-6 rounded-3xl text-white md:grid-cols-3'
           style={{ backgroundColor: data.bgColor }}
         >
           {/* first col */}
-          <div className="p-6 sm:p-8 flex flex-col justify-center gap-4">
-            <p data-aos="slide-right">
-              {i18n.dir() === "ltr" ? data.discountEN : data.discountFA}
+          <div className='flex flex-col justify-center gap-4 p-6 sm:p-8'>
+            <p data-aos='slide-right'>
+              {i18n.dir() === 'ltr' ? data.discountEN : data.discountFA}
             </p>
             <h1
-              data-aos="zoom-out"
-              className="uppercase text-4xl lg:text-7xl font-bold"
+              data-aos='zoom-out'
+              className='text-4xl font-bold uppercase lg:text-7xl'
             >
-              {i18n.dir() === "ltr" ? data.titleEN : data.titleFA}
+              {i18n.dir() === 'ltr' ? data.titleEN : data.titleFA}
             </h1>
-            <p data-aos="fade-up">
-              {i18n.dir() === "ltr" ? data.dateEN : data.dateFA}
+            <p data-aos='fade-up'>
+              {i18n.dir() === 'ltr' ? data.dateEN : data.dateFA}
             </p>
           </div>
 
           {/* second col */}
-          <div data-aos="zoom-in" className="h-full flex items-center">
+          <div data-aos='zoom-in' className='flex h-full items-center'>
             <Image
               src={data.image}
-              alt="on sale"
-              className="scale-125 w-[250px] md:w-[340px] mx-auto drop-shadow-[-8px_4px_6px_rgba(0,0,0,.4)] object-cover"
+              alt='on sale'
+              className='mx-auto w-[250px] scale-125 object-cover drop-shadow-[-8px_4px_6px_rgba(0,0,0,.4)] md:w-[340px]'
             />
           </div>
 
           {/* third col */}
-          <div className="flex flex-col justify-center gap-4 p-6 sm:p-8">
-            <p data-aos="zoom-out" className="font-bold text-xl">
-              {i18n.dir() === "ltr" ? data.title2EN : data.title2FA}
+          <div className='flex flex-col justify-center gap-4 p-6 sm:p-8'>
+            <p data-aos='zoom-out' className='text-xl font-bold'>
+              {i18n.dir() === 'ltr' ? data.title2EN : data.title2FA}
             </p>
-            <p data-aos="fade-up" className="text-3xl sm:text-5xl font-bold">
-              {i18n.dir() === "ltr" ? data.title3EN : data.title3FA}
+            <p data-aos='fade-up' className='text-3xl font-bold sm:text-5xl'>
+              {i18n.dir() === 'ltr' ? data.title3EN : data.title3FA}
             </p>
             <p
-              data-aos="fade-up"
+              data-aos='fade-up'
               className={`text-sm leading-5 ${
-                i18n.dir() === "ltr" ? "tracking-wide" : ""
+                i18n.dir() === 'ltr' ? 'tracking-wide' : ''
               }`}
             >
-              {i18n.dir() === "ltr" ? data.title4EN : data.title4FA}
+              {i18n.dir() === 'ltr' ? data.title4EN : data.title4FA}
             </p>
-            <div data-aos="fade-up" data-aos-offset="0">
+            <div data-aos='fade-up' data-aos-offset='0'>
               <button
-                className="bg-white px-4 py-2 rounded-full"
+                className='rounded-full bg-white px-4 py-2'
                 style={{ color: data.bgColor }}
               >
-                {t("shop-now")}
+                {t('shop-now')}
               </button>
             </div>
           </div>

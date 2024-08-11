@@ -1,16 +1,15 @@
 import LoadingPage from '@/src/components/shared/loading-page/LoadingPage';
-import { lazy, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 
-const CreditCardForm = lazy(
+const CreditCardForm = dynamic(
   () => import('@/src/components/templates/payment/en/CreditCardForm'),
+  {
+    loading: () => <LoadingPage />,
+  },
 );
 
 const PaymentEn = () => {
-  return (
-    <Suspense fallback={<LoadingPage />}>
-      <CreditCardForm />
-    </Suspense>
-  );
+  return <CreditCardForm />;
 };
 
 export default PaymentEn;

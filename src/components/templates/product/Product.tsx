@@ -14,21 +14,27 @@ type ProductTemplateProps = {
 };
 
 const ProductTemplate = ({ productId }: ProductTemplateProps) => {
+  // libraries
   const { t } = useTranslation();
   const { push: pushRouter } = useRouter();
+
+  // states
+  const [activeImg, setActiveImage] = useState<string>('');
+  const [amount, setAmount] = useState<number>(1);
+
+  // queries
   const { data: product } = useGetProductById(productId);
-  const [activeImg, setActiveImage] = useState('');
-  const [amount, setAmount] = useState(1);
-
-  const { setShoppingCartInfo } = useCheckoutStore();
-  const { state } = useUserContext();
-
   useEffect(() => {
     if (product) {
       setActiveImage(product?.data.product.images[0]);
     }
   }, [product]);
 
+  // contexts & stores
+  const { state } = useUserContext();
+  const { setShoppingCartInfo } = useCheckoutStore();
+
+  // functions
   const addToCardHandler = () => {
     if (product) {
       setShoppingCartInfo({
@@ -43,6 +49,7 @@ const ProductTemplate = ({ productId }: ProductTemplateProps) => {
     }
   };
 
+  // redirect to 404 if product not found
   if (product && product?.status !== 'success') {
     pushRouter(MainRoutes.NOTFOUND);
   }
@@ -52,14 +59,19 @@ const ProductTemplate = ({ productId }: ProductTemplateProps) => {
       <Toaster richColors />
       <div className='flex flex-col justify-between gap-16 p-14 lg:flex-row lg:items-center'>
         <div className='flex flex-col gap-6 lg:w-2/4'>
-          <img
+          {/* product active image */}
+          <Image
             src={`http://${activeImg}`}
-            alt={product?.data.product.name}
+            alt={product?.data.product.name || ''}
+            width={500}
+            height={500}
             className='aspect-square h-full w-full rounded-xl border border-gray-400 object-cover dark:border-gray-200'
           />
+          {/* product images */}
           <div className='flex h-24 flex-row justify-between'>
-            {product?.data.product.images.map((image) => (
+            {product?.data.product.images.map((image, index) => (
               <Image
+                key={index}
                 src={`http://${image}`}
                 alt={product?.data.product.name}
                 width={100}

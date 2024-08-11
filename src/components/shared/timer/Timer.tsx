@@ -6,8 +6,10 @@ type TimerPropsType = {
 };
 
 const Timer = ({ time, action }: TimerPropsType) => {
-  const [timeLeft, setTimeLeft] = useState(time);
+  // states
+  const [timeLeft, setTimeLeft] = useState<number>(time);
 
+  // count down the time
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {

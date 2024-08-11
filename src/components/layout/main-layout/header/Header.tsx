@@ -30,15 +30,21 @@ const lngs: Record<'en' | 'fa', { flag: StaticImageData }> = {
 };
 
 export default function Header() {
-  const { push: pushRouter } = useRouter();
+  // libraries
   const { t, i18n } = useTranslation();
-  const { state } = useUserContext();
+  const { push: pushRouter } = useRouter();
+
+  // mutations
   const { mutate: logout } = useLogout();
 
+  // contexts & stores
+  const { state } = useUserContext();
   const { shoppingCartInfo } = useCheckoutStore();
 
-  const [showMobileDropdown, setShowMobileDropdown] = useState(false);
+  // states
+  const [showMobileDropdown, setShowMobileDropdown] = useState<boolean>(false);
 
+  // functions
   const handleLogout = () => {
     logout();
   };
@@ -196,6 +202,7 @@ export default function Header() {
               )}
             </button>
 
+            {/* Language section */}
             <div className='flex items-center gap-4'>
               {Object.keys(lngs).map((lng) => {
                 return (

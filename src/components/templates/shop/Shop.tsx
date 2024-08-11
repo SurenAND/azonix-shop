@@ -17,37 +17,34 @@ import { ChangeEvent, MouseEvent, useEffect, useMemo, useState } from 'react';
 // Dynamic import
 const Products = dynamic(
   () => import('@/src/components/shared/products/Products'),
-  {
-    ssr: true,
-  },
+  { loading: () => <ProductSkeleton /> },
 );
 
 export default function ShopTemplate() {
-  // sidebar open state
-  const [open, setOpen] = useState(true);
+  // libraries
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // states
+  const [open, setOpen] = useState<boolean>(true);
 
   // search params
-  const searchParams = useSearchParams();
   const page = searchParams.get('p') || '1';
   const category = searchParams.get('c') || '';
   const subcategory = searchParams.get('sc') || '';
   const minPrice = searchParams.get('min') || '';
   const maxPrice = searchParams.get('max') || '';
   const sort = searchParams.get('s') || '';
-
-  // router
-  const router = useRouter();
   const params = new URLSearchParams(searchParams);
 
-  // get categories
+  // queries
   const { data: categories, isFetching: categoryFetching } = useGetCategories();
-
-  // get sub categories
   const { data: subCategories, isFetching: subCategoryFetching } =
     useGetSubCategories({
       category,
     });
 
+  // get products
   const newParams = useMemo(
     () => ({
       page: +page,
@@ -60,26 +57,26 @@ export default function ShopTemplate() {
     }),
     [page, category, subcategory, minPrice, maxPrice, sort],
   );
-
   const {
     data: products,
     isFetching: productFetching,
     refetch,
   } = useGetProducts(newParams);
 
+  // refetch products
   useEffect(() => {
     refetch();
-  }, [newParams, refetch]);
+  }, [newParams]);
 
   // ----------- Input Filter -----------
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState<string>('');
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setQuery(value);
   };
 
-  // ----------- Radio Filtering -----------
+  // ----------- filter by category -----------
   const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     params.set('c', value);
@@ -88,6 +85,7 @@ export default function ShopTemplate() {
     router.push({ query: params.toString() });
   };
 
+  // ----------- filter by price -----------
   const handlePriceChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.split('-');
     params.set('min', value[0]);
@@ -96,6 +94,7 @@ export default function ShopTemplate() {
     router.push({ query: params.toString() });
   };
 
+  // ----------- sort by price -----------
   const handlePriceSortingChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     params.set('s', value);
@@ -103,7 +102,7 @@ export default function ShopTemplate() {
     router.push({ query: params.toString() });
   };
 
-  // ------------ Button Filtering -----------
+  // ------------ filter by subcategory -----------
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
     const value = target.value;

@@ -10,12 +10,14 @@ import { useTranslation } from 'react-i18next';
 import { MdInbox } from 'react-icons/md';
 
 export default function DrawerList() {
+  // libraries
+  const { t } = useTranslation();
   const { pathname, push: pushRouter } = useRouter();
   const searchParams = useSearchParams().get('view');
-  const { t } = useTranslation();
 
   return (
     <div className='flex h-full w-64 flex-col justify-between px-5 py-3'>
+      {/* Dashboard */}
       <div className='mb-4 flex flex-col gap-1'>
         <h6 className='text-lg font-bold'>{t('dashboard')}</h6>
         <div
@@ -40,6 +42,7 @@ export default function DrawerList() {
           </button>
         </div>
       </div>
+      {/* Products */}
       <div className='mb-4 flex flex-col gap-1'>
         <h6 className='text-lg font-bold'>{t('products-management')}</h6>
         {drawerProductsItems?.map((item, index) => (
@@ -67,6 +70,7 @@ export default function DrawerList() {
           </div>
         ))}
       </div>
+      {/* Orders */}
       <div className='mb-4 flex flex-col gap-1'>
         <h6 className='text-lg font-bold'>{t('orders-management')}</h6>
         {drawerOrdersItems?.map((item, index) => (
@@ -94,6 +98,7 @@ export default function DrawerList() {
           </div>
         ))}
       </div>
+      {/* User */}
       <div className='mb-4 flex flex-col gap-1'>
         <h6 className='text-lg font-bold'>{t('user-management')}</h6>
         {drawerUserItems?.map((item, index) => (
@@ -121,6 +126,7 @@ export default function DrawerList() {
           </div>
         ))}
       </div>
+      {/* Footer */}
       <div>
         <hr className='my-4' />
         <p className='my-4 text-center text-sm font-semibold'>

@@ -1,17 +1,18 @@
-import { MainRoutes } from "@/src/constant/routes";
-import { useRouter } from "next/router";
-import { useTranslation } from "react-i18next";
+import { MainRoutes } from '@/src/constant/routes';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
-export default function ToLogIn({
-  setActive,
-  active,
-}: {
+type ToLogInProps = {
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
   active: boolean;
-}) {
-  const { push: pushRouter } = useRouter();
-  const { t, i18n } = useTranslation();
+};
 
+export default function ToLogIn({ setActive, active }: ToLogInProps) {
+  // libraries
+  const { t, i18n } = useTranslation();
+  const { push: pushRouter } = useRouter();
+
+  // functions
   const handleClick = () => {
     setActive(false);
     pushRouter(`${MainRoutes.REGISTER}?view=login`);
@@ -19,27 +20,27 @@ export default function ToLogIn({
 
   return (
     <div
-      className={`absolute h-full px-6 text-center top-0 end-0 ${
+      className={`absolute end-0 top-0 h-full px-6 text-center ${
         active
-          ? "translate-x-0"
-          : i18n.dir() === "ltr"
-          ? "-translate-x-full"
-          : "translate-x-full"
-      } transition-all duration-600 ease-in-out flex flex-col justify-center items-center gap-20`}
+          ? 'translate-x-0'
+          : i18n.dir() === 'ltr'
+            ? '-translate-x-full'
+            : 'translate-x-full'
+      } duration-600 flex flex-col items-center justify-center gap-20 transition-all ease-in-out`}
     >
-      <h4 className={`font-bold text-5xl ${active ? "block" : "hidden"}`}>
-        {t("login-toggle-title")}
+      <h4 className={`text-5xl font-bold ${active ? 'block' : 'hidden'}`}>
+        {t('login-toggle-title')}
       </h4>
-      <p className={`text-lg ${active ? "block" : "hidden"}`}>
-        {t("login-toggle-description")}
+      <p className={`text-lg ${active ? 'block' : 'hidden'}`}>
+        {t('login-toggle-description')}
       </p>
       <button
         onClick={handleClick}
-        className={`bg-transparent text-white border border-white text-xs py-4 px-14 rounded-lg font-semibold uppercase mt-2 hover:bg-axLightPurple hover:border-axLightPurple ${
-          active ? "block" : "hidden"
-        } ${i18n.dir() === "ltr" ? "tracking-wide" : ""}`}
+        className={`mt-2 rounded-lg border border-white bg-transparent px-14 py-4 text-xs font-semibold uppercase text-white hover:border-axLightPurple hover:bg-axLightPurple ${
+          active ? 'block' : 'hidden'
+        } ${i18n.dir() === 'ltr' ? 'tracking-wide' : ''}`}
       >
-        {t("login")}
+        {t('login')}
       </button>
     </div>
   );

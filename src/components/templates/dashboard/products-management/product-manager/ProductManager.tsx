@@ -5,23 +5,24 @@ import {
 import Loading from '@/src/components/shared/loading/Loading';
 import Pagination from '@/src/components/shared/pagination/Pagination';
 import { ProductsTable } from '@/src/components/templates/dashboard/products-management/product-manager/product-table/ProductTable';
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-const AddPopUp = lazy(
+const AddPopUp = dynamic(
   () =>
     import(
       '@/src/components/templates/dashboard/products-management/product-manager/modals/add/Add'
     ),
 );
-const DeletePopUp = lazy(
+const DeletePopUp = dynamic(
   () =>
     import(
       '@/src/components/templates/dashboard/products-management/product-manager/modals/delete/Delete'
     ),
 );
-const EditPopUp = lazy(
+const EditPopUp = dynamic(
   () =>
     import(
       '@/src/components/templates/dashboard/products-management/product-manager/modals/edit/Edit'
@@ -29,23 +30,26 @@ const EditPopUp = lazy(
 );
 
 function ProductManager() {
+  // libraries
   const { t, i18n } = useTranslation();
-  const [page, setPage] = useState(1);
-  const [productCategory, setProductCategory] = useState('');
+
+  // states
+  const [page, setPage] = useState<number>(1);
+  const [productCategory, setProductCategory] = useState<string>('');
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const [openEdit, setOpenEdit] = useState<boolean>(false);
+  const [idToEdit, setIdToEdit] = useState<string>('');
+  const [openAdd, setOpenAdd] = useState<boolean>(false);
+  const idToDelete = useRef<string>('');
+
+  // queries
   const { data: products, refetch } = useGetProducts({
     page,
     category: productCategory,
   });
 
+  // mutations
   const { mutate: deleteProduct } = useDeleteProduct();
-
-  const [openDelete, setOpenDelete] = useState(false);
-  const idToDelete = useRef<string>('');
-
-  const [openEdit, setOpenEdit] = useState(false);
-  const [idToEdit, setIdToEdit] = useState<string>('');
-
-  const [openAdd, setOpenAdd] = useState(false);
 
   const filteredList = (id: string) => {
     setProductCategory(id);
@@ -64,7 +68,9 @@ function ProductManager() {
   return (
     <main className='min-h-screen w-full p-3 md:w-[780px]'>
       <header className='flex items-center justify-between'>
+        {/* product manager title */}
         <h1 className='text-lg font-bold'>{t('product-manager')}</h1>
+        {/* add product button */}
         <button
           className={`mt-2 rounded-lg bg-axLightPurple px-7 py-2 text-xs font-semibold uppercase text-white hover:bg-axDarkPurple ${
             i18n.dir() === 'ltr' ? 'tracking-wide' : ''
@@ -74,7 +80,9 @@ function ProductManager() {
           {t('add-product')}
         </button>
       </header>
+
       <div className='mx-auto flex min-h-[calc(100vh-100px)] w-full items-center px-3 py-8 sm:justify-center md:w-[760px]'>
+        {/* products table */}
         <ProductsTable
           list={products?.data.products || []}
           onFilteredList={filteredList}
@@ -84,6 +92,8 @@ function ProductManager() {
           setOpenEdit={setOpenEdit}
         />
       </div>
+
+      {/* pagination */}
       {products && (
         <Pagination
           page={page}
@@ -91,6 +101,8 @@ function ProductManager() {
           OnSetPage={(pageNo) => setPage(pageNo)}
         />
       )}
+
+      {/* delete popup */}
       <Suspense fallback={<Loading />}>
         {openDelete && (
           <DeletePopUp
@@ -100,6 +112,8 @@ function ProductManager() {
             idToDelete={idToDelete.current}
           />
         )}
+
+        {/* edit popup */}
         {openEdit && (
           <EditPopUp
             openEdit={openEdit}
@@ -108,6 +122,8 @@ function ProductManager() {
             setIdToEdit={setIdToEdit}
           />
         )}
+
+        {/* add product popup */}
         {openAdd && (
           <AddPopUp openAdd={openAdd} onClose={() => setOpenAdd(false)} />
         )}

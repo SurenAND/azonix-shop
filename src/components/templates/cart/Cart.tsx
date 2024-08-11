@@ -27,22 +27,8 @@ const DeliveryInfo = dynamic(
 );
 
 const CartTemplate = () => {
-  const [paymentMethodSelected, setPaymentMethodSelected] = useState<
-    number | null
-  >(null);
-  const [paymentName, setPaymentName] = useState('');
-
-  const {
-    shoppingCartInfo,
-    clearUserCart,
-    deliveryDate,
-    resetUserDeliveryDate,
-  } = useCheckoutStore();
-
-  const { userData, setUserData } = useUserStore();
+  // libraries
   const { i18n } = useTranslation();
-  const { state } = useUserContext();
-
   const {
     register,
     handleSubmit,
@@ -50,9 +36,27 @@ const CartTemplate = () => {
     formState: { errors },
   } = useForm();
 
+  // states
+  const [paymentMethodSelected, setPaymentMethodSelected] = useState<
+    number | null
+  >(null);
+  const [paymentName, setPaymentName] = useState<string>('');
+
+  // contexts & stores
+  const { state } = useUserContext();
+  const {
+    shoppingCartInfo,
+    clearUserCart,
+    deliveryDate,
+    resetUserDeliveryDate,
+  } = useCheckoutStore();
+  const { userData, setUserData } = useUserStore();
+
+  // mutations
   const { mutate: addNewOrder } = useAddNewOrder();
   const { mutate: updateProduct } = useUpdateProduct();
 
+  // preFill form
   useEffect(() => {
     if (userData) {
       reset({
@@ -65,6 +69,7 @@ const CartTemplate = () => {
     }
   }, [reset, userData]);
 
+  // function
   const handleForm = (data: FieldValues) => {
     // update user
     if (userData) {

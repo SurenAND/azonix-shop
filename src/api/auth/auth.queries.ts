@@ -21,9 +21,11 @@ import { useUserStore } from '@/src/store/user/user.store';
 import { AuthReducerAction } from '@/src/types/enums';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 export const useLogin = () => {
+  const { t } = useTranslation();
   const { push: pushRouter } = useRouter();
   const { dispatch } = useUserContext();
   const { assignCartToUser } = useCheckoutStore();
@@ -58,9 +60,7 @@ export const useLogin = () => {
       }
     },
     onError() {
-      toast.warning(
-        'User Not Found Please Sign Up or enter valid username and password!',
-      );
+      toast.warning(t('loginUserNotFound'));
     },
   });
 };

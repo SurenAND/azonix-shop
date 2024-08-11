@@ -1,4 +1,6 @@
 import Upload from '@/src/assets/images/upload.png';
+import Image from 'next/image';
+
 type MyFileInputProps = {
   changeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -9,7 +11,13 @@ const MyFileInput = ({ changeHandler }: MyFileInputProps) => {
       htmlFor='doc'
       className='flex cursor-pointer items-center gap-3 rounded-3xl border border-dashed border-gray-300 bg-gray-50 p-4'
     >
-      <img className='h-16 w-auto' src={Upload.src} alt='' />
+      <Image
+        className='h-16 w-auto'
+        src={Upload}
+        alt='Upload icon'
+        width={64}
+        height={64}
+      />
       <div className='space-y-2'>
         <h4 className='text-base font-semibold text-gray-700'>Upload a file</h4>
         <span className='text-sm text-gray-500'>Max 4 Images</span>

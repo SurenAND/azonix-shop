@@ -25,8 +25,10 @@ const DeliveryInfo = ({
   setPaymentMethodSelected,
   paymentMethodSelected,
 }: DeliveryInfoPropsType) => {
+  // libraries
   const { t, i18n } = useTranslation();
 
+  // change the payment method
   function paymentMethodChange(i: number, name: string) {
     setPaymentMethodSelected(i);
     setPaymentName(name);

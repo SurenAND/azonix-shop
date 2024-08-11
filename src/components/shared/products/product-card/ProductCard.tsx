@@ -46,9 +46,9 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
     >
       {/* product image */}
       <div
-        className={`flex h-[180px] w-full items-center justify-center ${
+        className={`relative flex h-[180px] w-full items-center justify-center ${
           index % 2 === 0 ? 'bg-axYellow/80' : 'bg-primary/80'
-        }`}
+        }  ${product?.quantity === 0 ? 'opacity-50' : ''}`}
       >
         <Image
           src={`http://${product?.images[0]}`}
@@ -57,6 +57,13 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
           height={150}
           className='drop-shadow-[-8px_4px_6px_rgba(0,0,0,.4)]'
         />
+        {product?.quantity === 0 && (
+          <div className='absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black/50'>
+            <p className='text-center text-2xl font-bold text-axGray'>
+              {t('out-of-stock')}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* product info */}
@@ -128,13 +135,14 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
           {/* add to cart button */}
           <button
             onClick={addToCardHandler}
-            className={`rounded-md px-6 py-2 font-medium text-white transition ${
+            className={`rounded-md px-6 py-2 font-medium text-white transition disabled:cursor-not-allowed ${
               i18n.dir() === 'ltr' ? 'tracking-wider' : ''
             } ${
               index % 2 === 0
                 ? 'bg-axYellow/80 hover:bg-axYellow/90'
                 : 'bg-primary/80 hover:bg-primary/90'
             }`}
+            disabled={product?.quantity === 0}
           >
             {t('add-to-cart')}
           </button>

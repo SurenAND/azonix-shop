@@ -1,20 +1,18 @@
-import { MainRoutes } from '@/src/constant/routes';
-
 export const QuickLinks = [
   {
     id: 1,
     title: 'home',
-    links: MainRoutes.HOME,
+    links: '/#',
   },
   {
     id: 2,
     title: 'about',
-    links: MainRoutes.ABOUT_US,
+    links: '/#about',
   },
   {
     id: 3,
     title: 'shop',
-    links: MainRoutes.SHOP,
+    links: '/#shop',
   },
   {
     id: 4,

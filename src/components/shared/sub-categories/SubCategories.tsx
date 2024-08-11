@@ -12,15 +12,12 @@ const SubCategories = ({
   show,
   subCategories,
 }: SubCategoriesProps) => {
-  // libraries
   const { t } = useTranslation();
-
   return (
     <>
       <div className={show ? 'block' : 'hidden'}>
         <h2 className='my-5 ms-14 text-xl'>{t('product-sub-category')}</h2>
         <div className='ms-14 flex gap-5'>
-          {/* all button */}
           <button
             onClick={handleClick}
             value=''
@@ -28,7 +25,6 @@ const SubCategories = ({
           >
             {t('all')}
           </button>
-          {/* sub categories */}
           {subCategories?.map((subCategory) => (
             <button
               key={subCategory._id}

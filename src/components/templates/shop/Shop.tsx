@@ -3,48 +3,43 @@ import {
   useGetSubCategories,
 } from '@/src/api/category/category.queries';
 import { useGetProducts } from '@/src/api/product/product.queries';
+import Products from '@/src/components/shared/products/Products';
 import ProductSkeleton from '@/src/components/shared/skeletons/product-skeleton/ProductSkeleton';
 import ShopSidebarSkeleton from '@/src/components/shared/skeletons/shop-sidebar/ShopSidebarSkeleton';
 import SubCategorySkeleton from '@/src/components/shared/skeletons/sub-category-skeleton/SubCategorySkeleton';
 import SubCategories from '@/src/components/shared/sub-categories/SubCategories';
 import Nav from '@/src/components/templates/shop/nav/Nav';
 import Sidebar from '@/src/components/templates/shop/sidebar/Sidebar';
-import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { ChangeEvent, MouseEvent, useEffect, useMemo, useState } from 'react';
 
-// Dynamic import
-const Products = dynamic(
-  () => import('@/src/components/shared/products/Products'),
-  { loading: () => <ProductSkeleton /> },
-);
-
 export default function ShopTemplate() {
-  // libraries
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  // states
-  const [open, setOpen] = useState<boolean>(true);
+  // sidebar open state
+  const [open, setOpen] = useState(true);
 
   // search params
+  const searchParams = useSearchParams();
   const page = searchParams.get('p') || '1';
   const category = searchParams.get('c') || '';
   const subcategory = searchParams.get('sc') || '';
   const minPrice = searchParams.get('min') || '';
   const maxPrice = searchParams.get('max') || '';
   const sort = searchParams.get('s') || '';
+
+  // router
+  const router = useRouter();
   const params = new URLSearchParams(searchParams);
 
-  // queries
+  // get categories
   const { data: categories, isFetching: categoryFetching } = useGetCategories();
+
+  // get sub categories
   const { data: subCategories, isFetching: subCategoryFetching } =
     useGetSubCategories({
       category,
     });
 
-  // get products
   const newParams = useMemo(
     () => ({
       page: +page,
@@ -57,26 +52,26 @@ export default function ShopTemplate() {
     }),
     [page, category, subcategory, minPrice, maxPrice, sort],
   );
+
   const {
     data: products,
     isFetching: productFetching,
     refetch,
   } = useGetProducts(newParams);
 
-  // refetch products
   useEffect(() => {
     refetch();
-  }, [newParams]);
+  }, [newParams, refetch]);
 
   // ----------- Input Filter -----------
-  const [query, setQuery] = useState<string>('');
+  const [query, setQuery] = useState('');
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setQuery(value);
   };
 
-  // ----------- filter by category -----------
+  // ----------- Radio Filtering -----------
   const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     params.set('c', value);
@@ -85,7 +80,6 @@ export default function ShopTemplate() {
     router.push({ query: params.toString() });
   };
 
-  // ----------- filter by price -----------
   const handlePriceChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.split('-');
     params.set('min', value[0]);
@@ -94,7 +88,6 @@ export default function ShopTemplate() {
     router.push({ query: params.toString() });
   };
 
-  // ----------- sort by price -----------
   const handlePriceSortingChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     params.set('s', value);
@@ -102,7 +95,7 @@ export default function ShopTemplate() {
     router.push({ query: params.toString() });
   };
 
-  // ------------ filter by subcategory -----------
+  // ------------ Button Filtering -----------
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
     const value = target.value;

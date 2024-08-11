@@ -8,13 +8,9 @@ type paginationPropsType = {
 };
 
 const Pagination = ({ page, totalPages, OnSetPage }: paginationPropsType) => {
-  // libraries
   const { i18n } = useTranslation();
-
-  // states
   const [pages, setPages] = useState<number[]>([]);
 
-  // functions
   const changePaginationNums = (page: number) => {
     const newPages = [];
     const startIdx = Math.max(1, page - 1);
@@ -27,7 +23,6 @@ const Pagination = ({ page, totalPages, OnSetPage }: paginationPropsType) => {
     setPages(newPages);
   };
 
-  // change pagination numbers
   useEffect(() => {
     changePaginationNums(page);
   }, [page, totalPages]);

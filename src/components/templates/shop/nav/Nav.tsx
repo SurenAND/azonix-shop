@@ -6,9 +6,7 @@ type NavPropsType = {
 };
 
 const Nav = ({ handleInputChange, query }: NavPropsType) => {
-  // libraries
   const { t } = useTranslation();
-
   return (
     <div className='z-50 ms-8 flex items-center justify-between gap-5 border-b-2 border-gray-300 p-5 dark:border-gray-400'>
       <div className='w-full'>

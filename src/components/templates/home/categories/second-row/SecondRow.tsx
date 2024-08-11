@@ -8,10 +8,8 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 const SecondRow = () => {
-  // libraries
   const { t, i18n } = useTranslation();
   const { push: pushRouter } = useRouter();
-
   return (
     <div className='py-8'>
       <div className='container'>

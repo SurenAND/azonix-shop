@@ -1,3 +1,4 @@
+import { useGetUserById, useUpdateUser } from '@/src/api/auth/auth.queries';
 import { useAddNewOrder } from '@/src/api/orders/orders.queries';
 import {
   AddOrderResponseType,
@@ -9,14 +10,13 @@ import DeliveryInfoSkeleton from '@/src/components/shared/skeletons/delivery-inf
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
-import { useUserStore } from '@/src/store/user/user.store';
-import { UserStoreType } from '@/src/store/user/user.type';
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
-// Dynamic load components
+// Lazy load components
 const Checkout = dynamic(
   () => import('@/src/components/templates/cart/checkout/Checkout'),
   { loading: () => <CheckoutSkeleton /> },
@@ -27,8 +27,20 @@ const DeliveryInfo = dynamic(
 );
 
 const CartTemplate = () => {
-  // libraries
-  const { i18n } = useTranslation();
+  const [paymentMethodSelected, setPaymentMethodSelected] = useState<
+    number | null
+  >(null);
+  const [paymentName, setPaymentName] = useState('');
+
+  const {
+    shoppingCartInfo,
+    clearUserCart,
+    deliveryDate,
+    resetUserDeliveryDate,
+  } = useCheckoutStore();
+  const { t, i18n } = useTranslation();
+  const { state } = useUserContext();
+
   const {
     register,
     handleSubmit,
@@ -36,44 +48,28 @@ const CartTemplate = () => {
     formState: { errors },
   } = useForm();
 
-  // states
-  const [paymentMethodSelected, setPaymentMethodSelected] = useState<
-    number | null
-  >(null);
-  const [paymentName, setPaymentName] = useState<string>('');
-
-  // contexts & stores
-  const { state } = useUserContext();
-  const {
-    shoppingCartInfo,
-    clearUserCart,
-    deliveryDate,
-    resetUserDeliveryDate,
-  } = useCheckoutStore();
-  const { userData, setUserData } = useUserStore();
-
-  // mutations
+  const { data: oldUser } = useGetUserById(state?.userId);
+  const { mutate: updateUser } = useUpdateUser();
   const { mutate: addNewOrder } = useAddNewOrder();
   const { mutate: updateProduct } = useUpdateProduct();
 
-  // preFill form
-  useEffect(() => {
-    if (userData) {
-      reset({
-        firstname: userData.firstname || '',
-        lastname: userData.lastname || '',
-        username: userData.username || '',
-        phoneNumber: userData.phoneNumber || '',
-        address: userData.address || '',
-      });
-    }
-  }, [reset, userData]);
-
-  // function
   const handleForm = (data: FieldValues) => {
     // update user
-    if (userData) {
-      setUserData(data as UserStoreType);
+    if (oldUser) {
+      updateUser(
+        {
+          newUser: oldUser?.data.user,
+          data: data,
+        },
+        {
+          onSuccess: (data) => {
+            if (data.status === 'success') {
+              reset();
+              toast.success(t('changes-saved'));
+            }
+          },
+        },
+      );
     }
 
     if (paymentName === 'online' && i18n.language === 'en') {
@@ -137,6 +133,8 @@ const CartTemplate = () => {
             setPaymentMethodSelected={setPaymentMethodSelected}
             setPaymentName={setPaymentName}
             paymentMethodSelected={paymentMethodSelected}
+            oldUser={oldUser}
+            reset={reset}
           />
 
           {/* order's summary */}

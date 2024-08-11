@@ -6,30 +6,13 @@ import Timer from '@/src/components/shared/timer/Timer';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { FaArrowRotateRight, FaRegClock, FaRegMessage } from 'react-icons/fa6';
-import Image from 'next/image';
-
-type FormInputs = {
-  cardNumber: string;
-  cvv2: string;
-  expirationMonth: string;
-  expirationYear: string;
-  securityCode: string;
-  secondPassword: string;
-  email: string;
-};
 
 const PaymentFa = () => {
-  // libraries
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormInputs>();
-
-  // contexts & stores
+  const { mutate: addNewOrder } = useAddNewOrder();
+  const { mutate: updateProduct } = useUpdateProduct();
   const { state } = useUserContext();
+
   const {
     shoppingCartInfo,
     clearUserCart,
@@ -37,12 +20,7 @@ const PaymentFa = () => {
     resetUserDeliveryDate,
   } = useCheckoutStore();
 
-  // mutations
-  const { mutate: addNewOrder } = useAddNewOrder();
-  const { mutate: updateProduct } = useUpdateProduct();
-
-  // functions
-  const onSubmit: SubmitHandler<FormInputs> = (data) => {
+  const handlePayment = () => {
     // add new order
     addNewOrder(
       {
@@ -91,11 +69,9 @@ const PaymentFa = () => {
   return (
     <div dir='rtl'>
       <header className='flex gap-4 border-t-4 border-pink-400 sm:gap-8'>
-        <Image
+        <img
           src={ShaparakLogo.src}
           alt='درگاه اینترنتی سپهر'
-          width={80}
-          height={80}
           className='max-w-[4rem] p-1 sm:max-w-[5rem] sm:p-2'
         />
         <h1 className='inline-block rounded-b-xl bg-pink-400 p-2 text-white sm:p-4'>
@@ -115,8 +91,8 @@ const PaymentFa = () => {
             </div>
           </div>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
-          {/* card number */}
+        {/* payment form */}
+        <form className='flex flex-col gap-4'>
           <div className='grid grid-cols-3 gap-2'>
             <div className='col-span-1 flex flex-col gap-1'>
               <p className='font-bold text-blue-900'>شماره کارت :</p>
@@ -124,18 +100,9 @@ const PaymentFa = () => {
                 شماره ۱۶ رقمی درج شده بر روی کارت
               </p>
             </div>
-            <input
-              {...register('cardNumber', {
-                required: true,
-                pattern: /^\d{16}$/,
-              })}
-              className='col-span-2 max-w-[20rem] rounded border p-1'
-            />
-            {errors.cardNumber && (
-              <span className='text-red-500'>شماره کارت معتبر نیست</span>
-            )}
+            <input className='col-span-2 max-w-[20rem] rounded border p-1 ' />
           </div>
-          {/* card cvv */}
+
           <div className='grid grid-cols-3 gap-2'>
             <div className='col-span-1 flex flex-col gap-1'>
               <p className='font-bold text-blue-900'>
@@ -145,15 +112,8 @@ const PaymentFa = () => {
                 شماره ۳ یا ۴ رقمی درج شده بر روی کارت
               </p>
             </div>
-            <input
-              {...register('cvv2', { required: true, pattern: /^\d{3,4}$/ })}
-              className='col-span-2 max-w-[20rem] rounded border p-1'
-            />
-            {errors.cvv2 && (
-              <span className='text-red-500'>شماره شناسایی دوم معتبر نیست</span>
-            )}
+            <input className='col-span-2 max-w-[20rem] rounded border p-1 ' />
           </div>
-          {/* card date */}
           <div className='grid grid-cols-3 gap-2'>
             <div className='col-span-1 flex flex-col gap-1'>
               <p className='font-bold text-blue-900'>تاریخ انقضای کارت :</p>
@@ -162,30 +122,11 @@ const PaymentFa = () => {
               </p>
             </div>
             <div className='col-span-2 flex items-center gap-2 '>
-              <input
-                {...register('expirationMonth', {
-                  required: true,
-                  pattern: /^(0[1-9]|1[0-2])$/,
-                })}
-                className='max-w-[3rem] rounded border p-1'
-              />
+              <input className='max-w-[3rem] rounded border p-1' />
               /
-              <input
-                {...register('expirationYear', {
-                  required: true,
-                  pattern: /^(20|19)\d{2}$/,
-                })}
-                className='max-w-[3rem] rounded border p-1'
-              />
+              <input className='max-w-[3rem] rounded border p-1' />
             </div>
-            {errors.expirationMonth && (
-              <span className='text-red-500'>ماه معتبر نیست</span>
-            )}
-            {errors.expirationYear && (
-              <span className='text-red-500'>سال معتبر نیست</span>
-            )}
           </div>
-          {/* card security code */}
           <div className='grid grid-cols-3 gap-2'>
             <div className='col-span-1 flex flex-col gap-1'>
               <p className='font-bold text-blue-900'> کد امنیتی :</p>
@@ -194,24 +135,13 @@ const PaymentFa = () => {
               </p>
             </div>
             <div className='col-span-2 flex items-center gap-2 '>
-              <input
-                {...register('securityCode', {
-                  required: true,
-                  pattern: /^\d{5}$/,
-                })}
-                type='text'
-                className='max-w-[5rem] rounded border p-1'
-              />
+              <input type='text' className='max-w-[5rem] rounded border p-1' />
               <p className='max-w-[4rem] rounded bg-gray-100 px-4 py-1'>
                 88402
               </p>
               <FaArrowRotateRight className='w-4' />
             </div>
-            {errors.securityCode && (
-              <span className='text-red-500'>کد امنیتی معتبر نیست</span>
-            )}
           </div>
-          {/* card password */}
           <div className='grid grid-cols-3 gap-2'>
             <div className='col-span-1 flex flex-col gap-1'>
               <p className='font-bold text-blue-900'>رمز دوم (رمز اینترنتی):</p>
@@ -220,23 +150,13 @@ const PaymentFa = () => {
               </p>
             </div>
             <div className='col-span-2 flex items-center gap-2'>
-              <input
-                {...register('secondPassword', {
-                  required: true,
-                  pattern: /^\d{5}$/,
-                })}
-                className='max-w-[5rem] rounded border p-1'
-              />
+              <input className='max-w-[5rem] rounded border p-1' />
               <div className='flex max-w-[8rem] gap-2 rounded border p-1'>
                 <FaRegMessage className='w-4 text-blue-800' />
                 <p className='text-blue-800'>درخواست رمز پویا</p>
               </div>
             </div>
-            {errors.secondPassword && (
-              <span className='text-red-500'>رمز دوم معتبر نیست</span>
-            )}
           </div>
-          {/* card email */}
           <div className='grid grid-cols-3 gap-2'>
             <div className='col-span-1 flex flex-col gap-1'>
               <p className='font-bold text-blue-900'>ایمیل (اختیاری) :</p>
@@ -244,20 +164,14 @@ const PaymentFa = () => {
                 رسید پرداخت به این آدرس ایمیل خواهد شد .
               </p>
             </div>
-            <input
-              {...register('email', { pattern: /^\S+@\S+$/i })}
-              className='col-span-2 max-w-[20rem] rounded border p-1'
-            />
-            {errors.email && (
-              <span className='text-red-500'>ایمیل معتبر نیست</span>
-            )}
+            <input className='col-span-2 max-w-[20rem] rounded border p-1 ' />
           </div>
 
-          {/* buttons */}
           <div className='mb-8 grid max-w-[33rem] grid-cols-3 gap-2'>
             <button
-              type='submit'
+              type='button'
               className='col-span-2 w-full rounded-lg bg-axBlue p-3 font-semibold text-white shadow-lg hover:bg-axBlue/80 focus:outline-none'
+              onClick={handlePayment}
             >
               پرداخت
             </button>

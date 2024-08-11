@@ -18,14 +18,10 @@ function EditableTd({
   editedProducts,
   setEditedProducts,
 }: EditableTdProps) {
-  // libraries
   const { t } = useTranslation();
-
-  // states
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  // functions
   const getValue = () => {
     return (editedProducts[product?._id]?.[field as keyof ProductType] ??
       product[field as keyof ProductType]) as number;
@@ -36,6 +32,22 @@ function EditableTd({
       `is${field.charAt(0).toUpperCase() + field.slice(1)}Edit` as keyof Partial<ProductType>;
     return editedProducts[product?._id]?.[editKey] ?? false;
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setIsEdit(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleChange = (value: number) => {
     setEditedProducts((prev) => ({
@@ -71,24 +83,6 @@ function EditableTd({
     }
   };
 
-  // detect click outside the input
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
-      ) {
-        setIsEdit(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  // render input
   const renderInput = () => (
     <input
       className='w-full text-center font-bold text-black'
@@ -100,7 +94,6 @@ function EditableTd({
     />
   );
 
-  // render span
   const renderSpan = () => (
     <span
       className={`block p-1 ${isEdited() ? 'bg-axLightPurple/60 text-white' : ''}`}

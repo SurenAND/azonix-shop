@@ -2,18 +2,17 @@ import { useGetOrders } from '@/src/api/orders/orders.queries';
 import { EmptyList } from '@/src/components/shared/empty-list/EmptyList';
 import Loading from '@/src/components/shared/loading/Loading';
 import Pagination from '@/src/components/shared/pagination/Pagination';
-import dynamic from 'next/dynamic';
-import { Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdRadioButtonChecked, MdRadioButtonUnchecked } from 'react-icons/md';
 
-const OrdersTable = dynamic(
+const OrdersTable = lazy(
   () =>
     import(
       '@/src/components/templates/dashboard/orders/orders-table/OrdersTable'
     ),
 );
-const OrderInfoPopup = dynamic(
+const OrderInfoPopup = lazy(
   () =>
     import(
       '@/src/components/templates/dashboard/orders/modals/order-info/OrderInfo'
@@ -21,17 +20,14 @@ const OrderInfoPopup = dynamic(
 );
 
 const Orders = () => {
-  // libraries
   const { t } = useTranslation();
+  const [isDelivered, setIsDelivered] = useState(false);
+  const [sortDate, setSortDate] = useState('desc');
+  const [page, setPage] = useState(1);
 
-  // states
-  const [isDelivered, setIsDelivered] = useState<boolean>(false);
-  const [sortDate, setSortDate] = useState<string>('desc');
-  const [page, setPage] = useState<number>(1);
-  const [openOrderInfo, setOpenOrderInfo] = useState<boolean>(false);
+  const [openOrderInfo, setOpenOrderInfo] = useState(false);
   const [infoId, setInfoId] = useState<string>('');
 
-  // queries
   const { data: orders, refetch } = useGetOrders({
     page,
     sort: sortDate,
@@ -42,7 +38,6 @@ const Orders = () => {
     refetch();
   }, [page, sortDate, isDelivered]);
 
-  // functions
   const filteredList = (text: string) => {
     setSortDate(text);
     setPage(1);
@@ -56,10 +51,7 @@ const Orders = () => {
   return (
     <main className='min-h-screen w-full p-3 md:w-[780px]'>
       <header className='flex items-center justify-between'>
-        {/* ----------- Title ----------- */}
         <h1 className='text-lg font-bold'>{t('orders-management')}</h1>
-
-        {/* ----------- Filter buttons ----------- */}
         <div className='flex gap-2'>
           <div
             className='flex items-center gap-1 border-l border-[#afafaf50] px-2'
@@ -87,7 +79,6 @@ const Orders = () => {
       </header>
 
       <div className='mx-auto flex min-h-[calc(100vh-100px)] w-full items-center px-3 py-8 sm:justify-center md:w-[760px]'>
-        {/* ----------- Table ----------- */}
         <Suspense fallback={<Loading />}>
           {orders &&
           orders.status === 'success' &&
@@ -99,12 +90,11 @@ const Orders = () => {
               onFilteredList={filteredList}
               setInfoId={setInfoId}
               setOpenInfo={setOpenOrderInfo}
+              isDelivered={isDelivered}
             />
           )}
         </Suspense>
       </div>
-
-      {/* ----------- Pagination ----------- */}
       {orders && (
         <Pagination
           page={page}
@@ -112,8 +102,6 @@ const Orders = () => {
           OnSetPage={(pageNo) => setPage(pageNo)}
         />
       )}
-
-      {/* ----------- Order info popup ----------- */}
       <Suspense fallback={<Loading />}>
         <OrderInfoPopup
           openInfo={openOrderInfo}

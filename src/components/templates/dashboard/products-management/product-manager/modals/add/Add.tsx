@@ -19,25 +19,31 @@ type AddModalProps = {
 };
 
 const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
-  // libraries
   const { t } = useTranslation();
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-
-  // states
   const [images, setImages] = useState<File[]>([]);
-  const [description, setDescription] = useState<string>('');
-  const [productCategory, setProductCategory] = useState<string>('');
-
-  // queries
+  const [description, setDescription] = useState('');
+  const { mutate: addNewProduct } = useAddProduct();
   const { data: categories } = useGetCategories();
+  const [productCategory, setProductCategory] = useState('');
   const { data: subCategories, refetch } = useGetSubCategories({
     category: productCategory,
   });
+
+  const filteredList = (id: string) => {
+    setProductCategory(id);
+  };
+
+  const deleteImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   useEffect(() => {
     if (categories) {
       setProductCategory(categories.data.categories[0]._id);
@@ -47,18 +53,6 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
   useEffect(() => {
     refetch();
   }, [productCategory]);
-
-  // mutations
-  const { mutate: addNewProduct } = useAddProduct();
-
-  // functions
-  const filteredList = (id: string) => {
-    setProductCategory(id);
-  };
-
-  const deleteImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
-  };
 
   // handle mage change on mobile and tablets
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -248,9 +242,7 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               >
                 {categories?.data.categories.map((category) => (
-                  <option key={category._id} value={category._id}>
-                    {category.name}
-                  </option>
+                  <option value={category._id}>{category.name}</option>
                 ))}
               </select>
               {/* category error message */}
@@ -273,9 +265,7 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
               >
                 {productCategory &&
                   subCategories?.data.subcategories.map((subCategory) => (
-                    <option key={subCategory._id} value={subCategory._id}>
-                      {subCategory.name}
-                    </option>
+                    <option value={subCategory._id}>{subCategory.name}</option>
                   ))}
               </select>
               {/* subcategory error message */}

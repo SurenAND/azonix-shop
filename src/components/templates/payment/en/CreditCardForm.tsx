@@ -6,39 +6,27 @@ import Chip from '@/src/assets/images/chip.png';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
-import Image from 'next/image';
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-
-type FormInputs = {
-  cardNumber: string;
-  cardHolder: string;
-  cardMonth: string;
-  cardYear: string;
-  cardCvv: string;
-};
 
 const CreditCardForm = () => {
-  // constants
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardHolder, setCardHolder] = useState('');
+  const [cardMonth, setCardMonth] = useState('');
+  const [cardYear, setCardYear] = useState('');
+  const [cardCvv, setCardCvv] = useState('');
+  const [isCardFlipped, setIsCardFlipped] = useState(false);
+
+  // error state
+  const [cardNumberError, setCardNumberError] = useState('');
+  const [cardHolderError, setCardHolderError] = useState('');
+  const [cardMonthError, setCardMonthError] = useState('');
+  const [cardYearError, setCardYearError] = useState('');
+  const [cardCvvError, setCardCvvError] = useState('');
+
   const minCardYear = new Date().getFullYear();
 
-  // libraries
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<FormInputs>();
-  const watchedFields = watch();
-
-  // states
-  const [isCardFlipped, setIsCardFlipped] = useState<boolean>(false);
-
-  // mutations
   const { mutate: addNewOrder } = useAddNewOrder();
   const { mutate: updateProduct } = useUpdateProduct();
-
-  // contexts & stores
   const { state } = useUserContext();
   const {
     shoppingCartInfo,
@@ -47,7 +35,6 @@ const CreditCardForm = () => {
     resetUserDeliveryDate,
   } = useCheckoutStore();
 
-  // functions
   const flipCard = (status: boolean) => {
     setIsCardFlipped(status);
   };
@@ -69,42 +56,73 @@ const CreditCardForm = () => {
     return maskedNumber;
   };
 
-  const onSubmit: SubmitHandler<FormInputs> = (data) => {
-    addNewOrder(
-      {
-        user: state?.userId,
-        products: shoppingCartInfo
-          .filter((item) => item.userId === state.userId)
-          .map((item) => ({
-            product: item._id,
-            count: item.quantity,
-          })),
-        deliveryStatus: false,
-        deliveryDate:
-          deliveryDate
-            .find((item) => item.userId === state.userId)
-            ?.date.split('T')[0] || '',
-      },
-      {
-        onSuccess: (data) => {
-          if (data.status === 'success') {
-            data?.data.order.products.forEach(
-              (item: ProductInOrderResponseType) => {
-                updateProduct({
-                  productId: item.product._id,
-                  data: {
-                    quantity: item.product.quantity - item.count,
-                  },
-                });
-              },
-            );
-            clearUserCart(state?.userId);
-            resetUserDeliveryDate(state?.userId);
-            location.href = MainRoutes.PAYMENT_RESULT + '?result=successful';
-          }
+  const validation = () => {
+    if (cardNumber.length !== 16 || !/^\d+$/.test(cardNumber)) {
+      setCardNumberError('Card number is invalid!');
+      return false;
+    } else if (cardHolder === '' || !/^[a-zA-Z ]+$/.test(cardHolder)) {
+      setCardHolderError('Card holder is required!');
+      return false;
+    } else if (cardMonth === '') {
+      setCardMonthError('Expiration date is required!');
+      return false;
+    } else if (cardYear === '') {
+      setCardYearError('Expiration date is required!');
+      return false;
+    } else if (cardCvv.length !== 4 || !/^\d+$/.test(cardCvv)) {
+      setCardCvvError('CVV is invalid!');
+      return false;
+    }
+    setCardYearError('');
+    setCardMonthError('');
+    setCardHolderError('');
+    setCardNumberError('');
+    setCardCvvError('');
+    return true;
+  };
+
+  const handlePayment = () => {
+    if (validation()) {
+      // add new order
+      addNewOrder(
+        {
+          user: state?.userId,
+          products: shoppingCartInfo
+            .filter((item) => item.userId === state.userId)
+            .map((item) => ({
+              product: item._id,
+              count: item.quantity,
+            })),
+          deliveryStatus: false,
+          deliveryDate:
+            deliveryDate
+              .find((item) => item.userId === state.userId)
+              ?.date.split('T')[0] || '',
         },
-      },
-    );
+        {
+          onSuccess: (data) => {
+            if (data.status === 'success') {
+              // remove orders from product
+              data?.data.order.products.forEach(
+                (item: ProductInOrderResponseType) => {
+                  updateProduct({
+                    productId: item.product._id,
+                    data: {
+                      quantity: item.product.quantity - item.count,
+                    },
+                  });
+                },
+              );
+              // clear user's cart
+              clearUserCart(state?.userId);
+              // reset user delivery date
+              resetUserDeliveryDate(state?.userId);
+              location.href = MainRoutes.PAYMENT_RESULT + '?result=successful';
+            }
+          },
+        },
+      );
+    }
   };
 
   return (
@@ -118,32 +136,27 @@ const CreditCardForm = () => {
           >
             {/* front */}
             <div className='backface-hidden absolute flex h-full w-full flex-col justify-between rounded-xl bg-white/10 p-5 text-white'>
-              {/* card info */}
               <div className='flex justify-between p-4'>
-                <Image src={Chip} width={48} height={48} alt='Card Chip' />
+                <img src={Chip.src} className='w-12' alt='Card Chip' />
                 <div className='w-12 text-right text-lg font-bold'>VISA</div>
               </div>
-              {/* card number */}
               <label
                 htmlFor='cardNumber'
                 className='mt-5 block cursor-pointer px-4 py-2 text-center font-mono text-2xl'
               >
-                {generateCardNumberMask(watchedFields.cardNumber || '')}
+                {generateCardNumberMask(cardNumber)}
               </label>
-              {/* card holder */}
               <div className='flex justify-between'>
                 <label htmlFor='cardHolder' className='block'>
                   <div className='text-xs font-bold'>Card Holder</div>
                   <div className='mt-1 cursor-pointer text-sm'>
-                    {watchedFields.cardHolder || 'FULL NAME'}
+                    {cardHolder || 'FULL NAME'}
                   </div>
                 </label>
-                {/* card date */}
                 <label htmlFor='cardDate' className='block'>
                   <div className='text-xs font-bold'>Expires</div>
                   <div className='mt-1 text-sm'>
-                    {watchedFields.cardMonth || 'MM'} /{' '}
-                    {watchedFields.cardYear || 'YY'}
+                    {cardMonth || 'MM'} / {cardYear || 'YY'}
                   </div>
                 </label>
               </div>
@@ -151,29 +164,21 @@ const CreditCardForm = () => {
             {/* back */}
             <div className='backface-hidden rotate-y-180 absolute flex h-full w-full flex-col justify-between rounded-xl bg-black/10 p-5 text-white'>
               <div className='mb-2 h-10 bg-black/50'></div>
-              {/* card cvv */}
               <div className='flex items-center justify-between'>
                 <label className='text-sm font-bold'>CVV</label>
                 <div className='flex h-8 w-20 items-center justify-center rounded-sm bg-white/20 text-xl'>
-                  {Array.from({
-                    length: watchedFields.cardCvv?.length || 0,
-                  }).map((_, i) => (
+                  {Array.from({ length: cardCvv.length }).map((_, i) => (
                     <span key={i}>*</span>
                   ))}
                 </div>
               </div>
-              {/* card type */}
               <div className='text-right text-sm'>VISA</div>
             </div>
           </div>
         </div>
 
         {/* inputs */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className='mt-12 rounded-lg bg-white p-8 pt-28 shadow-lg'
-        >
-          {/* card number */}
+        <div className='mt-12 rounded-lg bg-white p-8 pt-28 shadow-lg'>
           <div className='mb-6'>
             <label
               htmlFor='cardNumber'
@@ -185,23 +190,19 @@ const CreditCardForm = () => {
               type='text'
               id='cardNumber'
               className='w-full rounded-lg border p-3 focus:border-blue-300 focus:outline-none focus:ring'
-              {...register('cardNumber', {
-                required: true,
-                pattern: {
-                  value: /^\d{16}$/,
-                  message: 'Card number must be 16 digits',
-                },
-              })}
+              value={cardNumber}
+              onChange={(e) => setCardNumber(e.target.value)}
               maxLength={16}
               autoComplete='off'
             />
-            {errors.cardNumber && (
-              <p className='text-xs text-rose-400'>
-                {errors.cardNumber.message}
-              </p>
-            )}
+            <p
+              className={`text-xs text-rose-400 ${
+                cardNumberError ? 'visible' : 'invisible'
+              }`}
+            >
+              {cardNumberError}
+            </p>
           </div>
-          {/* card holder */}
           <div className='mb-6'>
             <label
               htmlFor='cardHolder'
@@ -213,19 +214,19 @@ const CreditCardForm = () => {
               type='text'
               id='cardHolder'
               className='w-full rounded-lg border p-3 focus:border-blue-300 focus:outline-none focus:ring'
-              {...register('cardHolder', {
-                required: true,
-              })}
+              value={cardHolder}
+              onChange={(e) => setCardHolder(e.target.value)}
               maxLength={30}
               autoComplete='off'
             />
-            {errors.cardHolder && (
-              <p className='text-xs text-rose-400'>
-                {errors.cardHolder.message}
-              </p>
-            )}
+            <p
+              className={`text-xs text-rose-400 ${
+                cardHolderError ? 'visible' : 'invisible'
+              }`}
+            >
+              {cardHolderError}
+            </p>
           </div>
-          {/* card date */}
           <div className='mb-6 flex'>
             <div className='mr-2 flex-1'>
               <label
@@ -237,9 +238,8 @@ const CreditCardForm = () => {
               <select
                 id='cardMonth'
                 className='w-full rounded-lg border p-3 focus:border-blue-300 focus:outline-none focus:ring'
-                {...register('cardMonth', {
-                  required: true,
-                })}
+                value={cardMonth}
+                onChange={(e) => setCardMonth(e.target.value)}
               >
                 <option value='' disabled selected>
                   Month
@@ -250,11 +250,13 @@ const CreditCardForm = () => {
                   </option>
                 ))}
               </select>
-              {errors.cardMonth && (
-                <p className='text-xs text-rose-400'>
-                  {errors.cardMonth.message}
-                </p>
-              )}
+              <p
+                className={`text-xs text-rose-400 ${
+                  cardMonthError ? 'visible' : 'invisible'
+                }`}
+              >
+                {cardMonthError}
+              </p>
             </div>
             <div className='ml-2 flex-1'>
               <label
@@ -266,9 +268,8 @@ const CreditCardForm = () => {
               <select
                 id='cardYear'
                 className='w-full rounded-lg border p-3 focus:border-blue-300 focus:outline-none focus:ring'
-                {...register('cardYear', {
-                  required: true,
-                })}
+                value={cardYear}
+                onChange={(e) => setCardYear(e.target.value)}
               >
                 <option value='' disabled selected>
                   Year
@@ -279,14 +280,15 @@ const CreditCardForm = () => {
                   </option>
                 ))}
               </select>
-              {errors.cardYear && (
-                <p className='text-xs text-rose-400'>
-                  {errors.cardYear.message}
-                </p>
-              )}
+              <p
+                className={`text-xs text-rose-400 ${
+                  cardYearError ? 'visible' : 'invisible'
+                }`}
+              >
+                {cardYearError}
+              </p>
             </div>
           </div>
-          {/* card cvv */}
           <div className='mb-6'>
             <label
               htmlFor='cardCvv'
@@ -298,23 +300,23 @@ const CreditCardForm = () => {
               type='text'
               id='cardCvv'
               className='w-full rounded-lg border p-3 focus:border-blue-300 focus:outline-none focus:ring'
-              {...register('cardCvv', {
-                required: true,
-                pattern: { value: /^\d{4}$/, message: 'CVV must be 4 digits' },
-              })}
+              value={cardCvv}
+              onChange={(e) => setCardCvv(e.target.value)}
               onFocus={() => flipCard(true)}
               onBlur={() => flipCard(false)}
               maxLength={4}
               autoComplete='off'
             />
-            {errors.cardCvv && (
-              <p className='text-xs text-rose-400'>{errors.cardCvv.message}</p>
-            )}
+            <p
+              className={`text-xs text-rose-400 ${
+                cardCvvError ? 'visible' : 'invisible'
+              }`}
+            >
+              {cardCvvError}
+            </p>
           </div>
-          {/* buttons */}
           <div className='flex justify-between gap-5'>
             <button
-              type='button'
               className='w-full rounded-lg bg-primary/90 p-3 font-semibold text-white shadow-lg hover:bg-primary focus:outline-none'
               onClick={() =>
                 (location.href = MainRoutes.PAYMENT_RESULT + '?result=failed')
@@ -323,13 +325,13 @@ const CreditCardForm = () => {
               Cancel
             </button>
             <button
-              type='submit'
               className='w-full rounded-lg bg-axBlue p-3 font-semibold text-white shadow-lg hover:bg-axBlue/80 focus:outline-none'
+              onClick={handlePayment}
             >
               Confirm
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

@@ -10,31 +10,23 @@ import { FaFacebookF, FaGithub } from 'react-icons/fa';
 import { FaGooglePlusG, FaLinkedinIn } from 'react-icons/fa6';
 import { TbEyeClosed } from 'react-icons/tb';
 
-type LoginFormValues = {
+interface LoginFormValues {
   username: string;
   password: string;
-};
+}
 
-type LogInTemplateProps = {
-  active: boolean;
-};
+export default function LogInTemplate({ active }: { active: boolean }) {
+  const [showPassword, setShowPassword] = useState(false);
 
-export default function LogInTemplate({ active }: LogInTemplateProps) {
-  // libraries
-  const { t, i18n } = useTranslation();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const { t, i18n } = useTranslation();
 
-  // states
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-
-  // mutations
   const { mutate: loginMutate } = useLogin();
 
-  // functions
   const handleLogin = (data: FieldValues) => {
     const loginData = data as LoginFormValues;
     loginMutate(loginData);

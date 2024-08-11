@@ -23,9 +23,7 @@ const Sidebar = ({
   toggleSidebar,
   open,
 }: SidebarProps) => {
-  // libraries
   const { t, i18n } = useTranslation();
-
   return (
     <>
       <section

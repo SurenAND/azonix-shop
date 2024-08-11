@@ -1,4 +1,3 @@
-import { MainRoutes } from '@/src/constant/routes';
 import { BASE_URL } from '@/src/constant/url';
 import axios from 'axios';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
@@ -47,13 +46,13 @@ req.interceptors.response.use(
       } catch (refreshError) {
         deleteCookie('accessToken');
         deleteCookie('refreshToken');
-        location.href = MainRoutes.REGISTER;
+        location.href = '/register';
         return Promise.reject(refreshError);
       }
     } else if (config.url === '/auth/token') {
       deleteCookie('accessToken');
       deleteCookie('refreshToken');
-      location.href = MainRoutes.REGISTER;
+      location.href = '/register';
       return Promise.reject(error);
     } else {
       return Promise.reject(error);

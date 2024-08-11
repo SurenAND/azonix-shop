@@ -2,7 +2,6 @@ import {
   ImportantLinks,
   QuickLinks,
 } from '@/src/components/layout/main-layout/footer/data';
-import { MainRoutes } from '@/src/constant/routes';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { FaMobileAlt } from 'react-icons/fa';
@@ -14,9 +13,7 @@ import {
 } from 'react-icons/fa6';
 
 export default function Footer() {
-  // libraries
   const { t, i18n } = useTranslation();
-
   return (
     <div className='dark:bg-gray-950'>
       <div className='container'>
@@ -24,7 +21,7 @@ export default function Footer() {
           {/* company details */}
           <div className='px-4 py-9'>
             <Link
-              href={MainRoutes.HOME}
+              href='#'
               className={`text-2xl font-bold uppercase text-primary sm:text-3xl ${
                 i18n.dir() === 'ltr' ? 'tracking-widest' : ''
               }`}

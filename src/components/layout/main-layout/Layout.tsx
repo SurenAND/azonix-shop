@@ -11,16 +11,12 @@ const Footer = dynamic(
 );
 
 export default function Layout({ children }: PropsWithChildren) {
-  // libraries
+  const [dir, setDir] = useState('ltr');
   const { i18n } = useTranslation();
 
-  // states
-  const [dir, setDir] = useState<string>('ltr');
-
-  // change direction of the layout based on the language
   useEffect(() => {
     setDir(i18n.dir());
-  }, [i18n, i18n.resolvedLanguage]);
+  }, [i18n.resolvedLanguage]);
 
   return (
     <div

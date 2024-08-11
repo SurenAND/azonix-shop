@@ -18,8 +18,10 @@ const EditPopUp = ({
   idToEdit,
   setIdToEdit,
 }: EditModalProps) => {
-  // libraries
   const { t } = useTranslation();
+
+  const { mutate: updateUser } = useUpdateUser();
+
   const {
     register,
     handleSubmit,
@@ -27,13 +29,8 @@ const EditPopUp = ({
     formState: { errors },
   } = useForm();
 
-  // mutations
-  const { mutate: updateUser } = useUpdateUser();
-
-  // queries
   const { data: oldUser } = useGetUserById(idToEdit);
 
-  // preFill the form
   useEffect(() => {
     if (oldUser) {
       reset({
@@ -46,7 +43,6 @@ const EditPopUp = ({
     }
   }, [oldUser, reset]);
 
-  // functions
   const handleForm = (data: FieldValues) => {
     if (oldUser) {
       updateUser(

@@ -1,35 +1,45 @@
 import { getProductByIdApi } from '@/src/api/product/product.api';
 import Layout from '@/src/components/layout/main-layout/Layout';
+import CategoryTemplate from '@/src/components/templates/category/Category';
 import ProductTemplate from '@/src/components/templates/product/Product';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 
-export default function ShopProductPage() {
-  const { product } = useRouter().query;
-  if (typeof product !== 'string') {
-    return <div>Category not found</div>;
+export default function CategorySlug() {
+  const { slug } = useRouter().query;
+
+  if (!slug) {
+    return <h1>Not Found</h1>;
   }
 
-  return <ProductTemplate productId={product} />;
+  return (
+    <>
+      {slug.length === 1 ? (
+        <CategoryTemplate category={slug[0]} />
+      ) : slug.length === 2 ? (
+        <ProductTemplate productId={slug[1]} />
+      ) : null}
+    </>
+  );
 }
 
-ShopProductPage.getLayout = function getLayout(page: ReactElement) {
+CategorySlug.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
 export async function getStaticProps({
   params,
 }: {
-  params: { product: string };
+  params: { slug: string[] };
 }) {
   const queryClient = new QueryClient();
-  const { product } = params;
+  const { slug } = params;
 
-  if (product) {
+  if (slug && slug.length === 2) {
     await queryClient.prefetchQuery({
-      queryKey: ['products', 'single', product],
-      queryFn: () => getProductByIdApi(product),
+      queryKey: ['products', 'single', slug[1]],
+      queryFn: () => getProductByIdApi(slug[1]),
     });
   }
 

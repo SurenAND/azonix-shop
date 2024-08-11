@@ -2,6 +2,7 @@ import { getAllCategoriesApi } from '@/src/api/category/category.api';
 import { getAllProductsApi } from '@/src/api/product/product.api';
 import Layout from '@/src/components/layout/main-layout/Layout';
 import ShopTemplate from '@/src/components/templates/shop/Shop';
+import { withCSR } from '@/src/lib/utils';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { ReactElement } from 'react';
 
@@ -13,7 +14,7 @@ Shop.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = withCSR(async () => {
   const queryClient = new QueryClient();
 
   await Promise.all([
@@ -32,4 +33,4 @@ export const getServerSideProps = async () => {
       dehydratedState: dehydrate(queryClient),
     },
   };
-};
+});

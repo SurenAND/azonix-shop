@@ -2,11 +2,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const DarkMode = () => {
-  // libraries
   const { i18n } = useTranslation();
-
-  // states
-  const [theme, setTheme] = useState<string>(() => {
+  const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || 'light';
     }
@@ -18,6 +15,7 @@ const DarkMode = () => {
     typeof document !== 'undefined' ? document.documentElement : null;
 
   // set theme to localStorage and html element
+
   useEffect(() => {
     if (typeof window !== 'undefined' && htmlEl) {
       localStorage.setItem('theme', theme);

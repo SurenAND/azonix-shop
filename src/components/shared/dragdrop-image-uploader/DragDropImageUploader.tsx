@@ -1,27 +1,21 @@
-import Image from 'next/image';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-
-type DragDropImageUploaderProps = {
-  images: File[];
-  setImages: Dispatch<SetStateAction<File[]>>;
-  deleteImage: (index: number) => void;
-};
 
 function DragDropImageUploader({
   images,
   setImages,
   deleteImage,
-}: DragDropImageUploaderProps) {
-  // libraries
+}: {
+  images: File[];
+  setImages: Dispatch<SetStateAction<File[]>>;
+  deleteImage: (index: number) => void;
+}) {
   const { t } = useTranslation();
 
-  // states
-  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // functions
   const selectFiles = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -77,13 +71,11 @@ function DragDropImageUploader({
 
   return (
     <div className='hidden overflow-hidden rounded-md p-3 shadow dark:bg-gray-800 lg:block'>
-      {/* title */}
       <div className='text-center'>
         <p className='font-bold text-axLightPurple dark:text-white'>
           {t('drag-drop-images')}
         </p>
       </div>
-      {/* drag drop area */}
       <div
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
@@ -117,7 +109,6 @@ function DragDropImageUploader({
           onChange={onFileSelect}
         />
       </div>
-      {/* images */}
       <div className='mt-3 flex h-auto max-h-52 w-full flex-wrap items-center justify-start overflow-y-auto'>
         {images?.map((image, index) => (
           <div className='relative mb-2 mr-1 h-20 w-20' key={index}>
@@ -127,12 +118,10 @@ function DragDropImageUploader({
             >
               &times;
             </span>
-            <Image
-              className='rounded-md object-cover'
+            <img
+              className='h-full w-full rounded-md'
               src={URL.createObjectURL(image)}
-              alt={image?.name || 'Uploaded image'}
-              fill
-              sizes='80px'
+              alt={image?.name}
             />
           </div>
         ))}

@@ -2,21 +2,21 @@ import { MainRoutes } from '@/src/constant/routes';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-type ToSignUpProps = {
+export default function ToSignUp({
+  setActive,
+  active,
+}: {
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
   active: boolean;
-};
-
-export default function ToSignUp({ setActive, active }: ToSignUpProps) {
-  // libraries
-  const { t, i18n } = useTranslation();
+}) {
   const { push: pushRouter } = useRouter();
 
-  // functions
   const handleClick = () => {
     setActive(true);
     pushRouter(`${MainRoutes.REGISTER}?view=signup`);
   };
+
+  const { t, i18n } = useTranslation();
 
   return (
     <div

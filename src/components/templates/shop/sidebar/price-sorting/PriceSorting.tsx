@@ -5,7 +5,6 @@ type PriceSortingProps = {
 };
 
 const PriceSorting = ({ handleChange }: PriceSortingProps) => {
-  // libraries
   const { t } = useTranslation();
 
   return (

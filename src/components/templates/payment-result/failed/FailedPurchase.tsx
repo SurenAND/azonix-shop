@@ -1,20 +1,14 @@
 import paymentFailure from '@/src/assets/images/result/paymentFailure.png';
 import { MainRoutes } from '@/src/constant/routes';
-import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
-
 const FailedPurchase = () => {
-  // libraries
   const { t, i18n } = useTranslation();
-
   return (
     <div className='flex min-h-[50vh] flex-col items-center justify-center gap-8 bg-axGray px-8 dark:bg-gray-700'>
-      <Image
-        src={paymentFailure}
-        alt={t('payment-failure-alt')}
-        className='mx-auto'
-        width={80}
-        height={80}
+      <img
+        src={paymentFailure.src}
+        alt='عدم موفقیت در پرداخت'
+        className='mx-auto max-w-[5rem]'
       />
       <p className='text-center text-base leading-7'>
         {t('payment-result-failed')}

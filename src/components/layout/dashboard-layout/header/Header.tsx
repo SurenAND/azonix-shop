@@ -2,7 +2,6 @@ import UsFlag from '@/src/assets/images/languages/en.png';
 import IrFlag from '@/src/assets/images/languages/fa.png';
 import Logo from '@/src/assets/images/logo.webp';
 import { MainRoutes } from '@/src/constant/routes';
-import { useUserContext } from '@/src/context/authContext';
 import { stringAvatar } from '@/src/lib/utils';
 import dynamic from 'next/dynamic';
 import Image, { StaticImageData } from 'next/image';
@@ -27,11 +26,7 @@ export default function Header({
 }: {
   toggleSidebar: Dispatch<SetStateAction<boolean>>;
 }) {
-  // libraries
   const { i18n } = useTranslation();
-
-  // contexts
-  const { state } = useUserContext();
 
   return (
     <div className='flex w-full items-center justify-between gap-10 bg-white p-6 duration-200 dark:bg-gray-900 dark:text-white md:justify-normal'>
@@ -85,7 +80,7 @@ export default function Header({
           <MdNotificationsNone className='h-6 w-6' />
         </button>
         <div className='hidden h-10 w-10 items-center justify-center rounded-full bg-axBlue text-xl font-bold text-axWhite md:flex'>
-          {stringAvatar(state?.username)}
+          {stringAvatar('Ashkan')}
         </div>
       </div>
     </div>

@@ -14,16 +14,12 @@ const UserSidebar = dynamic(
 );
 
 const ProfileLayout = ({ children }: PropsWithChildren) => {
-  // libraries
-  const { i18n } = useTranslation();
-
-  // states
-  const [dir, setDir] = useState<string>('ltr');
-
   // change direction of the layout based on the language
+  const [dir, setDir] = useState('ltr');
+  const { i18n } = useTranslation();
   useEffect(() => {
     setDir(i18n.dir());
-  }, [i18n, i18n.resolvedLanguage]);
+  }, [i18n.resolvedLanguage]);
 
   return (
     <div className='min-h-screen bg-axGray pb-5 dark:bg-gray-700' dir={dir}>

@@ -1,4 +1,4 @@
-import { AuthReducerAction } from '@/src/types/enums';
+import { AuthReducerAction } from "@/src/types/enums";
 
 export type AuthStateType = {
   isLogin: boolean;

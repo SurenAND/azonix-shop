@@ -1,33 +1,32 @@
 import DashboardSkeleton from '@/src/components/shared/skeletons/dashboard-skeleton/DashboardSkeleton';
-import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Toaster } from 'sonner';
 
-// dynamic import components
-const Orders = dynamic(
+// Lazy load components
+const Orders = lazy(
   () => import('@/src/components/templates/dashboard/orders/Orders'),
 );
-const AddProduct = dynamic(
+const AddProduct = lazy(
   () =>
     import(
       '@/src/components/templates/dashboard/products-management/add-product/AddProduct'
     ),
 );
-const Inventory = dynamic(
+const Inventory = lazy(
   () =>
     import(
       '@/src/components/templates/dashboard/products-management/inventory/Inventory'
     ),
 );
-const ProductManager = dynamic(
+const ProductManager = lazy(
   () =>
     import(
       '@/src/components/templates/dashboard/products-management/product-manager/ProductManager'
     ),
 );
-const UsersManager = dynamic(
+const UsersManager = lazy(
   () =>
     import(
       '@/src/components/templates/dashboard/user-manager/users/UsersManager'
@@ -35,7 +34,6 @@ const UsersManager = dynamic(
 );
 
 function DashboardTemplate() {
-  // libraries
   const { t } = useTranslation();
   const searchParams = useSearchParams().get('view');
 

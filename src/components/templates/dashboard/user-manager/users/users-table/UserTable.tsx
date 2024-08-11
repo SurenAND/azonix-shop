@@ -18,8 +18,10 @@ const UsersTable = ({
   setIdToEdit,
   setOpenEdit,
 }: UsersTableProps) => {
+  // libraries
   const { t } = useTranslation();
 
+  // functions
   const setDeleteUserModal = (id: string) => {
     idToDelete.current = id;
     setOpenDelete(true);
@@ -60,10 +62,15 @@ const UsersTable = ({
                 Math.floor(index % 2) !== 0 ? 'bg-gray-400 text-white' : ''
               } ${Math.floor(index % 2) !== 0 ? 'dark:text-black' : ''}`}
             >
+              {/* firstname */}
               <td className='truncate border p-1'>{user?.firstname}</td>
+              {/* lastname */}
               <td className='truncate border p-1'>{user?.lastname}</td>
+              {/* username */}
               <td className='truncate border p-1'>{user?.username}</td>
+              {/* phone number */}
               <td className='truncate border p-1'>{user?.phoneNumber}</td>
+              {/* delete and edit */}
               <td className='border p-1'>
                 <div className='flex select-none items-center justify-center gap-4'>
                   <MdDelete

@@ -1,23 +1,25 @@
 import { useDeleteUser, useGetUsers } from '@/src/api/auth/auth.queries';
 import { EmptyList } from '@/src/components/shared/empty-list/EmptyList';
+import Loading from '@/src/components/shared/loading/Loading';
 import Pagination from '@/src/components/shared/pagination/Pagination';
-import { useEffect, useRef, useState, lazy, Suspense } from 'react';
+import dynamic from 'next/dynamic';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-const DeletePopUp = lazy(
+const DeletePopUp = dynamic(
   () =>
     import(
       '@/src/components/templates/dashboard/user-manager/users/modals/delete/Delete'
     ),
 );
-const EditPopUp = lazy(
+const EditPopUp = dynamic(
   () =>
     import(
       '@/src/components/templates/dashboard/user-manager/users/modals/edit/Edit'
     ),
 );
-const UsersTable = lazy(
+const UsersTable = dynamic(
   () =>
     import(
       '@/src/components/templates/dashboard/user-manager/users/users-table/UserTable'
@@ -25,36 +27,43 @@ const UsersTable = lazy(
 );
 
 function UsersManager() {
+  // libraries
   const { t } = useTranslation();
-  const [page, setPage] = useState(1);
+
+  // states
+  const [page, setPage] = useState<number>(1);
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const idToDelete = useRef<string>('');
+  const [openEdit, setOpenEdit] = useState<boolean>(false);
+  const [idToEdit, setIdToEdit] = useState<string>('');
+
+  // queries
   const { data: users, refetch } = useGetUsers({
     page,
     role: 'USER',
   });
 
+  useEffect(() => {
+    refetch();
+  }, [page]);
+
+  // mutations
   const { mutate: deleteUser } = useDeleteUser();
 
-  const [openDelete, setOpenDelete] = useState(false);
-  const idToDelete = useRef<string>('');
-
-  const [openEdit, setOpenEdit] = useState(false);
-  const [idToEdit, setIdToEdit] = useState<string>('');
-
+  // functions
   const handleDelete = (id: string) => {
     deleteUser(id);
     toast.success(t('user-delete-success'));
   };
 
-  useEffect(() => {
-    refetch();
-  }, [page]);
-
   return (
     <main className='min-h-screen w-full p-3 md:w-[780px]'>
+      {/* header */}
       <header className='flex items-center justify-between'>
         <h1 className='text-lg font-bold'>{t('user-manager')}</h1>
       </header>
-      <Suspense fallback={<div>Loading...</div>}>
+      {/* table */}
+      <Suspense fallback={<Loading />}>
         <div className='mx-auto flex min-h-[calc(100vh-100px)] w-full items-center px-3 py-8 sm:justify-center md:w-[760px]'>
           {users &&
           users.status === 'success' &&
@@ -71,6 +80,8 @@ function UsersManager() {
           )}
         </div>
       </Suspense>
+
+      {/* pagination */}
       {users && (
         <Pagination
           page={page}
@@ -78,13 +89,19 @@ function UsersManager() {
           OnSetPage={(pageNo) => setPage(pageNo)}
         />
       )}
-      <Suspense fallback={<div>Loading...</div>}>
+
+      {/* delete popup */}
+      <Suspense fallback={<Loading />}>
         <DeletePopUp
           openDelete={openDelete}
           onClose={() => setOpenDelete(false)}
           action={() => handleDelete(idToDelete.current)}
           idToDelete={idToDelete.current}
         />
+      </Suspense>
+
+      {/* edit popup */}
+      <Suspense fallback={<Loading />}>
         <EditPopUp
           openEdit={openEdit}
           onClose={() => setOpenEdit(false)}

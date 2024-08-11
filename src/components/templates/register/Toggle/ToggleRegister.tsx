@@ -2,14 +2,18 @@ import ToLogIn from '@/src/components/templates/register/toggle/to-login/ToLogIn
 import ToSignUp from '@/src/components/templates/register/toggle/to-signup/ToSignUp';
 import { useTranslation } from 'react-i18next';
 
+type ToggleRegisterProps = {
+  setActive: React.Dispatch<React.SetStateAction<boolean>>;
+  active: boolean;
+};
+
 export default function ToggleRegister({
   setActive,
   active,
-}: {
-  setActive: React.Dispatch<React.SetStateAction<boolean>>;
-  active: boolean;
-}) {
+}: ToggleRegisterProps) {
+  // libraries
   const { i18n } = useTranslation();
+
   return (
     <div
       className={`duration-600 absolute start-1/2 top-0 h-full w-1/2 overflow-hidden transition-all ease-in-out ${

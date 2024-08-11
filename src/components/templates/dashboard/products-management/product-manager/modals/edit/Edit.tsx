@@ -8,6 +8,7 @@ import {
 } from '@/src/api/product/product.queries';
 import DragDropImageUploader from '@/src/components/shared/dragdrop-image-uploader/DragDropImageUploader';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import {
   Dispatch,
   SetStateAction,
@@ -35,6 +36,7 @@ const EditPopUp = ({
   idToEdit,
   setIdToEdit,
 }: EditModalProps) => {
+  // libraries
   const { t } = useTranslation();
   const {
     register,
@@ -42,23 +44,21 @@ const EditPopUp = ({
     reset,
     formState: { errors },
   } = useForm();
+
+  // states
   const [images, setImages] = useState<File[]>([]);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState<string>('');
+  const [productCategory, setProductCategory] = useState<string>('');
+
+  // mutations
   const { mutate: updateProduct } = useUpdateProduct();
+
+  // queries
   const { data: categories } = useGetCategories();
-  const [productCategory, setProductCategory] = useState('');
   const { data: subCategories, refetch } = useGetSubCategories({
     category: productCategory,
   });
   const { data: oldProduct } = useGetProductById(idToEdit);
-
-  const filteredList = useCallback((id: string) => {
-    setProductCategory(id);
-  }, []);
-
-  const deleteImage = useCallback((index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
-  }, []);
 
   useEffect(() => {
     if (categories) {
@@ -68,8 +68,9 @@ const EditPopUp = ({
 
   useEffect(() => {
     refetch();
-  }, [productCategory, refetch]);
+  }, [productCategory]);
 
+  // preFetch data
   useEffect(() => {
     if (oldProduct) {
       reset({
@@ -103,6 +104,15 @@ const EditPopUp = ({
 
     fetchImages();
   }, [oldProduct, reset]);
+
+  // functions
+  const filteredList = useCallback((id: string) => {
+    setProductCategory(id);
+  }, []);
+
+  const deleteImage = useCallback((index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  }, []);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -300,7 +310,9 @@ const EditPopUp = ({
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               >
                 {categories?.data.categories.map((category) => (
-                  <option value={category._id}>{category.name}</option>
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>
                 ))}
               </select>
               {/* category error message */}
@@ -323,7 +335,9 @@ const EditPopUp = ({
               >
                 {productCategory &&
                   subCategories?.data.subcategories.map((subCategory) => (
-                    <option value={subCategory._id}>{subCategory.name}</option>
+                    <option key={subCategory._id} value={subCategory._id}>
+                      {subCategory.name}
+                    </option>
                   ))}
               </select>
               {/* subcategory error message */}
@@ -378,10 +392,12 @@ const EditPopUp = ({
                   >
                     &times;
                   </span>
-                  <img
-                    className='h-full w-full rounded-md'
+                  <Image
+                    className='rounded-md object-cover'
                     src={URL.createObjectURL(image)}
                     alt={image.name}
+                    fill
+                    sizes='80px'
                   />
                 </div>
               ))}

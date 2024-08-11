@@ -5,6 +5,7 @@ type PriceProps = {
 };
 
 const Price = ({ handleChange }: PriceProps) => {
+  // libraries
   const { t } = useTranslation();
 
   return (

@@ -3,14 +3,13 @@ import IrFlag from '@/src/assets/images/languages/fa.png';
 import Loading from '@/src/components/shared/loading/Loading';
 import ToggleRegister from '@/src/components/templates/register/toggle/ToggleRegister';
 import { MainRoutes } from '@/src/constant/routes';
+import dynamic from 'next/dynamic';
 import Image, { StaticImageData } from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Toaster } from 'sonner';
-
-import dynamic from 'next/dynamic';
 
 const LogInTemplate = dynamic(
   () => import('@/src/components/templates/register/login/LogIn'),
@@ -32,11 +31,17 @@ const lngs: Record<'en' | 'fa', { flag: StaticImageData }> = {
 };
 
 export default function RegisterTemplate() {
-  const [active, setActive] = useState(false);
+  // libraries
+  const { t, i18n } = useTranslation();
   const { push: pushRouter } = useRouter();
   const searchParams = useSearchParams().get('view');
   const isSignUp = searchParams === 'signup';
 
+  // states
+  const [active, setActive] = useState<boolean>(false);
+  const [dir, setDir] = useState<string>('ltr');
+
+  // functions
   const handleClick = () => {
     if (active) {
       setActive(false);
@@ -48,11 +53,9 @@ export default function RegisterTemplate() {
   };
 
   // change direction of the layout based on the language
-  const [dir, setDir] = useState('ltr');
-  const { t, i18n } = useTranslation();
   useEffect(() => {
     setDir(i18n.dir());
-  }, [i18n.resolvedLanguage]);
+  }, [i18n, i18n.resolvedLanguage]);
 
   useEffect(() => {
     if (isSignUp) {
@@ -60,6 +63,7 @@ export default function RegisterTemplate() {
     }
   }, [isSignUp]);
 
+  // redirect to 404 page if the user tries to access a page that does not exist
   if (searchParams && !isSignUp && searchParams !== 'login') {
     pushRouter(MainRoutes.NOTFOUND);
   }
@@ -72,16 +76,16 @@ export default function RegisterTemplate() {
       >
         <div className='relative min-h-[600px] w-[1000px] max-w-full overflow-hidden rounded-3xl bg-white shadow-lg'>
           {isSignUp ? (
-            <Suspense fallback={<Loading />}>
-              <SignUpTemplate active={active} />
-            </Suspense>
+            <SignUpTemplate active={active} />
           ) : (
-            <Suspense fallback={<Loading />}>
-              <LogInTemplate active={active} />
-            </Suspense>
+            <LogInTemplate active={active} />
           )}
+
+          {/* toggle between login and signup */}
           <ToggleRegister setActive={setActive} active={active} />
         </div>
+
+        {/* toggle between login and signup in mobile */}
         <div className='flex items-center gap-4' dir='ltr'>
           <div className='text-axLightPurple sm:hidden'>
             {active ? (
@@ -104,6 +108,8 @@ export default function RegisterTemplate() {
               </button>
             )}
           </div>
+
+          {/* language toggle */}
           {Object.keys(lngs).map((lng) => {
             return (
               <button

@@ -2,20 +2,29 @@ import { useGetProductById } from '@/src/api/product/product.queries';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
 import { ShoppingCartItem } from '@/src/store/checkout/checkout.type';
 import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 
 const CartCard = ({ product }: { product: ShoppingCartItem }) => {
+  // libraries
   const { t } = useTranslation();
+
+  // store
   const { incrementQuantity, decrementQuantity, removeFromCart } =
     useCheckoutStore();
+
+  // queries
   const { data: productInDB } = useGetProductById(product?._id);
+
   return (
     <div>
       <div className='flex flex-col items-center justify-between rounded-lg bg-white p-2 shadow-lg sm:flex-row'>
         {/* Product Image */}
-        <img
-          className='m-2 h-28 w-28 rounded-md border bg-gray-200 object-cover object-center'
+        <Image
+          className='m-2 rounded-md border bg-gray-200 object-cover object-center'
           src={`http://${product?.image}`}
-          alt={product?.name}
+          alt={product?.name || 'Product image'}
+          width={112}
+          height={112}
         />
         {/* Product Info */}
         <div className='flex w-full flex-col px-4 py-4'>

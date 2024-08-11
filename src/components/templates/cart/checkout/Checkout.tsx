@@ -30,6 +30,7 @@ const Checkout = ({
   const [subtotal, setSubtotal] = useState<number>(0);
   const [savings, setSavings] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
+  const [outOfStock, setOutOfStock] = useState<boolean>(false);
 
   // contexts
   const { state } = useUserContext();
@@ -62,7 +63,14 @@ const Checkout = ({
         <div className='max-h-[300px] space-y-3 overflow-y-auto p-3'>
           {shoppingCartInfo
             ?.filter((item) => item?.userId === state.userId)
-            ?.map((item) => <CartCard key={item?._id} product={item} />)}
+            ?.map((item) => (
+              <CartCard
+                key={item?._id}
+                product={item}
+                setOutOfStock={setOutOfStock}
+                outOfStock={outOfStock}
+              />
+            ))}
         </div>
 
         {/* prices */}
@@ -106,6 +114,7 @@ const Checkout = ({
             type='submit'
             className='flex w-full items-center justify-center rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary focus:outline-none focus:ring-4  focus:ring-primary disabled:cursor-not-allowed disabled:opacity-50 dark:bg-primary dark:hover:bg-primary dark:focus:ring-primary'
             disabled={
+              outOfStock ||
               !state.isLogin ||
               paymentMethodSelected === null ||
               shoppingCartInfo?.filter((item) => item?.userId === state?.userId)

@@ -1,5 +1,9 @@
 import { req } from '@/src/api/api.config';
-import { GetUsersParamsType, newUserType } from '@/src/api/auth/auth.type';
+import {
+  GetUsersParamsType,
+  newUserType,
+  UserDataType,
+} from '@/src/api/auth/auth.type';
 
 export const LoginApi = async (username: string, password: string) => {
   const response = await req.post('/auth/login', { username, password });

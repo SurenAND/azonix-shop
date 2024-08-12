@@ -10,4 +10,5 @@ export const MainRoutes = {
   PAYMENT_EN: '/payment-en',
   PAYMENT_FA: '/payment-fa',
   PAYMENT_RESULT: '/payment-result',
+  WISHLIST: '/wishlist',
 };

@@ -193,5 +193,9 @@
   "wishlist-title": "Wishlist",
   "wishlist-subtitle": "Explore Your Wishlist",
   "wishlist-empty-p1": "Your wishlist",
-  "wishlist-empty-p2": "is empty."
+  "wishlist-empty-p2": "is empty.",
+  "change-saved": "Changes Saved Successfully!",
+  "personal-info": "Personal Information",
+  "personal-info-desc": "Lorem ipsum, dolor sit amet consectetur adipisicing elit, Sapiente, perspiciatis? Impedit fugit dolorem corrupti ullam consectetur.",
+  "save-changes": "Save Changes"
 }

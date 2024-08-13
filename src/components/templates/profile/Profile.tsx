@@ -18,7 +18,6 @@ const ProfileTemplate = () => {
       {searchParams === 'account-settings' && <AccountSettings />}
       {searchParams === 'change-password' && <ChangePassword />}
       {/* {searchParams === "your-orders" && <YourOrders />} */}
-      {/* {searchParams === "your-address" && <YourAddress />} */}
       {searchParams === 'legal-notice' && <LegalNotice />}
       {!searchParams && (
         <div className='flex h-full flex-col items-center justify-center space-y-2'>

@@ -1,7 +1,6 @@
 import { useGetUserById, useUpdateUser } from '@/src/api/auth/auth.queries';
 import { useUserContext } from '@/src/context/authContext';
 import { useUserStore } from '@/src/store/user/user.store';
-import { AuthReducerAction } from '@/src/types/enums';
 import { useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +13,7 @@ const AccountSettings = () => {
   const { register, handleSubmit, reset } = useForm();
 
   // context & stores
-  const { state, dispatch } = useUserContext();
+  const { state } = useUserContext();
   const { setUserData } = useUserStore();
 
   // queries
@@ -31,6 +30,7 @@ const AccountSettings = () => {
         firstname: userData?.data.user.firstname,
         lastname: userData?.data.user.lastname,
         phoneNumber: userData?.data.user.phoneNumber,
+        address: userData?.data.user.address,
       });
     }
   }, [userData, reset]);
@@ -46,14 +46,6 @@ const AccountSettings = () => {
         {
           onSuccess(data) {
             if (data?.status === 'success') {
-              dispatch({
-                type: AuthReducerAction.SET_USER,
-                payload: {
-                  ...data?.data.user,
-                  accessToken: data?.token.accessToken,
-                  refreshToken: data?.token.refreshToken,
-                },
-              });
               setUserData({
                 firstname: data?.data.user.firstname,
                 lastname: data?.data.user.lastname,
@@ -70,7 +62,7 @@ const AccountSettings = () => {
   };
 
   return (
-    <div className='flex h-[75vh] w-full flex-col items-center space-y-16 p-10'>
+    <div className='flex h-[75vh] w-full flex-col items-center space-y-10 p-10'>
       <div className='bg-profileGradient flex w-full gap-8 rounded-lg p-5'>
         <div className='bg-profileGradient flex h-24 w-40 items-center justify-center rounded-full p-2 text-blue-500'>
           <FaShieldHalved className='h-2/3 w-2/3' />
@@ -136,6 +128,19 @@ const AccountSettings = () => {
               className='w-full rounded border p-2 outline-none focus:ring-2 focus:ring-blue-500'
             />
           </div>
+        </div>
+
+        <div className='w-[85%]'>
+          <label htmlFor='address' className='mb-1 block'>
+            {t('address')} <span className='text-red-500'>*</span>
+          </label>
+          <textarea
+            id='address'
+            {...register('address')}
+            required
+            className='w-full resize-none rounded border p-2 outline-none focus:ring-2 focus:ring-blue-500'
+            rows={2}
+          />
         </div>
 
         <button

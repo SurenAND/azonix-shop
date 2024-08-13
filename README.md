@@ -13,20 +13,42 @@
 </br><h2></h2></br>
 <strong>Pages Photos</strong>
 </br>
-
-<!-- ![1]()
-![2]()
-![3]()
-![4]()
-![5]()
-![login]() -->
-
-<strong>Admin Panel</strong>
 </br>
 
-<!-- ![panel admin 1]()
-![panel admin 2]()
-![panel admin 3]() -->
+<h3>Login</h3>
+<kbd><img src="https://github.com/SurenAND/azonix-shop/blob/master/public/img/shop/login.png" ></kbd>
+</br>
+</br>
+<h3>Landing/English/LightTheme</h3>
+<kbd><img src="https://github.com/SurenAND/azonix-shop/blob/master/public/img/shop/main-light-en.png" ></kbd>
+</br>
+</br>
+<h3>Landing/Persian/DarkTheme</h3>
+<kbd><img src="https://github.com/SurenAND/azonix-shop/blob/master/public/img/shop/main-dark-fa.png" ></kbd>
+</br>
+</br>
+<h3>Products Page</h3>
+<kbd><img src="https://github.com/SurenAND/azonix-shop/blob/master/public/img/shop/shop.png" ></kbd>
+</br>
+</br>
+<h3>Wishlist Page</h3>
+<kbd><img src="https://github.com/SurenAND/azonix-shop/blob/master/public/img/shop/wishlist.png" ></kbd>
+
+</br><h2></h2></br>
+<strong>Admin Panel</strong>
+</br>
+</br>
+
+<h3>Dashboard</h3>
+<kbd><img src="https://github.com/SurenAND/azonix-shop/blob/master/public/img/admin/dashboard.png" ></kbd>
+</br>
+</br>
+<h3>Add Product</h3>
+<kbd><img src="https://github.com/SurenAND/azonix-shop/blob/master/public/img/admin/add-product.png" ></kbd>
+</br>
+</br>
+<h3>Orders</h3>
+<kbd><img src="https://github.com/SurenAND/azonix-shop/blob/master/public/img/admin/orders.png" ></kbd>
 
 </br><h2></h2></br>
 <strong>Project Phase 1 : </strong>

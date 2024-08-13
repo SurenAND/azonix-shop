@@ -55,7 +55,7 @@ const ProductTemplate = ({ productId }: ProductTemplateProps) => {
     if (url.startsWith('http://') || url.startsWith('https://')) {
       return url;
     }
-    return `http://${url.replace(/^\//, '')}`;
+    return `https://${url.replace(/^\//, '')}`;
   };
 
   // redirect to 404 if product not found

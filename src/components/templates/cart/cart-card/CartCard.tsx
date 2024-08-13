@@ -43,7 +43,7 @@ const CartCard = ({ product, setOutOfStock, outOfStock }: CartCardProps) => {
         {/* Product Image */}
         <Image
           className='m-2 rounded-md border bg-gray-200 object-cover object-center'
-          src={`http://${product?.image}`}
+          src={product?.image}
           alt={product?.name || 'Product image'}
           width={112}
           height={112}

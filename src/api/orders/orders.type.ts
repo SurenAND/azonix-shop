@@ -106,3 +106,7 @@ export type AddOrderResponseType = {
 
 export type ProductInOrderResponseType =
   AddOrderResponseType['data']['order']['products'][0];
+
+export type GetOrdersByUserIdParamsType = {
+  sort?: string;
+};

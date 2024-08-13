@@ -5,6 +5,7 @@ import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import { stringAvatar } from '@/src/lib/utils';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import useWishlistStore from '@/src/store/wishlist/wishlist.store';
 import dynamic from 'next/dynamic';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
@@ -31,6 +32,7 @@ export default function Header() {
   // contexts & stores
   const { state } = useUserContext();
   const { shoppingCartInfo } = useCheckoutStore();
+  const { wishlistItems } = useWishlistStore();
 
   return (
     <div className='flex w-full items-center justify-between gap-10 bg-white p-6 duration-200 dark:bg-gray-900 dark:text-white md:justify-normal'>
@@ -77,8 +79,24 @@ export default function Header() {
         </div>
 
         {/* Wishlist section */}
-        <button className='flex h-10 w-10 items-center justify-center rounded-lg bg-axWhite text-axLightPurple transition-all duration-200 ease-in-out hover:bg-axDarkPurple hover:text-white dark:bg-axDarkPurple dark:text-axWhite dark:hover:bg-axLightPurple'>
-          <MdFavoriteBorder className='text-xl' />
+        <button
+          className='flex h-10 w-10 items-center justify-center rounded-lg bg-axWhite text-axLightPurple transition-all duration-200 ease-in-out hover:bg-axDarkPurple hover:text-white dark:bg-axDarkPurple dark:text-axWhite dark:hover:bg-axLightPurple'
+          onClick={() => {
+            pushRouter(MainRoutes.WISHLIST);
+          }}
+        >
+          <button className='relative p-3'>
+            <MdFavoriteBorder className='text-xl' />
+            {wishlistItems?.filter((item) => item?.userId === state.userId)
+              .length > 0 && (
+              <div className='absolute end-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white'>
+                {
+                  wishlistItems?.filter((item) => item?.userId === state.userId)
+                    .length
+                }
+              </div>
+            )}
+          </button>
         </button>
 
         {/* Cart section */}

@@ -5,10 +5,12 @@ import FullStar from '@/src/assets/images/rating/star.svg';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import useWishlistStore from '@/src/store/wishlist/wishlist.store';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { FaEye, FaHeart } from 'react-icons/fa';
+import { toast } from 'sonner';
 
 type ProductCardPropsType = {
   product: ProductType;
@@ -23,6 +25,7 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
   // contexts & stores
   const { state } = useUserContext();
   const { setShoppingCartInfo } = useCheckoutStore();
+  const { changeWishlist } = useWishlistStore();
 
   // functions
   const addToCardHandler = () => {
@@ -36,6 +39,21 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
         priceAfterDiscount: product?.priceAfterDiscount,
         quantity: 1,
       });
+      toast.success(t('product-added-to-cart'));
+    }
+  };
+
+  const addToWishlistHandler = () => {
+    if (product) {
+      changeWishlist({
+        _id: product?._id,
+        userId: state.userId,
+        name: product?.name,
+        image: product?.images[0],
+        brand: product?.brand,
+        category: product?.category.slugname,
+      });
+      toast.success(t('wishlist-changed'));
     }
   };
 
@@ -147,7 +165,10 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
             {t('add-to-cart')}
           </button>
           {/* wishlist button */}
-          <button className='flex flex-grow items-center justify-center rounded-md bg-gray-300/60 transition hover:bg-gray-300/80'>
+          <button
+            onClick={addToWishlistHandler}
+            className='flex flex-grow items-center justify-center rounded-md bg-gray-300/60 transition hover:bg-gray-300/80'
+          >
             <FaHeart className='opacity-50' />
           </button>
           {/* view button */}

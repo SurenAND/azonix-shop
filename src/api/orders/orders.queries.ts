@@ -2,11 +2,13 @@ import {
   addNewOrderApi,
   getAllOrdersApi,
   getOrderByIdApi,
+  getOrdersByUserIdApi,
   updateOrderApi,
 } from '@/src/api/orders/orders.api';
 import {
   AddNewOrderParamsType,
   AllOrdersType,
+  GetOrdersByUserIdParamsType,
   GetOrdersParamsType,
   OrderType,
   SingleOrderType,
@@ -60,5 +62,15 @@ export const useUpdateOrder = () => {
         queryKey: ['orders'],
       });
     },
+  });
+};
+
+export const useGetOrderByUserId = (
+  userId: string,
+  params: GetOrdersByUserIdParamsType,
+) => {
+  return useQuery<AllOrdersType>({
+    queryKey: ['orders', 'user', userId],
+    queryFn: () => getOrdersByUserIdApi(userId, params),
   });
 };

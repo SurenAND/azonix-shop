@@ -2,6 +2,7 @@ import LoadingPage from '@/src/components/shared/loading-page/LoadingPage';
 import dynamic from 'next/dynamic';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Toaster } from 'sonner';
 
 const Header = dynamic(
   () => import('@/src/components/layout/profile-layout/header/Header'),
@@ -27,6 +28,7 @@ const ProfileLayout = ({ children }: PropsWithChildren) => {
 
   return (
     <div className='min-h-screen bg-axGray pb-5 dark:bg-gray-700' dir={dir}>
+      <Toaster richColors />
       <Header />
       <div className='mt-[5vh] flex w-full flex-col justify-center max-md:h-[80vh] md:flex-row'>
         <div className='w-full rounded-lg md:min-h-[50vh] md:w-1/5'>

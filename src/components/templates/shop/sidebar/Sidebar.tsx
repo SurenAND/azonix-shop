@@ -1,7 +1,7 @@
 import { CategoryType } from '@/src/api/category/category.type';
-import Category from '@/src/components/templates/shop/sidebar/category/Category';
+import Category from '@/src/components/templates/shop/sidebar/by-category/Category';
 import PriceSorting from '@/src/components/templates/shop/sidebar/price-sorting/PriceSorting';
-import Price from '@/src/components/templates/shop/sidebar/price/Price';
+import Price from '@/src/components/templates/shop/sidebar/by-price/Price';
 import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';

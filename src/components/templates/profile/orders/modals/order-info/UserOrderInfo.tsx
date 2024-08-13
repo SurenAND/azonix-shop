@@ -1,59 +1,24 @@
-import {
-  useGetOrderById,
-  useUpdateOrder,
-} from '@/src/api/orders/orders.queries';
-import MyButton from '@/src/components/shared/button/Button';
+import { useGetOrderById } from '@/src/api/orders/orders.queries';
 import OrderedProduct from '@/src/components/templates/dashboard/orders/modals/order-info/ordered-product/OrderedProduct';
-import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaTimes } from 'react-icons/fa';
-import { toast } from 'sonner';
 
-type OrderInfoPopupProps = {
+type UserOrderInfoPopupProps = {
   openInfo: boolean;
   onClose: () => void;
   infoId: string;
-  setInfoId: Dispatch<SetStateAction<string>>;
 };
 
-const OrderInfoPopup = ({
+const UserOrderInfoPopup = ({
   openInfo,
   onClose,
   infoId,
-  setInfoId,
-}: OrderInfoPopupProps) => {
+}: UserOrderInfoPopupProps) => {
   // libraries
   const { t } = useTranslation();
 
-  // mutations
-  const { mutate: updateOrder } = useUpdateOrder();
-
   // queries
   const { data: oldOrder } = useGetOrderById(infoId);
-
-  // functions
-  const deliveredData = () => {
-    if (oldOrder) {
-      updateOrder(
-        {
-          newOrder: oldOrder.data.order,
-          data: {
-            deliveryStatus: true,
-            deliveryDate: new Date().toISOString(),
-          },
-        },
-        {
-          onSuccess: (data) => {
-            if (data.status === 'success') {
-              onClose();
-              setInfoId('');
-              toast.success(t('delivered-success'));
-            }
-          },
-        },
-      );
-    }
-  };
 
   return (
     <div
@@ -128,17 +93,17 @@ const OrderInfoPopup = ({
               {oldOrder?.data.order.deliveryStatus ? (
                 <p>
                   {t('delivery-time')} :
+                  {new Date(oldOrder?.data.order.updatedAt).toLocaleDateString(
+                    'EN',
+                  )}
+                </p>
+              ) : (
+                <p>
+                  {t('delivery-time')} :
                   {new Date(
                     oldOrder?.data.order.deliveryDate,
                   ).toLocaleDateString('EN')}
                 </p>
-              ) : (
-                <MyButton
-                  text={t('delivered')}
-                  bgColor='bg-axGreen'
-                  textColor='text-white'
-                  handler={deliveredData}
-                />
               )}
             </div>
           </div>
@@ -148,4 +113,4 @@ const OrderInfoPopup = ({
   );
 };
 
-export default OrderInfoPopup;
+export default UserOrderInfoPopup;

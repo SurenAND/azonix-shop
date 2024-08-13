@@ -1,5 +1,4 @@
 import {
-  MdHome,
   MdLocalShipping,
   MdManageAccounts,
   MdPassword,
@@ -27,12 +26,6 @@ export const UserSideBarItems = [
   },
   {
     id: 4,
-    title: 'your-address',
-    view: 'your-address',
-    icon: <MdHome />,
-  },
-  {
-    id: 5,
     title: 'legal-notice',
     view: 'legal-notice',
     icon: <MdPolicy />,

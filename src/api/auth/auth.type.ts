@@ -8,6 +8,7 @@ export type UserDataType = {
   role: string;
   createdAt: string;
   updatedAt: string;
+  password: string;
 };
 
 export type newUserType = {

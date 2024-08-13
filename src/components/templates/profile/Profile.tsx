@@ -1,4 +1,5 @@
 import AccountSettings from '@/src/components/templates/profile/account-setting/AccountSetting';
+import ChangePassword from '@/src/components/templates/profile/change-password/changePassword';
 import { useUserContext } from '@/src/context/authContext';
 import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +15,7 @@ const ProfileTemplate = () => {
   return (
     <div className='z-50 flex w-full items-center justify-center overflow-y-auto rounded-lg bg-white shadow-ax1 dark:bg-gray-400 max-md:h-full md:w-3/5'>
       {searchParams === 'account-settings' && <AccountSettings />}
-      {/* {searchParams === "change-password" && <ChangePassword />} */}
+      {searchParams === 'change-password' && <ChangePassword />}
       {/* {searchParams === "your-orders" && <YourOrders />} */}
       {/* {searchParams === "your-address" && <YourAddress />} */}
       {/* {searchParams === "legal-notice" && <LegalNotice />} */}

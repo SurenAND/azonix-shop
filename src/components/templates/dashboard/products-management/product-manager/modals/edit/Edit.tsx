@@ -92,7 +92,7 @@ const EditPopUp = ({
         // Convert image URLs to File objects
         const imageFiles = await Promise.all(
           imageUrls.map(async (url) => {
-            const imageUrl = `http://${url}`;
+            const imageUrl = url;
             const response = await fetch(imageUrl);
             const data = await response.blob();
             return new File([data], 'image.jpg', { type: 'image/jpeg' });

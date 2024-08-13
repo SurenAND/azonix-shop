@@ -29,10 +29,10 @@ const UserOrderedProduct = ({ products }: UserOrderedProductProps) => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product, index) => {
+          {products?.map((product, index) => {
             return (
               <tr
-                key={product._id}
+                key={product?._id}
                 className={`mb-4 flex flex-col sm:table-row ${
                   Math.floor(index % 2) !== 0 ? 'bg-gray-400 text-white' : ''
                 } ${Math.floor(index % 2) !== 0 ? 'dark:text-black' : ''}`}
@@ -41,8 +41,8 @@ const UserOrderedProduct = ({ products }: UserOrderedProductProps) => {
                 <td className='hidden border p-1 md:table-cell'>
                   <div className='flex select-none justify-center'>
                     <Image
-                      src={`http://${product.product.images[0]}`}
-                      alt={product.product.name}
+                      src={product?.product.images[0]}
+                      alt={product?.product.name}
                       width={48}
                       height={48}
                       className='rounded bg-white/90'
@@ -51,7 +51,7 @@ const UserOrderedProduct = ({ products }: UserOrderedProductProps) => {
                 </td>
 
                 {/* ----------- Product name ----------- */}
-                <td className='truncate border p-1'>{product.product.name}</td>
+                <td className='truncate border p-1'>{product?.product.name}</td>
 
                 {/* ----------- Product quantity ----------- */}
                 <td className='truncate border p-1'>

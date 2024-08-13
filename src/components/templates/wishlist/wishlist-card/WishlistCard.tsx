@@ -44,7 +44,7 @@ const WishlistCard = ({ product, index }: WishlistCardPropsType) => {
         }`}
       >
         <Image
-          src={`http://${product?.image}`}
+          src={product?.image}
           alt={product?.name}
           width={150}
           height={150}

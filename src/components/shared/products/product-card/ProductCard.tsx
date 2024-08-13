@@ -69,7 +69,7 @@ const ProductCard = ({ product, index }: ProductCardPropsType) => {
         }  ${product?.quantity === 0 ? 'opacity-50' : ''}`}
       >
         <Image
-          src={`http://${product?.images[0]}`}
+          src={product?.images[0]}
           alt={product?.name}
           width={150}
           height={150}

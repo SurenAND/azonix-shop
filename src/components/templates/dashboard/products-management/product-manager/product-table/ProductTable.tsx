@@ -59,7 +59,7 @@ export const ProductsTable = ({
               <option value=''>{t('all-category')}</option>
               {categories?.data.categories.map((category) => (
                 <option key={category?._id} value={category?._id}>
-                  {category.name}
+                  {category?.name}
                 </option>
               ))}
             </select>
@@ -71,7 +71,7 @@ export const ProductsTable = ({
       </thead>
       {/* table body */}
       <tbody>
-        {list.map((product, index) => {
+        {list?.map((product, index) => {
           return (
             <tr
               key={product._id}
@@ -83,8 +83,8 @@ export const ProductsTable = ({
               <td className='hidden border p-1 md:table-cell'>
                 <div className='flex select-none justify-center'>
                   <Image
-                    src={`http://${product.images[0]}`}
-                    alt={product.name}
+                    src={product?.images[0]}
+                    alt={product?.name}
                     width={48}
                     height={48}
                     className='rounded bg-white/90'
@@ -92,21 +92,21 @@ export const ProductsTable = ({
                 </div>
               </td>
               {/* product name */}
-              <td className='truncate border p-1'>{product.name}</td>
+              <td className='truncate border p-1'>{product?.name}</td>
               {/* product category */}
               <td className='truncate border p-1'>
-                {product.category.name}/{product.subcategory.name}
+                {product?.category.name}/{product?.subcategory.name}
               </td>
               {/* delete and edit button */}
               <td className='border p-1'>
                 <div className='flex select-none items-center justify-center gap-4'>
                   <MdDelete
                     className='w-5 cursor-pointer'
-                    onClick={() => setDeleteProductModal(product._id)}
+                    onClick={() => setDeleteProductModal(product?._id)}
                   />
                   <MdEdit
                     className='w-5 cursor-pointer'
-                    onClick={() => setEditProductModal(product._id)}
+                    onClick={() => setEditProductModal(product?._id)}
                   />
                 </div>
               </td>

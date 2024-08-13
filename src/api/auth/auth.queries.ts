@@ -18,6 +18,7 @@ import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
 import { useUserStore } from '@/src/store/user/user.store';
+import useWishlistStore from '@/src/store/wishlist/wishlist.store';
 import { AuthReducerAction } from '@/src/types/enums';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
@@ -30,6 +31,7 @@ export const useLogin = () => {
   const { dispatch } = useUserContext();
   const { assignCartToUser } = useCheckoutStore();
   const { setUserData } = useUserStore();
+  const { assignWishlistToUser } = useWishlistStore();
   return useMutation({
     mutationFn: ({
       username,
@@ -56,11 +58,12 @@ export const useLogin = () => {
           address: data?.data.user.address,
         });
         assignCartToUser(data?.data.user._id);
+        assignWishlistToUser(data?.data.user._id);
         pushRouter(MainRoutes.HOME);
       }
     },
     onError() {
-      toast.warning(t('loginUserNotFound'));
+      toast.warning(t('login-user-not-found'));
     },
   });
 };
@@ -70,6 +73,7 @@ export const useSignup = () => {
   const { dispatch } = useUserContext();
   const { assignCartToUser } = useCheckoutStore();
   const { setUserData } = useUserStore();
+  const { assignWishlistToUser } = useWishlistStore();
   return useMutation({
     mutationFn: (newUser: newUserType) => SignupApi(newUser),
     onSuccess(data) {
@@ -90,6 +94,7 @@ export const useSignup = () => {
           address: data?.data.user.address,
         });
         assignCartToUser(data?.data.user._id);
+        assignWishlistToUser(data?.data.user._id);
         pushRouter(MainRoutes.HOME);
       }
       if (data?.status === 'fail') {

@@ -36,4 +36,10 @@ export const DropdownLinks = [
     link: MainRoutes.PROFILE,
     roleToAccess: ['ADMIN', 'USER'],
   },
+  {
+    id: 3,
+    name: 'wishlist',
+    link: MainRoutes.WISHLIST,
+    roleToAccess: ['ADMIN', 'USER'],
+  },
 ];

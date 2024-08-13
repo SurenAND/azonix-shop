@@ -198,12 +198,11 @@
   "personal-info": "Personal Information",
   "personal-info-desc": "Lorem ipsum, dolor sit amet consectetur adipisicing elit, Sapiente, perspiciatis? Impedit fugit dolorem corrupti ullam consectetur.",
   "save-changes": "Save Changes",
-  "old-password": "Old Password",
-  "new-password": "New Password",
-  "old-password-incorrect": "Old password is incorrect!",
   "password-changed-successfully": "Password changed successfully!",
   "change-password-desc": "Lorem ipsum, dolor sit amet consectetur adipisicing elit, Sapiente, perspiciatis? Impedit fugit dolorem corrupti ullam consectetur.",
-  "same-password": "The new password is the same as the old password!",
   "terms-of-use": "Terms of Use",
-  "terms-of-use-description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+  "terms-of-use-description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  "confirm-new-password": "Confirm New Password",
+  "password-not-match": "Password not match!",
+  "new-password": "New Password"
 }

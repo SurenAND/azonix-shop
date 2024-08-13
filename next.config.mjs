@@ -4,7 +4,7 @@ import path from 'path';
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['localhost', ''],
+    domains: ['localhost', '', 'azonix.liara.run'],
   },
   webpack: (config) => {
     config.resolve.alias['@'] = path.resolve('.');

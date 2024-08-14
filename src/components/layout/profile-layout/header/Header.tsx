@@ -102,9 +102,11 @@ export default function Header() {
               <ul className='space-y-2'>
                 {Object.keys(lngs).map((lng) => {
                   return (
-                    <li onClick={() => setShowMobileLngDropdown(false)}>
+                    <li
+                      key={lng}
+                      onClick={() => setShowMobileLngDropdown(false)}
+                    >
                       <button
-                        key={lng}
                         onClick={() => i18n.changeLanguage(lng)}
                         disabled={i18n.resolvedLanguage === lng}
                       >

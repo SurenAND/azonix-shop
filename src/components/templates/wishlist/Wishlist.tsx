@@ -13,7 +13,7 @@ const WishlistTemplate = () => {
   const { wishlistItems } = useWishlistStore();
 
   return (
-    <div className='mx-auto my-10 flex h-screen max-w-screen-xl flex-col items-center justify-start'>
+    <div className='mx-auto my-10 flex min-h-screen max-w-screen-xl flex-col items-center justify-start'>
       <div className='container'>
         {/* Heading section */}
         <Heading
@@ -23,7 +23,7 @@ const WishlistTemplate = () => {
         {/* Body section */}
         <div className='mb-10'>
           {/* products */}
-          <section className='ms-14 mt-8 flex flex-wrap justify-center gap-5'>
+          <section className='ms-7 mt-8 flex flex-wrap justify-center gap-5 sm:ms-14'>
             {wishlistItems?.length > 0 ? (
               wishlistItems?.map((item, index) => (
                 <WishlistCard key={item._id} product={item} index={index} />

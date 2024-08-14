@@ -21,7 +21,7 @@ const Products = ({
       <Toaster richColors />
 
       {/* products */}
-      <section className='ms-14 mt-8 flex flex-wrap justify-center gap-5'>
+      <section className='ms-3 mt-8 flex flex-wrap justify-center gap-5 sm:ms-14'>
         {products?.map((product, index) => (
           <ProductCard key={product._id} product={product} index={index} />
         ))}

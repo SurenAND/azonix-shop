@@ -62,13 +62,15 @@ const AccountSettings = () => {
   };
 
   return (
-    <div className='flex h-[75vh] w-full flex-col items-center space-y-10 p-10'>
-      <div className='bg-profileGradient flex w-full gap-8 rounded-lg p-5'>
-        <div className='bg-profileGradient flex h-24 w-40 items-center justify-center rounded-full p-2 text-blue-500'>
+    <div className='flex min-h-[75vh] w-full flex-col items-center space-y-6 p-4 sm:p-10'>
+      <div className='flex w-full flex-col gap-4 rounded-lg bg-profileGradient p-4 sm:flex-row sm:gap-8 sm:p-5'>
+        <div className='mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-profileGradient p-2 text-blue-500 sm:mx-0 sm:h-24 sm:w-40'>
           <FaShieldHalved className='h-2/3 w-2/3' />
         </div>
-        <div className='flex flex-col'>
-          <h1 className='mt-2 text-3xl font-black'>{t('personal-info')}</h1>
+        <div className='flex flex-col text-center sm:text-left'>
+          <h1 className='mt-2 text-2xl font-black sm:text-3xl'>
+            {t('personal-info')}
+          </h1>
           <p>{t('personal-info-desc')}</p>
         </div>
       </div>
@@ -76,8 +78,8 @@ const AccountSettings = () => {
         onSubmit={handleSubmit(onSubmit)}
         className='flex w-full flex-col items-center gap-2.5'
       >
-        <div className='flex w-full flex-wrap justify-between p-2.5 px-5'>
-          <div className='m-1 w-[45%]'>
+        <div className='flex w-full flex-col p-2.5 px-5 sm:flex-row sm:flex-wrap sm:justify-between'>
+          <div className='m-1 w-full sm:w-[45%]'>
             <label htmlFor='username' className='mb-1 block'>
               {t('username')} <span className='text-red-500'>*</span>
             </label>
@@ -90,7 +92,7 @@ const AccountSettings = () => {
             />
           </div>
 
-          <div className='m-1 w-[45%]'>
+          <div className='m-1 w-full sm:w-[45%]'>
             <label htmlFor='firstname' className='mb-1 block'>
               {t('firstname')} <span className='text-red-500'>*</span>
             </label>
@@ -103,7 +105,7 @@ const AccountSettings = () => {
             />
           </div>
 
-          <div className='m-1 w-[45%]'>
+          <div className='m-1 w-full sm:w-[45%]'>
             <label htmlFor='lastname' className='mb-1 block'>
               {t('lastname')} <span className='text-red-500'>*</span>
             </label>
@@ -116,7 +118,7 @@ const AccountSettings = () => {
             />
           </div>
 
-          <div className='m-1 w-[45%]'>
+          <div className='m-1 w-full sm:w-[45%]'>
             <label htmlFor='phoneNumber' className='mb-1 block'>
               {t('phone-number')} <span className='text-red-500'>*</span>
             </label>
@@ -130,7 +132,7 @@ const AccountSettings = () => {
           </div>
         </div>
 
-        <div className='w-[85%]'>
+        <div className='w-full sm:w-[85%]'>
           <label htmlFor='address' className='mb-1 block'>
             {t('address')} <span className='text-red-500'>*</span>
           </label>
@@ -145,7 +147,7 @@ const AccountSettings = () => {
 
         <button
           type='submit'
-          className='rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600'
+          className='w-full rounded bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 sm:w-auto'
         >
           {t('save-changes')}
         </button>

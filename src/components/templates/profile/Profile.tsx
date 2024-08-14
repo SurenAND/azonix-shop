@@ -15,17 +15,17 @@ const ProfileTemplate = () => {
   const { state } = useUserContext();
 
   return (
-    <div className='z-50 flex w-full items-center justify-center overflow-y-auto rounded-lg bg-white shadow-ax1 dark:bg-gray-400 max-md:h-full md:w-3/5'>
+    <div className='z-50 flex h-full w-full items-start justify-center overflow-y-auto rounded-lg bg-white shadow-ax1 dark:bg-gray-400 md:w-3/5'>
       {searchParams === 'account-settings' && <AccountSettings />}
       {searchParams === 'change-password' && <ChangePassword />}
       {searchParams === 'your-orders' && <RecentOrders />}
       {searchParams === 'legal-notice' && <LegalNotice />}
       {!searchParams && (
-        <div className='flex h-full flex-col items-center justify-center space-y-2'>
-          <h3 className='text-7xl font-black uppercase'>
+        <div className='flex h-full flex-col items-center justify-center space-y-2 p-4 text-center'>
+          <h3 className='text-4xl font-black uppercase md:text-7xl'>
             {t('hi') + `, ${state?.username}`}
           </h3>
-          <h4 className='text-center text-6xl capitalize'>
+          <h4 className='text-3xl capitalize md:text-6xl'>
             {t('welcome-to-your-profile')}
           </h4>
         </div>

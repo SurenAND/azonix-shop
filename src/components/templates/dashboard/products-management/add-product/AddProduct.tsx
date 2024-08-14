@@ -98,13 +98,13 @@ function AddProduct() {
   }
 
   return (
-    <div className='flex min-h-screen w-2/3 select-none flex-col items-center justify-center space-y-5'>
+    <div className='flex min-h-screen w-full select-none flex-col items-center justify-center space-y-5 px-4 md:w-2/3 md:px-0'>
       {/* Add Product Title */}
-      <h4 className='text-4xl font-black uppercase dark:text-white'>
+      <h4 className='text-2xl font-black uppercase dark:text-white md:text-4xl'>
         {t('add-product')}
       </h4>
       {/* Add Product Form */}
-      <div className='w-full max-w-3xl rounded bg-white p-6 shadow-md dark:bg-gray-800'>
+      <div className='w-full max-w-3xl rounded bg-white p-4 shadow-md dark:bg-gray-800 md:p-6'>
         <form
           onSubmit={handleSubmit(handleForm)}
           className='grid grid-cols-1 gap-4'
@@ -130,7 +130,7 @@ function AddProduct() {
               {t('product-name-input-error')}
             </p>
           </div>
-          <div className='grid grid-cols-3 gap-4'>
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
             {/* Product Price */}
             <div className='flex flex-col'>
               <label className='mb-2 dark:text-gray-300'>
@@ -155,7 +155,7 @@ function AddProduct() {
             </div>
             {/* Product Discount Percentage */}
             <div className='flex flex-col'>
-              <label className='mb-2 dark:text-gray-300'>
+              <label className='mb-2 truncate dark:text-gray-300'>
                 {t('product-discount-percentage')} :
               </label>
               <input
@@ -201,7 +201,7 @@ function AddProduct() {
             </div>
           </div>
           {/* Product Brand & Category & Sub Category */}
-          <div className='grid gap-4 md:grid-cols-3'>
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
             {/* Product Brand */}
             <div className='flex flex-col'>
               <label className='mb-2 dark:text-gray-300'>
@@ -281,7 +281,7 @@ function AddProduct() {
           <label className='mb-2 dark:text-gray-300'>
             {t('product-description')} :
           </label>
-          <div className='mb-5 flex h-40 flex-col rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'>
+          <div className='mb-5 flex h-48 flex-col rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:h-40'>
             <Suspense fallback={<Loading />}>
               <ReactQuill
                 theme='snow'

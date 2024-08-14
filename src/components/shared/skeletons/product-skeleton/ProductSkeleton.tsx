@@ -1,6 +1,6 @@
 const ProductSkeleton = () => {
   return (
-    <section className='ms-14 mt-8 flex flex-wrap justify-center gap-5'>
+    <section className='ms-3 mt-8 flex flex-wrap justify-center gap-5 sm:ms-14'>
       {Array.from({ length: 6 }, (_, index) => (
         <div
           key={index}

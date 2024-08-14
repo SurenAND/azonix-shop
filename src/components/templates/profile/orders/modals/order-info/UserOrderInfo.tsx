@@ -1,4 +1,5 @@
 import { useGetOrderById } from '@/src/api/orders/orders.queries';
+import OrderModalSkeleton from '@/src/components/shared/skeletons/order-modal-skeleton/OrderModalSkeleton';
 import OrderedProduct from '@/src/components/templates/dashboard/orders/modals/order-info/ordered-product/OrderedProduct';
 import { useTranslation } from 'react-i18next';
 import { FaTimes } from 'react-icons/fa';
@@ -18,7 +19,7 @@ const UserOrderInfoPopup = ({
   const { t } = useTranslation();
 
   // queries
-  const { data: oldOrder } = useGetOrderById(infoId);
+  const { data: oldOrder, isFetching } = useGetOrderById(infoId);
 
   return (
     <div
@@ -30,7 +31,7 @@ const UserOrderInfoPopup = ({
       {/* modal */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative flex max-h-[95vh] w-2/3 flex-col items-center justify-start overflow-y-auto rounded-xl bg-white p-6 text-start shadow transition-all dark:bg-gray-800 lg:w-1/2 ${
+        className={`relative flex max-h-[95vh] w-full flex-col items-center justify-start overflow-y-auto rounded-xl bg-white p-4 text-start shadow transition-all dark:bg-gray-800 sm:w-5/6 md:w-2/3 lg:w-1/2 ${
           openInfo ? 'scale-100 opacity-100' : 'scale-125 opacity-0'
         }`}
       >
@@ -43,8 +44,10 @@ const UserOrderInfoPopup = ({
         </button>
 
         {/* order info */}
-        {oldOrder ? (
-          <div className='mx-auto flex w-full max-w-xl flex-col gap-4 p-4'>
+        {isFetching ? (
+          <OrderModalSkeleton />
+        ) : oldOrder ? (
+          <div className='mx-auto flex w-full flex-col gap-4 p-2 sm:p-4'>
             {/* ----------- Customer name ----------- */}
             <p>
               {t('customer-name')} :{' '}
@@ -89,7 +92,7 @@ const UserOrderInfoPopup = ({
             <OrderedProduct products={oldOrder?.data.order.products} />
 
             {/* ----------- Delivery status ----------- */}
-            <div className='mx-auto flex w-1/2 justify-center'>
+            <div className='mx-auto flex w-full justify-center sm:w-2/3 md:w-1/2'>
               {oldOrder?.data.order.deliveryStatus ? (
                 <p>
                   {t('delivery-time')} :

@@ -99,12 +99,12 @@ const CategoryTemplate = ({ categorySlug }: CategoryTemplateProps) => {
   return (
     <div className='mx-auto my-20 flex max-w-6xl flex-col gap-10'>
       {/* ----------- Category title ----------- */}
-      <h2 className='mx-20 border-b-2 border-gray-400 pb-5 text-center text-5xl font-bold uppercase'>
+      <h2 className='mx-20 border-b-2 border-gray-400 pb-5 text-center text-3xl font-bold uppercase sm:text-5xl'>
         {categories?.data.categories[0].name}
       </h2>
 
       {/* ----------- Subcategories ----------- */}
-      <div className='flex justify-center text-center'>
+      <div className='text-center sm:flex sm:justify-center'>
         {!subCategoryFetching ? (
           <SubCategories
             handleClick={handleClick}

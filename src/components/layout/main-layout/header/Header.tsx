@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BiWorld } from 'react-icons/bi';
 import { FaCaretDown, FaCartShopping } from 'react-icons/fa6';
 import { IoMdLogIn, IoMdSearch } from 'react-icons/io';
 import { IoMenu } from 'react-icons/io5';
@@ -43,6 +44,8 @@ export default function Header() {
 
   // states
   const [showMobileDropdown, setShowMobileDropdown] = useState<boolean>(false);
+  const [showMobileLngDropdown, setShowMobileLngDropdown] =
+    useState<boolean>(false);
 
   // functions
   const handleLogout = () => {
@@ -52,7 +55,7 @@ export default function Header() {
   return (
     <div className='relative z-40 bg-white duration-200 dark:bg-gray-900 dark:text-white'>
       <div className='py-4'>
-        <div className='container flex items-center justify-between'>
+        <div className='container flex flex-col items-center justify-between gap-5 sm:flex-row sm:gap-0'>
           {/* Logo and Links section */}
           <div className='flex items-center gap-4'>
             <Link href={MainRoutes.HOME}>
@@ -103,11 +106,16 @@ export default function Header() {
                             </Link>
                           </li>
                         ))}
-                        <li onClick={handleLogout}>
-                          <span className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'>
-                            {t('logout')}
-                          </span>
-                        </li>
+                        {state.isLogin && (
+                          <li onClick={handleLogout}>
+                            <span
+                              className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'
+                              onClick={() => setShowMobileDropdown(false)}
+                            >
+                              {t('logout')}
+                            </span>
+                          </li>
+                        )}
                       </ul>
                     </div>
                   </li>
@@ -129,6 +137,15 @@ export default function Header() {
                 }`}
               >
                 <ul className='space-y-2'>
+                  <li>
+                    <Link
+                      href={MainRoutes.SHOP}
+                      onClick={() => setShowMobileDropdown(false)}
+                      className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'
+                    >
+                      {t('shop')}
+                    </Link>
+                  </li>
                   {DropdownLinks?.map((data) => (
                     <li
                       key={data?.id}
@@ -140,24 +157,30 @@ export default function Header() {
                     >
                       <Link
                         href={data?.link}
+                        onClick={() => setShowMobileDropdown(false)}
                         className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'
                       >
                         {t(data?.name)}
                       </Link>
                     </li>
                   ))}
-                  <li onClick={handleLogout}>
-                    <span className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'>
-                      {t('logout')}
-                    </span>
-                  </li>
+                  {state.isLogin && (
+                    <li onClick={handleLogout}>
+                      <span
+                        className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'
+                        onClick={() => setShowMobileDropdown(false)}
+                      >
+                        {t('logout')}
+                      </span>
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
           </div>
 
           {/* Navbar Right section */}
-          <div className='flex items-center justify-between gap-4'>
+          <div className='ms-4 flex items-center justify-between gap-4'>
             {/* Search Bar section */}
             <div className='group relative hidden sm:block'>
               <input
@@ -178,7 +201,7 @@ export default function Header() {
                 <Link href={MainRoutes.REGISTER}>
                   <IoMdLogIn className='text-2xl text-gray-600 dark:text-gray-400' />
                 </Link>
-                <div className='absolute bottom-2 end-0 h-4 w-4 text-sm text-gray-600 dark:text-gray-400'>
+                <div className='absolute bottom-2 end-0 hidden h-4 w-4 text-sm text-gray-600 dark:text-gray-400 sm:block'>
                   {t('login')}
                 </div>
               </button>
@@ -203,7 +226,7 @@ export default function Header() {
             </button>
 
             {/* Language section */}
-            <div className='flex items-center gap-4'>
+            <div className='hidden items-center gap-4 sm:flex'>
               {Object.keys(lngs).map((lng) => {
                 return (
                   <button
@@ -220,6 +243,43 @@ export default function Header() {
                   </button>
                 );
               })}
+            </div>
+
+            {/* Language section on Mobile */}
+            <div className='relative sm:hidden'>
+              <button
+                className='flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 transition-all duration-200 ease-in-out dark:text-gray-400'
+                onClick={() => setShowMobileLngDropdown((prev) => !prev)}
+              >
+                <BiWorld className='h-6 w-6' />
+              </button>
+              {/* Dropdown Menu */}
+              <div
+                className={`absolute z-[999] rounded-md bg-axGray p-2 dark:bg-gray-700 dark:text-white ${
+                  showMobileLngDropdown ? 'block' : 'hidden'
+                }`}
+              >
+                <ul className='space-y-2'>
+                  {Object.keys(lngs).map((lng) => {
+                    return (
+                      <li onClick={() => setShowMobileLngDropdown(false)}>
+                        <button
+                          key={lng}
+                          onClick={() => i18n.changeLanguage(lng)}
+                          disabled={i18n.resolvedLanguage === lng}
+                        >
+                          <Image
+                            src={lngs[lng as 'en' | 'fa'].flag}
+                            alt='language'
+                            width={20}
+                            height={20}
+                          />
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
 
             {/* Dark Mode section */}

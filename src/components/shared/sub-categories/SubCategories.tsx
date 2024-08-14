@@ -18,8 +18,10 @@ const SubCategories = ({
   return (
     <>
       <div className={show ? 'block' : 'hidden'}>
-        <h2 className='my-5 ms-14 text-xl'>{t('product-sub-category')}</h2>
-        <div className='ms-14 flex gap-5'>
+        <h2 className='my-5 ms-7 text-xl sm:ms-14'>
+          {t('product-sub-category')}
+        </h2>
+        <div className='ms-7 flex gap-5 overflow-x-auto sm:ms-14'>
           {/* all button */}
           <button
             onClick={handleClick}

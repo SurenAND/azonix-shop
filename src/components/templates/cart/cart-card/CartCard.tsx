@@ -61,7 +61,7 @@ const CartCard = ({ product, setOutOfStock, outOfStock }: CartCardProps) => {
           </p>
         </div>
         {/* Quantity */}
-        <div className='flex flex-col items-end gap-8'>
+        <div className='flex flex-col items-center gap-8 sm:items-end'>
           {productInDB?.data.product.quantity === 0 ? (
             <span className='text-nowrap text-sm text-red-500'>
               {t('out-of-stock')}

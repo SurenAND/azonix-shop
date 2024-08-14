@@ -55,7 +55,7 @@ export default function Header() {
   return (
     <div className='relative z-40 bg-white duration-200 dark:bg-gray-900 dark:text-white'>
       <div className='py-4'>
-        <div className='container flex items-center justify-between'>
+        <div className='container flex flex-col items-center justify-between gap-5 sm:flex-row sm:gap-0'>
           {/* Logo and Links section */}
           <div className='flex items-center gap-4'>
             <Link href={MainRoutes.HOME}>
@@ -248,7 +248,7 @@ export default function Header() {
             {/* Language section on Mobile */}
             <div className='relative sm:hidden'>
               <button
-                className='flex h-8 w-8 items-center justify-center rounded-lg text-axLightPurple transition-all duration-200 ease-in-out dark:text-axWhite'
+                className='flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 transition-all duration-200 ease-in-out dark:text-gray-400'
                 onClick={() => setShowMobileLngDropdown((prev) => !prev)}
               >
                 <BiWorld className='h-6 w-6' />

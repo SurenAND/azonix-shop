@@ -55,14 +55,16 @@ const Orders = () => {
 
   return (
     <main className='min-h-screen w-full p-3 md:w-[780px]'>
-      <header className='flex items-center justify-between'>
+      <header className='flex flex-col sm:flex-row sm:items-center sm:justify-between'>
         {/* ----------- Title ----------- */}
-        <h1 className='text-lg font-bold'>{t('orders-management')}</h1>
+        <h1 className='mb-2 text-lg font-bold sm:mb-0'>
+          {t('orders-management')}
+        </h1>
 
         {/* ----------- Filter buttons ----------- */}
         <div className='flex gap-2'>
           <div
-            className='flex items-center gap-1 border-l border-[#afafaf50] px-2'
+            className='flex items-center gap-1 border-l border-[#afafaf50] px-2 text-sm sm:text-base'
             onClick={() => deliverHandler(false)}
           >
             {isDelivered ? (
@@ -73,7 +75,7 @@ const Orders = () => {
             <span>{t('pending-delivery')}</span>
           </div>
           <div
-            className='flex items-center gap-1'
+            className='flex items-center gap-1 text-sm sm:text-base'
             onClick={() => deliverHandler(true)}
           >
             {isDelivered ? (
@@ -86,7 +88,7 @@ const Orders = () => {
         </div>
       </header>
 
-      <div className='mx-auto flex min-h-[calc(100vh-100px)] w-full items-center px-3 py-8 sm:justify-center md:w-[760px]'>
+      <div className='mx-auto flex min-h-[calc(100vh-100px)] w-full items-center px-0 py-4 sm:justify-center sm:px-3 sm:py-8 md:w-[760px]'>
         {/* ----------- Table ----------- */}
         <Suspense fallback={<Loading />}>
           {orders &&

@@ -105,7 +105,7 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
       {/* modal */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative flex max-h-[95vh] w-2/3 flex-col items-center justify-start overflow-y-auto rounded-xl bg-white p-6 text-start shadow transition-all dark:bg-gray-800 lg:w-1/2 ${
+        className={`relative flex max-h-[95vh] w-full flex-col items-center justify-start overflow-y-auto rounded-xl bg-white p-4 text-start shadow transition-all dark:bg-gray-800 sm:w-5/6 md:w-2/3 lg:w-1/2 ${
           openAdd ? 'scale-100 opacity-100' : 'scale-125 opacity-0'
         }`}
       >
@@ -143,7 +143,7 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
               {t('product-name-input-error')}
             </p>
           </div>
-          <div className='grid grid-cols-3 gap-4'>
+          <div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
             {/* Product Price */}
             <div className='flex flex-col'>
               <label className='mb-2 dark:text-gray-300'>
@@ -168,7 +168,7 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
             </div>
             {/* Product Discount Percentage */}
             <div className='flex flex-col'>
-              <label className='mb-2 dark:text-gray-300'>
+              <label className='mb-2 truncate dark:text-gray-300'>
                 {t('product-discount-percentage')} :
               </label>
               <input
@@ -214,7 +214,7 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
             </div>
           </div>
           {/* Product Brand & Category & Sub Category */}
-          <div className='grid gap-4 md:grid-cols-3'>
+          <div className='grid gap-4 sm:grid-cols-2 md:grid-cols-3'>
             {/* Product Brand */}
             <div className='flex flex-col'>
               <label className='mb-2 dark:text-gray-300'>
@@ -292,7 +292,7 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
           <label className='mb-2 dark:text-gray-300'>
             {t('product-description')} :
           </label>
-          <div className='mb-5 flex h-40 flex-col rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'>
+          <div className='mb-5 flex h-48 flex-col rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white sm:h-40'>
             <ReactQuill
               theme='snow'
               value={description}
@@ -312,7 +312,7 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
             </p>
           </div>
           {/* Product Image */}
-          <div className='flex flex-col lg:hidden'>
+          <div className='flex flex-col sm:hidden'>
             <label className='mb-2 dark:text-gray-300'>
               {t('product-image-limit')} :
             </label>

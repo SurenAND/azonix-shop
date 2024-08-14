@@ -51,10 +51,10 @@ function DashboardTemplate() {
           {searchParams === 'orders' && <Orders />}
           {!searchParams && (
             <div className='flex h-screen flex-col items-center justify-center gap-10'>
-              <h3 className='text-7xl font-black uppercase'>
+              <h3 className='text-5xl font-black uppercase sm:text-7xl'>
                 {t('hi') + ', Admin'}
               </h3>
-              <h4 className='text-center text-6xl capitalize'>
+              <h4 className='text-center text-4xl capitalize sm:text-6xl'>
                 {t('welcome-to-your-dashboard')}
               </h4>
             </div>

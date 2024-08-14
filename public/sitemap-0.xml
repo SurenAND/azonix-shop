@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<url><loc>https://tsnext-tw.thcl.dev</loc><lastmod>2024-08-13T19:25:26.961Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://tsnext-tw.thcl.dev/about-us</loc><lastmod>2024-08-13T19:25:26.963Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://tsnext-tw.thcl.dev/cart</loc><lastmod>2024-08-13T19:25:26.963Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://tsnext-tw.thcl.dev/dashboard</loc><lastmod>2024-08-13T19:25:26.963Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://tsnext-tw.thcl.dev/payment-en</loc><lastmod>2024-08-13T19:25:26.963Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://tsnext-tw.thcl.dev/payment-fa</loc><lastmod>2024-08-13T19:25:26.963Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://tsnext-tw.thcl.dev/payment-result</loc><lastmod>2024-08-13T19:25:26.963Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://tsnext-tw.thcl.dev/profile</loc><lastmod>2024-08-13T19:25:26.963Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://tsnext-tw.thcl.dev/register</loc><lastmod>2024-08-13T19:25:26.963Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://tsnext-tw.thcl.dev/shop</loc><lastmod>2024-08-13T19:25:26.963Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://tsnext-tw.thcl.dev/wishlist</loc><lastmod>2024-08-13T19:25:26.963Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+</urlset>

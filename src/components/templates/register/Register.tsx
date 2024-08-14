@@ -71,10 +71,10 @@ export default function RegisterTemplate() {
   return (
     <>
       <main
-        className='flex h-screen select-none flex-col items-center justify-center gap-4 bg-gradient-to-r from-[#e2e2e2] to-[#c9d6ff] p-5'
+        className='flex min-h-screen select-none flex-col items-center justify-center gap-4 bg-gradient-to-r from-[#e2e2e2] to-[#c9d6ff] p-5'
         dir={dir}
       >
-        <div className='relative min-h-[600px] w-[1000px] max-w-full overflow-hidden rounded-3xl bg-white shadow-lg'>
+        <div className='relative min-h-[550px] w-[1000px] max-w-full overflow-hidden rounded-3xl bg-white shadow-lg sm:min-h-[600px]'>
           {isSignUp ? (
             <SignUpTemplate active={active} />
           ) : (

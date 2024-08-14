@@ -101,6 +101,9 @@ export const useSignup = () => {
         toast.error(data?.message);
       }
     },
+    onError(data) {
+      toast.error(data?.message);
+    },
   });
 };
 

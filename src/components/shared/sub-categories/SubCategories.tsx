@@ -21,7 +21,7 @@ const SubCategories = ({
         <h2 className='my-5 ms-7 text-xl sm:ms-14'>
           {t('product-sub-category')}
         </h2>
-        <div className='ms-7 flex gap-5 overflow-x-scroll sm:ms-14'>
+        <div className='ms-7 flex gap-5 overflow-x-auto sm:ms-14'>
           {/* all button */}
           <button
             onClick={handleClick}

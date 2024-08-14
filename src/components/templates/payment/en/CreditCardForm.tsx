@@ -108,12 +108,12 @@ const CreditCardForm = () => {
   };
 
   return (
-    <div className='flex min-h-screen items-center justify-center bg-axLightPurple'>
+    <div className='flex min-h-screen items-center justify-center bg-axLightPurple p-3 sm:p-0'>
       <div className='relative mt-16 w-full max-w-xl flex-col items-center justify-center'>
         {/* card */}
-        <div className='absolute -top-16 left-1/2 mx-auto my-0 h-[220px] w-[350px] -translate-x-1/2 rounded-xl bg-cover bg-center transition-transform duration-200'>
+        <div className='absolute -top-16 left-1/2 mx-auto my-0 h-[200px] w-[300px] -translate-x-1/2 rounded-xl bg-cover bg-center transition-transform duration-200 sm:h-[220px] sm:w-[350px]'>
           <div
-            className={`perspective-1000 preserve-3d relative mx-auto my-0 h-[220px] w-[350px] rounded-xl bg-cover bg-center transition-transform duration-200 ${isCardFlipped ? 'rotate-y-180' : ''}`}
+            className={`perspective-1000 preserve-3d relative mx-auto my-0 h-[200px] w-[300px] rounded-xl bg-cover bg-center transition-transform duration-200 sm:h-[220px] sm:w-[350px] ${isCardFlipped ? 'rotate-y-180' : ''}`}
             style={{ backgroundImage: `url(${CardBackground.src})` }}
           >
             {/* front */}
@@ -126,7 +126,7 @@ const CreditCardForm = () => {
               {/* card number */}
               <label
                 htmlFor='cardNumber'
-                className='mt-5 block cursor-pointer px-4 py-2 text-center font-mono text-2xl'
+                className='mt-2 block cursor-pointer px-4 py-2 text-center font-mono text-xl sm:mt-5 sm:text-2xl'
               >
                 {generateCardNumberMask(watchedFields.cardNumber || '')}
               </label>

@@ -15,7 +15,7 @@ const ProfileTemplate = () => {
   const { state } = useUserContext();
 
   return (
-    <div className='z-50 flex h-full w-full items-start justify-center overflow-y-auto rounded-lg bg-white shadow-ax1 dark:bg-gray-400 md:w-3/5'>
+    <div className='z-50 flex w-full items-start justify-center overflow-y-auto rounded-lg bg-white shadow-ax1 dark:bg-gray-400 max-md:h-full md:w-3/5'>
       {searchParams === 'account-settings' && <AccountSettings />}
       {searchParams === 'change-password' && <ChangePassword />}
       {searchParams === 'your-orders' && <RecentOrders />}

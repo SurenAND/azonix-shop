@@ -7,11 +7,9 @@ export const req = axios.create({ baseURL: BASE_URL });
 
 req.interceptors.request.use(
   (config) => {
-    if (config.url !== '/auth/token') {
-      const accessToken = getCookie('accessToken');
-      if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;
-      }
+    const accessToken = getCookie('accessToken');
+    if (accessToken) {
+      config.headers.Authorization = `Token ${accessToken}`;
     }
     return config;
   },
@@ -27,34 +25,21 @@ req.interceptors.response.use(
 
   async (error) => {
     const config = error.config;
-    if (
-      error.response.status === 401 &&
-      config.url !== '/auth/login' &&
-      config.url !== '/auth/token'
-    ) {
+    if (error.response.status === 401) {
       try {
-        const refreshToken = getCookie('refreshToken');
-        const response = await req.post('/auth/token', { refreshToken });
-        const accessToken = response?.data?.token?.accessToken;
-
+        const accessToken = getCookie('accessToken');
         if (accessToken) {
           setCookie('accessToken', accessToken);
-          config.headers.Authorization = `Bearer ${accessToken}`;
+          config.headers.Authorization = `Token ${accessToken}`;
           return req(config);
         } else {
           throw new Error('Failed to refresh token');
         }
       } catch (refreshError) {
         deleteCookie('accessToken');
-        deleteCookie('refreshToken');
         location.href = MainRoutes.REGISTER;
         return Promise.reject(refreshError);
       }
-    } else if (config.url === '/auth/token') {
-      deleteCookie('accessToken');
-      deleteCookie('refreshToken');
-      location.href = MainRoutes.REGISTER;
-      return Promise.reject(error);
     } else {
       return Promise.reject(error);
     }

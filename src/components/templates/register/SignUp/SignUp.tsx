@@ -1,11 +1,19 @@
-import { useSignup } from '@/src/api/auth/auth.queries';
 import { newUserType } from '@/src/api/auth/auth.type';
 import MyInput from '@/src/components/shared/input/Input';
+import { MainRoutes } from '@/src/constant/routes';
+import { useUserContext } from '@/src/context/authContext';
+import { useAuthStore } from '@/src/store/auth/auth.store';
+import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import { useUserStore } from '@/src/store/user/user.store';
+import useWishlistStore from '@/src/store/wishlist/wishlist.store';
+import { AuthReducerAction } from '@/src/types/enums';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { CgEye } from 'react-icons/cg';
 import { TbEyeClosed } from 'react-icons/tb';
+import { toast } from 'sonner';
 
 type SignUpTemplateProps = {
   active: boolean;
@@ -19,17 +27,57 @@ export default function SignUpTemplate({ active }: SignUpTemplateProps) {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const { push: pushRouter } = useRouter();
+
+  // contexts
+  const { dispatch } = useUserContext();
 
   // states
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  // stores
+  const { signup, error } = useAuthStore();
+  const { assignCartToUser } = useCheckoutStore();
+  const { setUserData } = useUserStore();
+  const { assignWishlistToUser } = useWishlistStore();
+
   // mutations
-  const { mutate: signupMutate } = useSignup();
+  // const { mutate: signupMutate } = useSignup();
 
   // functions
+  // const handleSignUp = (data: FieldValues) => {
+  //   const newUser = data as newUserType;
+  //   signupMutate(newUser);
+  // };
+
   const handleSignUp = (data: FieldValues) => {
+    const userId = crypto.randomUUID();
     const newUser = data as newUserType;
-    signupMutate(newUser);
+    const success = signup({ ...newUser, id: userId });
+    if (success) {
+      dispatch({
+        type: AuthReducerAction.SET_USER,
+        payload: {
+          username: newUser.username,
+          role: 'ADMIN',
+          _id: userId,
+          firstname: newUser.firstname,
+          accessToken: 'QB1PaCZVTc2dZA8KKlAYg9jBmZBmehja',
+        },
+      });
+      setUserData({
+        firstname: newUser.firstname,
+        lastname: newUser.lastname,
+        username: newUser.username,
+        phoneNumber: newUser.phoneNumber,
+        address: newUser.address,
+      });
+      assignCartToUser(userId);
+      assignWishlistToUser(userId);
+      pushRouter(MainRoutes.HOME);
+    } else {
+      toast.error(error);
+    }
   };
 
   return (

@@ -16,7 +16,6 @@ export type AuthReducerActionType =
         role: string;
         _id: string;
         accessToken: string;
-        refreshToken: string;
         firstname: string;
       };
     }

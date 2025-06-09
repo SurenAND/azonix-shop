@@ -37,9 +37,6 @@ function authReducer(
       setCookie('accessToken', action.payload.accessToken, {
         expires: expireDate,
       });
-      setCookie('refreshToken', action.payload.refreshToken, {
-        expires: expireDate,
-      });
       setCookie('firstname', action.payload.firstname, {
         expires: expireDate,
       });
@@ -87,7 +84,6 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
     const role = getCookie('role') ?? '';
     const _id = getCookie('_id') ?? '';
     const accessToken = getCookie('accessToken') ?? '';
-    const refreshToken = getCookie('refreshToken') ?? '';
     const firstname = getCookie('firstname') ?? '';
     if (!!accessToken) {
       dispatch({
@@ -97,7 +93,6 @@ export function AuthContextProvider({ children }: { children: ReactNode }) {
           role,
           _id,
           accessToken,
-          refreshToken,
           firstname,
         },
       });

@@ -1,4 +1,3 @@
-import { useLogout } from '@/src/api/auth/auth.queries';
 import UsFlag from '@/src/assets/images/languages/en.png';
 import IrFlag from '@/src/assets/images/languages/fa.png';
 import Logo from '@/src/assets/images/logo.webp';
@@ -8,7 +7,9 @@ import {
 } from '@/src/components/layout/main-layout/header/data';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
+import { useAuthStore } from '@/src/store/auth/auth.store';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
+import { AuthReducerAction } from '@/src/types/enums';
 import dynamic from 'next/dynamic';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
@@ -35,11 +36,12 @@ export default function Header() {
   const { push: pushRouter } = useRouter();
 
   // mutations
-  const { mutate: logout } = useLogout();
+  // const { mutate: logout } = useLogout();
 
   // contexts & stores
-  const { state } = useUserContext();
+  const { state, dispatch } = useUserContext();
   const { shoppingCartInfo } = useCheckoutStore();
+  const { logout, error } = useAuthStore();
 
   // states
   const [showMobileDropdown, setShowMobileDropdown] = useState<boolean>(false);
@@ -47,6 +49,7 @@ export default function Header() {
   // functions
   const handleLogout = () => {
     logout();
+    dispatch({ type: AuthReducerAction.LOGOUT });
   };
 
   return (

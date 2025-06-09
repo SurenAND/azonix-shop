@@ -59,7 +59,7 @@ export default function LogInTemplate({ active }: LogInTemplateProps) {
         type: AuthReducerAction.SET_USER,
         payload: {
           username: userData.username,
-          role: 'ADMIN',
+          role: userData.type,
           _id: userData.id,
           firstname: userData.firstname,
           accessToken: 'QB1PaCZVTc2dZA8KKlAYg9jBmZBmehja',

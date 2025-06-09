@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { AuthState, User } from './auth.type';
+import { sampleUserWithUserType } from './sampleUserData';
 
 const USERS_KEY = 'auth_users';
 
 function getStoredUsers(): User[] {
   const stored = localStorage.getItem(USERS_KEY);
-  return stored ? JSON.parse(stored) : [];
+  return stored ? JSON.parse(stored) : sampleUserWithUserType;
 }
 
 function saveUsers(users: User[]) {
@@ -22,12 +23,32 @@ function paginate<T>(items: T[], page = 1, limit = 10) {
   return { users: paginated, total, page, pages };
 }
 
+const initialState: AuthState = {
+  currentUser: null,
+  error: null,
+  deleteUser: () => {},
+  getUserById: () => null,
+  getUsers: (page = 1, limit = 10) => ({ users: [], total: 0, page, pages: 0 }),
+  getUsersByType: (type: string, page = 1, limit = 10) => ({
+    users: [],
+    total: 0,
+    page,
+    pages: 0,
+  }),
+  login: (username: string, password: string) => ({
+    success: false,
+    userData: null,
+  }),
+  logout: () => {},
+  signup: (user: User) => false,
+  updateUser: (profile: User) => {},
+  updateUserAsAdmin: (profile: User) => {},
+};
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      currentUser: null,
-      error: null,
-
+      ...initialState,
       signup: (newUser) => {
         const users = getStoredUsers();
         const exists = users.some((u) => u.username === newUser.username);
@@ -58,6 +79,18 @@ export const useAuthStore = create<AuthState>()(
 
       logout: () => {
         set({ currentUser: null, error: null });
+      },
+
+      updateUserAsAdmin: (profile: User) => {
+        const users = getStoredUsers();
+        const updatedUsers = users.map((user) =>
+          user.id === profile.id ? profile : user,
+        );
+        saveUsers(updatedUsers);
+
+        if (profile.type === 'ADMIN') {
+          set({ currentUser: profile, error: null });
+        }
       },
 
       updateUser: (profile: User) => {

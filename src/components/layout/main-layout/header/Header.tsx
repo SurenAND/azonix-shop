@@ -150,7 +150,7 @@ export default function Header() {
                     </li>
                   ))}
                   <li onClick={handleLogout}>
-                    <span className='inline-block w-full rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'>
+                    <span className='inline-block w-full cursor-pointer rounded-md p-2 font-semibold text-gray-500 duration-200 hover:bg-primary/20 dark:text-gray-400 dark:hover:text-white'>
                       {t('logout')}
                     </span>
                   </li>

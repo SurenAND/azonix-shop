@@ -39,19 +39,10 @@ export default function SignUpTemplate({ active }: SignUpTemplateProps) {
   const { assignCartToUser } = useCheckoutStore();
   const { assignWishlistToUser } = useWishlistStore();
 
-  // mutations
-  // const { mutate: signupMutate } = useSignup();
-
-  // functions
-  // const handleSignUp = (data: FieldValues) => {
-  //   const newUser = data as newUserType;
-  //   signupMutate(newUser);
-  // };
-
   const handleSignUp = (data: FieldValues) => {
     const userId = crypto.randomUUID();
     const newUser = data as User;
-    const success = signup({ ...newUser, id: userId });
+    const success = signup({ ...newUser, id: userId, type: 'ADMIN' });
     if (success) {
       dispatch({
         type: AuthReducerAction.SET_USER,

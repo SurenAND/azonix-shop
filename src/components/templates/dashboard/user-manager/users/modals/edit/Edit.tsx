@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/src/store/auth/auth.store';
 import { User } from '@/src/store/auth/auth.type';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { FaTimes } from 'react-icons/fa';
@@ -29,9 +29,16 @@ const EditPopUp = ({
   } = useForm();
 
   // stores
-  const { updateUser, getUserById } = useAuthStore();
+  const { updateUserAsAdmin, getUserById } = useAuthStore();
 
-  const oldUser = getUserById(idToEdit);
+  // states
+  const [oldUser, setOldUser] = useState<User>();
+
+  useEffect(() => {
+    setOldUser(getUserById(idToEdit)!);
+  }, [idToEdit]);
+
+  // const oldUser = getUserById(idToEdit);
 
   // preFill the form
   useEffect(() => {
@@ -44,12 +51,21 @@ const EditPopUp = ({
         address: oldUser.address || '',
       });
     }
-  }, [oldUser, reset]);
+  }, [oldUser]);
 
   // functions
   const handleForm = (data: FieldValues) => {
     if (oldUser) {
-      updateUser(data as User);
+      updateUserAsAdmin({
+        id: oldUser.id,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        phoneNumber: data.phoneNumber,
+        address: data.address,
+        username: data.username,
+        password: oldUser.password,
+        type: oldUser.type,
+      });
       reset();
       onClose();
       setIdToEdit('');

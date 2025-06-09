@@ -25,6 +25,7 @@ export interface AuthState {
     password: string,
   ) => { success: boolean; userData: User | null };
   updateUser: (profile: User) => void;
+  updateUserAsAdmin: (profile: User) => void;
   logout: () => void;
   getUsers: (page?: number, limit?: number) => PaginatedResult;
   getUsersByType: (

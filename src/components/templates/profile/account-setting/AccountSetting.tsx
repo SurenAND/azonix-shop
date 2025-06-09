@@ -1,5 +1,4 @@
 import { useAuthStore } from '@/src/store/auth/auth.store';
-import { User } from '@/src/store/auth/auth.type';
 import { useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -30,7 +29,16 @@ const AccountSettings = () => {
   // functions
   const onSubmit = (data: FieldValues) => {
     if (currentUser) {
-      updateUser(data as User);
+      updateUser({
+        id: currentUser.id,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        phoneNumber: data.phoneNumber,
+        address: data.address,
+        username: data.username,
+        password: currentUser.password,
+        type: currentUser.type,
+      });
       toast.success(t('change-saved'));
     }
   };

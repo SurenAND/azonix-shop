@@ -1,5 +1,5 @@
-import { useGetUserById, useUpdateUser } from '@/src/api/auth/auth.queries';
 import { useUserContext } from '@/src/context/authContext';
+import { useAuthStore } from '@/src/store/auth/auth.store';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { BsFillShieldLockFill } from 'react-icons/bs';
@@ -13,38 +13,29 @@ const ChangePassword = () => {
   // contexts
   const { state } = useUserContext();
 
-  // queries
-  const { data: userData } = useGetUserById(state.userId);
+  // stores
+  const { updateUser, getUserById } = useAuthStore();
 
-  // mutations
-  const { mutate: updateUser } = useUpdateUser();
+  const oldUser = getUserById(state.userId);
 
   // functions
   const onSubmit = (data: FieldValues) => {
     if (data.newPassword !== data.confirmNewPassword) {
       toast.error(t('password-not-match'));
-    } else if (userData && data.newPassword && data.confirmNewPassword) {
-      updateUser(
-        {
-          newUser: userData?.data.user,
-          data: {
-            password: data.newPassword,
-          },
-        },
-        {
-          onSuccess: () => {
-            toast.success(t('password-changed-successfully'));
-            reset();
-          },
-        },
-      );
+    } else if (oldUser && data.newPassword && data.confirmNewPassword) {
+      updateUser({
+        ...oldUser,
+        password: data.newPassword,
+      });
+      toast.success(t('password-changed-successfully'));
+      reset();
     }
   };
 
   return (
     <div className='flex h-[75vh] w-full flex-col items-center space-y-16 p-10'>
-      <div className='bg-profileGradient flex w-full gap-8 rounded-lg p-5'>
-        <div className='bg-profileGradient flex h-24 w-40 items-center justify-center rounded-full p-2 text-blue-500'>
+      <div className='flex w-full gap-8 rounded-lg bg-profileGradient p-5'>
+        <div className='flex h-24 w-40 items-center justify-center rounded-full bg-profileGradient p-2 text-blue-500'>
           <BsFillShieldLockFill className='h-2/3 w-2/3' />
         </div>
         <div className='flex flex-col'>

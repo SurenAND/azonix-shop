@@ -8,9 +8,9 @@ import CheckoutSkeleton from '@/src/components/shared/skeletons/checkout-skeleto
 import DeliveryInfoSkeleton from '@/src/components/shared/skeletons/delivery-info-skeleton/DeliveryInfoSkeleton';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
+import { useAuthStore } from '@/src/store/auth/auth.store';
+import { User } from '@/src/store/auth/auth.type';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
-import { useUserStore } from '@/src/store/user/user.store';
-import { UserStoreType } from '@/src/store/user/user.type';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -50,7 +50,7 @@ const CartTemplate = () => {
     deliveryDate,
     resetUserDeliveryDate,
   } = useCheckoutStore();
-  const { userData, setUserData } = useUserStore();
+  const { currentUser, updateUser } = useAuthStore();
 
   // mutations
   const { mutate: addNewOrder } = useAddNewOrder();
@@ -58,22 +58,22 @@ const CartTemplate = () => {
 
   // preFill form
   useEffect(() => {
-    if (userData) {
+    if (currentUser) {
       reset({
-        firstname: userData.firstname || '',
-        lastname: userData.lastname || '',
-        username: userData.username || '',
-        phoneNumber: userData.phoneNumber || '',
-        address: userData.address || '',
+        firstname: currentUser.firstname || '',
+        lastname: currentUser.lastname || '',
+        username: currentUser.username || '',
+        phoneNumber: currentUser.phoneNumber || '',
+        address: currentUser.address || '',
       });
     }
-  }, [reset, userData]);
+  }, [reset, currentUser]);
 
   // function
   const handleForm = (data: FieldValues) => {
     // update user
-    if (userData) {
-      setUserData(data as UserStoreType);
+    if (currentUser) {
+      updateUser(data as User);
     }
 
     if (paymentName === 'online' && i18n.language === 'en') {

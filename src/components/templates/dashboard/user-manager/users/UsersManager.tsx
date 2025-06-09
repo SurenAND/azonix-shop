@@ -1,7 +1,7 @@
-import { useDeleteUser, useGetUsers } from '@/src/api/auth/auth.queries';
 import { EmptyList } from '@/src/components/shared/empty-list/EmptyList';
 import Loading from '@/src/components/shared/loading/Loading';
 import Pagination from '@/src/components/shared/pagination/Pagination';
+import { useAuthStore } from '@/src/store/auth/auth.store';
 import dynamic from 'next/dynamic';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -37,23 +37,19 @@ function UsersManager() {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [idToEdit, setIdToEdit] = useState<string>('');
 
-  // queries
-  const { data: users, refetch } = useGetUsers({
-    page,
-    role: 'USER',
-  });
+  const { getUsersByType, deleteUser } = useAuthStore();
+
+  let users = getUsersByType('USER', page);
 
   useEffect(() => {
-    refetch();
+    users = getUsersByType('USER', page);
   }, [page]);
-
-  // mutations
-  const { mutate: deleteUser } = useDeleteUser();
 
   // functions
   const handleDelete = (id: string) => {
     deleteUser(id);
     toast.success(t('user-delete-success'));
+    users = getUsersByType('USER', page);
   };
 
   return (
@@ -65,13 +61,11 @@ function UsersManager() {
       {/* table */}
       <Suspense fallback={<Loading />}>
         <div className='mx-auto flex min-h-[calc(100vh-100px)] w-full items-center px-3 py-8 sm:justify-center md:w-[760px]'>
-          {users &&
-          users.status === 'success' &&
-          users.data.users.length === 0 ? (
+          {users && users.users.length === 0 ? (
             <EmptyList />
           ) : (
             <UsersTable
-              list={users?.data.users || []}
+              list={users?.users || []}
               idToDelete={idToDelete}
               setOpenDelete={setOpenDelete}
               setIdToEdit={setIdToEdit}
@@ -85,7 +79,7 @@ function UsersManager() {
       {users && (
         <Pagination
           page={page}
-          totalPages={users.total_pages}
+          totalPages={users.pages}
           OnSetPage={(pageNo) => setPage(pageNo)}
         />
       )}

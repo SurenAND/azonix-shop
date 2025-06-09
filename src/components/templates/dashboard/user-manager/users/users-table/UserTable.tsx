@@ -1,10 +1,10 @@
-import { UserDataType } from '@/src/api/auth/auth.type';
+import { User } from '@/src/store/auth/auth.type';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 type UsersTableProps = {
-  list: UserDataType[];
+  list: User[];
   idToDelete: MutableRefObject<string>;
   setOpenDelete: Dispatch<SetStateAction<boolean>>;
   setIdToEdit: Dispatch<SetStateAction<string>>;
@@ -57,7 +57,7 @@ const UsersTable = ({
         {list.map((user, index) => {
           return (
             <tr
-              key={user._id}
+              key={user.id}
               className={`mb-4 flex flex-col sm:table-row ${
                 Math.floor(index % 2) !== 0 ? 'bg-gray-400 text-white' : ''
               } ${Math.floor(index % 2) !== 0 ? 'dark:text-black' : ''}`}
@@ -75,11 +75,11 @@ const UsersTable = ({
                 <div className='flex select-none items-center justify-center gap-4'>
                   <MdDelete
                     className='w-5 cursor-pointer'
-                    onClick={() => setDeleteUserModal(user._id)}
+                    onClick={() => setDeleteUserModal(user.id)}
                   />
                   <MdEdit
                     className='w-5 cursor-pointer'
-                    onClick={() => setEditUserModal(user._id)}
+                    onClick={() => setEditUserModal(user.id)}
                   />
                 </div>
               </td>

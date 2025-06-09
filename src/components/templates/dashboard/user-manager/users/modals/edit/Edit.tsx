@@ -1,4 +1,5 @@
-import { useGetUserById, useUpdateUser } from '@/src/api/auth/auth.queries';
+import { useAuthStore } from '@/src/store/auth/auth.store';
+import { User } from '@/src/store/auth/auth.type';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -27,21 +28,20 @@ const EditPopUp = ({
     formState: { errors },
   } = useForm();
 
-  // mutations
-  const { mutate: updateUser } = useUpdateUser();
+  // stores
+  const { updateUser, getUserById } = useAuthStore();
 
-  // queries
-  const { data: oldUser } = useGetUserById(idToEdit);
+  const oldUser = getUserById(idToEdit);
 
   // preFill the form
   useEffect(() => {
     if (oldUser) {
       reset({
-        firstname: oldUser?.data?.user?.firstname || '',
-        lastname: oldUser?.data?.user?.lastname || '',
-        username: oldUser?.data?.user?.username || '',
-        phoneNumber: oldUser?.data?.user?.phoneNumber || '',
-        address: oldUser?.data?.user?.address || '',
+        firstname: oldUser.firstname || '',
+        lastname: oldUser.lastname || '',
+        username: oldUser.username || '',
+        phoneNumber: oldUser.phoneNumber || '',
+        address: oldUser.address || '',
       });
     }
   }, [oldUser, reset]);
@@ -49,22 +49,11 @@ const EditPopUp = ({
   // functions
   const handleForm = (data: FieldValues) => {
     if (oldUser) {
-      updateUser(
-        {
-          newUser: oldUser?.data.user,
-          data: data,
-        },
-        {
-          onSuccess: (data) => {
-            if (data.status === 'success') {
-              reset();
-              onClose();
-              setIdToEdit('');
-              toast.success(t('changes-saved'));
-            }
-          },
-        },
-      );
+      updateUser(data as User);
+      reset();
+      onClose();
+      setIdToEdit('');
+      toast.success(t('changes-saved'));
     }
   };
 

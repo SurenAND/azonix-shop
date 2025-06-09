@@ -1,5 +1,5 @@
-import ToLogIn from '@/src/components/templates/register/toggle/to-login/ToLogIn';
-import ToSignUp from '@/src/components/templates/register/toggle/to-signup/ToSignUp';
+import ToLogIn from '@/src/components/templates/register/Toggle/to-login/ToLogIn';
+import ToSignUp from '@/src/components/templates/register/Toggle/to-signup/ToSignUp';
 import { useTranslation } from 'react-i18next';
 
 type ToggleRegisterProps = {

@@ -6,6 +6,14 @@ export interface User {
   address: string;
   username: string;
   password: string;
+  type: 'ADMIN' | 'USER';
+}
+
+export interface PaginatedResult {
+  users: User[];
+  total: number;
+  page: number;
+  pages: number;
 }
 
 export interface AuthState {
@@ -16,5 +24,14 @@ export interface AuthState {
     username: string,
     password: string,
   ) => { success: boolean; userData: User | null };
+  updateUser: (profile: User) => void;
   logout: () => void;
+  getUsers: (page?: number, limit?: number) => PaginatedResult;
+  getUsersByType: (
+    type: string,
+    page?: number,
+    limit?: number,
+  ) => PaginatedResult;
+  getUserById: (id: string) => User | null;
+  deleteUser: (id: string) => void;
 }

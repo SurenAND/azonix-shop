@@ -13,6 +13,15 @@ function saveUsers(users: User[]) {
   localStorage.setItem(USERS_KEY, JSON.stringify(users));
 }
 
+function paginate<T>(items: T[], page = 1, limit = 10) {
+  const total = items.length;
+  const pages = Math.ceil(total / limit);
+  const start = (page - 1) * limit;
+  const end = start + limit;
+  const paginated = items.slice(start, end);
+  return { users: paginated, total, page, pages };
+}
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
@@ -50,10 +59,40 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({ currentUser: null, error: null });
       },
+
+      updateUser: (profile: User) => {
+        const users = getStoredUsers();
+        const updatedUsers = users.map((user) =>
+          user.id === profile.id ? profile : user,
+        );
+        saveUsers(updatedUsers);
+        set({ currentUser: profile, error: null });
+      },
+
+      getUsers: (page = 1, limit = 10) => {
+        const users = getStoredUsers();
+        return paginate(users, page, limit);
+      },
+
+      getUsersByType: (type: string, page = 1, limit = 10) => {
+        const users = getStoredUsers().filter((user) => user.type === type);
+        return paginate(users, page, limit);
+      },
+
+      getUserById: (id: string) => {
+        const users = getStoredUsers();
+        return users.find((user) => user.id === id) || null;
+      },
+
+      deleteUser: (id: string) => {
+        const users = getStoredUsers();
+        const updatedUsers = users.filter((user) => user.id !== id);
+        saveUsers(updatedUsers);
+      },
     }),
     {
-      name: 'auth-store', // localStorage key for zustand state
-      partialize: (state) => ({ currentUser: state.currentUser }), // persist only currentUser
+      name: 'auth-store',
+      partialize: (state) => ({ currentUser: state.currentUser }),
     },
   ),
 );

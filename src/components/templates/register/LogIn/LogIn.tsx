@@ -4,7 +4,6 @@ import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import { useAuthStore } from '@/src/store/auth/auth.store';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
-import { useUserStore } from '@/src/store/user/user.store';
 import useWishlistStore from '@/src/store/wishlist/wishlist.store';
 import { AuthReducerAction } from '@/src/types/enums';
 import Link from 'next/link';
@@ -46,7 +45,6 @@ export default function LogInTemplate({ active }: LogInTemplateProps) {
   // stores
   const { login, error } = useAuthStore();
   const { assignCartToUser } = useCheckoutStore();
-  const { setUserData } = useUserStore();
   const { assignWishlistToUser } = useWishlistStore();
 
   // mutations
@@ -66,13 +64,6 @@ export default function LogInTemplate({ active }: LogInTemplateProps) {
           firstname: userData.firstname,
           accessToken: 'QB1PaCZVTc2dZA8KKlAYg9jBmZBmehja',
         },
-      });
-      setUserData({
-        firstname: userData.firstname,
-        lastname: userData.lastname,
-        username: userData.username,
-        phoneNumber: userData.phoneNumber,
-        address: userData.address,
       });
       assignCartToUser(userData.id);
       assignWishlistToUser(userData.id);

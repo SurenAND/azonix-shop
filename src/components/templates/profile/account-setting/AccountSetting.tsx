@@ -1,6 +1,5 @@
-import { useGetUserById, useUpdateUser } from '@/src/api/auth/auth.queries';
-import { useUserContext } from '@/src/context/authContext';
-import { useUserStore } from '@/src/store/user/user.store';
+import { useAuthStore } from '@/src/store/auth/auth.store';
+import { User } from '@/src/store/auth/auth.type';
 import { useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -13,58 +12,33 @@ const AccountSettings = () => {
   const { register, handleSubmit, reset } = useForm();
 
   // context & stores
-  const { state } = useUserContext();
-  const { setUserData } = useUserStore();
-
-  // queries
-  const { data: userData } = useGetUserById(state.userId);
-
-  // mutations
-  const { mutate: updateUser } = useUpdateUser();
+  const { currentUser, updateUser } = useAuthStore();
 
   // preFill the form
   useEffect(() => {
-    if (userData) {
+    if (currentUser) {
       reset({
-        username: userData?.data.user.username,
-        firstname: userData?.data.user.firstname,
-        lastname: userData?.data.user.lastname,
-        phoneNumber: userData?.data.user.phoneNumber,
-        address: userData?.data.user.address,
+        username: currentUser.username,
+        firstname: currentUser.firstname,
+        lastname: currentUser.lastname,
+        phoneNumber: currentUser.phoneNumber,
+        address: currentUser.address,
       });
     }
-  }, [userData, reset]);
+  }, [currentUser, reset]);
 
   // functions
   const onSubmit = (data: FieldValues) => {
-    if (userData) {
-      updateUser(
-        {
-          newUser: userData?.data.user,
-          data: data,
-        },
-        {
-          onSuccess(data) {
-            if (data?.status === 'success') {
-              setUserData({
-                firstname: data?.data.user.firstname,
-                lastname: data?.data.user.lastname,
-                username: data?.data.user.username,
-                phoneNumber: data?.data.user.phoneNumber,
-                address: data?.data.user.address,
-              });
-              toast.success(t('change-saved'));
-            }
-          },
-        },
-      );
+    if (currentUser) {
+      updateUser(data as User);
+      toast.success(t('change-saved'));
     }
   };
 
   return (
     <div className='flex h-[75vh] w-full flex-col items-center space-y-10 p-10'>
-      <div className='bg-profileGradient flex w-full gap-8 rounded-lg p-5'>
-        <div className='bg-profileGradient flex h-24 w-40 items-center justify-center rounded-full p-2 text-blue-500'>
+      <div className='flex w-full gap-8 rounded-lg bg-profileGradient p-5'>
+        <div className='flex h-24 w-40 items-center justify-center rounded-full bg-profileGradient p-2 text-blue-500'>
           <FaShieldHalved className='h-2/3 w-2/3' />
         </div>
         <div className='flex flex-col'>

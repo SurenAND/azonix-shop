@@ -1,10 +1,9 @@
-import { newUserType } from '@/src/api/auth/auth.type';
 import MyInput from '@/src/components/shared/input/Input';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import { useAuthStore } from '@/src/store/auth/auth.store';
+import { User } from '@/src/store/auth/auth.type';
 import useCheckoutStore from '@/src/store/checkout/checkout.store';
-import { useUserStore } from '@/src/store/user/user.store';
 import useWishlistStore from '@/src/store/wishlist/wishlist.store';
 import { AuthReducerAction } from '@/src/types/enums';
 import { useRouter } from 'next/router';
@@ -38,7 +37,6 @@ export default function SignUpTemplate({ active }: SignUpTemplateProps) {
   // stores
   const { signup, error } = useAuthStore();
   const { assignCartToUser } = useCheckoutStore();
-  const { setUserData } = useUserStore();
   const { assignWishlistToUser } = useWishlistStore();
 
   // mutations
@@ -52,7 +50,7 @@ export default function SignUpTemplate({ active }: SignUpTemplateProps) {
 
   const handleSignUp = (data: FieldValues) => {
     const userId = crypto.randomUUID();
-    const newUser = data as newUserType;
+    const newUser = data as User;
     const success = signup({ ...newUser, id: userId });
     if (success) {
       dispatch({
@@ -64,13 +62,6 @@ export default function SignUpTemplate({ active }: SignUpTemplateProps) {
           firstname: newUser.firstname,
           accessToken: 'QB1PaCZVTc2dZA8KKlAYg9jBmZBmehja',
         },
-      });
-      setUserData({
-        firstname: newUser.firstname,
-        lastname: newUser.lastname,
-        username: newUser.username,
-        phoneNumber: newUser.phoneNumber,
-        address: newUser.address,
       });
       assignCartToUser(userId);
       assignWishlistToUser(userId);

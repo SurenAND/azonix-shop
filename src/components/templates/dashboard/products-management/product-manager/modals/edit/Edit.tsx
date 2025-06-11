@@ -1,33 +1,24 @@
-import {
-  useGetCategories,
-  useGetSubCategories,
-} from '@/src/api/category/category.queries';
-import {
-  useGetProductById,
-  useUpdateProduct,
-} from '@/src/api/product/product.queries';
 import DragDropImageUploader from '@/src/components/shared/dragdrop-image-uploader/DragDropImageUploader';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { FaTimes } from 'react-icons/fa';
 import 'react-quill/dist/quill.snow.css';
 import { toast } from 'sonner';
+import { useProductStore } from '@/src/store/product/product.store';
+import { useCategoryStore } from '@/src/store/category/category.store';
+import type { ProductType } from '@/src/api/product/product.type';
+import type { CategoryType, SubCategoryType } from '@/src/api/category/category.type';
+
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 type EditModalProps = {
   openEdit: boolean;
   onClose: () => void;
   idToEdit: string;
-  setIdToEdit: Dispatch<SetStateAction<string>>;
+  setIdToEdit: Dispatch<SetStateAction<string>>; // To clear it after successful edit
 };
 
 const EditPopUp = ({
@@ -36,142 +27,144 @@ const EditPopUp = ({
   idToEdit,
   setIdToEdit,
 }: EditModalProps) => {
-  // libraries
   const { t } = useTranslation();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, reset, formState: { errors }, watch, setValue } = useForm();
 
-  // states
-  const [images, setImages] = useState<File[]>([]);
+  // Local state for images (URLs for existing, File objects for new - simplified to string URLs)
+  const [currentImageUrls, setCurrentImageUrls] = useState<string[]>([]);
   const [description, setDescription] = useState<string>('');
-  const [productCategory, setProductCategory] = useState<string>('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
 
-  // mutations
-  const { mutate: updateProduct } = useUpdateProduct();
 
-  // queries
-  const { data: categories } = useGetCategories();
-  const { data: subCategories, refetch } = useGetSubCategories({
-    category: productCategory,
-  });
-  const { data: oldProduct } = useGetProductById(idToEdit);
+  // Product Store
+  const {
+    product: productToEdit, // This is the product being edited, fetched by ID
+    fetchProductById,
+    updateProduct: storeUpdateProduct,
+    loading: productLoading,
+    // error: productError // TODO: Display this error if fetching product fails
+  } = useProductStore((state) => ({
+    product: state.product,
+    fetchProductById: state.fetchProductById,
+    updateProduct: state.updateProduct,
+    loading: state.loading,
+    error: state.error
+  }));
 
+  // Category Store
+  const {
+    categories,
+    currentCategorySubcategories,
+    fetchAllCategories,
+    fetchSubcategoriesByCategory
+  } = useCategoryStore((state) => ({
+    categories: state.categories,
+    currentCategorySubcategories: state.currentCategorySubcategories,
+    fetchAllCategories: state.fetchAllCategories,
+    fetchSubcategoriesByCategory: state.fetchSubcategoriesByCategory,
+  }));
+
+  const formSelectedCategoryId = watch('category');
+
+  // Fetch product details when idToEdit changes
   useEffect(() => {
-    if (categories) {
-      setProductCategory(categories.data.categories[0]._id);
+    if (idToEdit) {
+      fetchProductById(idToEdit);
     }
-  }, [categories]);
+  }, [idToEdit, fetchProductById]);
 
+  // Populate form when productToEdit is loaded from store
   useEffect(() => {
-    refetch();
-  }, [productCategory]);
-
-  // preFetch data
-  useEffect(() => {
-    if (oldProduct) {
+    if (productToEdit && productToEdit._id === idToEdit) {
       reset({
-        name: oldProduct?.data?.product?.name || '',
-        price: oldProduct?.data?.product?.price || '',
-        discountPercentage: oldProduct?.data?.product?.discountPercentage || '',
-        quantity: oldProduct?.data?.product?.quantity || '',
-        brand: oldProduct?.data?.product?.brand || '',
-        category: oldProduct?.data?.product?.category?._id || '',
-        subcategory: oldProduct?.data?.product?.subcategory?._id || '',
+        name: productToEdit.name || '',
+        price: productToEdit.price || 0,
+        discountPercentage: productToEdit.discountPercentage || 0,
+        quantity: productToEdit.quantity || 0,
+        brand: productToEdit.brand || '',
+        category: productToEdit.category?._id || '',
+        subcategory: productToEdit.subcategory?._id || '',
       });
-      setProductCategory(oldProduct?.data?.product?.category?._id || '');
-      setDescription(oldProduct?.data?.product?.description || '');
+      setDescription(productToEdit.description || '');
+      setCurrentImageUrls(productToEdit.images || []);
+      setSelectedCategoryId(productToEdit.category?._id || '');
     }
+  }, [productToEdit, idToEdit, reset]);
 
-    const fetchImages = async () => {
-      const imageUrls = oldProduct?.data?.product?.images;
-      if (imageUrls) {
-        // Convert image URLs to File objects
-        const imageFiles = await Promise.all(
-          imageUrls.map(async (url) => {
-            const imageUrl = `http://${url}`;
-            const response = await fetch(imageUrl);
-            const data = await response.blob();
-            return new File([data], 'image.jpg', { type: 'image/jpeg' });
-          }),
-        );
-        setImages(imageFiles);
-      }
-    };
-
-    fetchImages();
-  }, [oldProduct, reset]);
-
-  // functions
-  const filteredList = useCallback((id: string) => {
-    setProductCategory(id);
-  }, []);
-
-  const deleteImage = useCallback((index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
-  }, []);
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImages((prev) => [...prev, file]);
-      };
-      reader.readAsDataURL(file);
+  // Fetch all categories if not available
+  useEffect(() => {
+    if (categories.length === 0) {
+      fetchAllCategories();
     }
+  }, [categories, fetchAllCategories]);
+
+  // Fetch subcategories when selectedCategoryId (from form or product) changes
+  useEffect(() => {
+    const categoryIdToFetch = formSelectedCategoryId || selectedCategoryId;
+    if (categoryIdToFetch) {
+      fetchSubcategoriesByCategory({ category: categoryIdToFetch });
+    }
+  }, [formSelectedCategoryId, selectedCategoryId, fetchSubcategoriesByCategory]);
+
+
+  // Image handling (simplified: manage string URLs, no new File uploads for local store)
+  const handleDeleteExistingImage = (urlToRemove: string) => {
+    setCurrentImageUrls((prev) => prev.filter(url => url !== urlToRemove));
   };
 
   const handleForm = (data: FieldValues) => {
-    const FD = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      FD.append(key, value as string);
-    });
-    FD.append('description', description);
-    images.forEach((image) => {
-      FD.append('images', image);
-    });
+    const selectedCatObj = categories.find(c => c._id === data.category);
+    const selectedSubCatObj = currentCategorySubcategories.find(sc => sc._id === data.subcategory);
 
-    if (oldProduct) {
-      updateProduct(
-        {
-          productId: oldProduct.data.product._id,
-          data: FD,
-        },
-        {
-          onSuccess: (data) => {
-            if (data.status === 'success') {
-              reset();
-              setImages([]);
-              onClose();
-              setIdToEdit('');
-              toast.success(t('changes-saved'));
-            }
-          },
-        },
-      );
+    if (!selectedCatObj || !selectedSubCatObj) {
+      toast.error(t('category_or_subcategory_not_found_error', {ns: 'common'}));
+      return;
     }
+
+    const updatedProductData: Partial<ProductType> = {
+      name: data.name,
+      price: parseFloat(data.price),
+      discountPercentage: parseInt(data.discountPercentage, 10),
+      quantity: parseInt(data.quantity, 10),
+      brand: data.brand,
+      category: selectedCatObj,
+      subcategory: selectedSubCatObj,
+      description: description,
+      images: currentImageUrls, // Use the managed list of URLs
+      // Thumbnail can be derived from images by the store if needed, or set explicitly
+      thumbnail: currentImageUrls.length > 0 ? currentImageUrls[0] : '',
+    };
+
+    storeUpdateProduct(idToEdit, updatedProductData);
+    toast.success(t('product_updated_successfully', { ns: 'common' }));
+    onClose(); // Close modal on success
+    setIdToEdit(''); // Clear ID
   };
 
+  if (!openEdit) return null;
+
+  if (productLoading && !productToEdit) {
+      return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+            <div className="bg-white p-6 rounded-xl dark:bg-gray-800">Loading product...</div>
+        </div>
+      );
+  }
+
+
   return (
-    // backdrop
     <div
       onClick={onClose}
       className={`fixed inset-0 z-50 flex items-center justify-center transition-colors ${
         openEdit ? 'visible bg-black/30' : 'invisible'
       }`}
     >
-      {/* modal */}
       <div
         onClick={(e) => e.stopPropagation()}
         className={`relative flex max-h-[95vh] w-2/3 flex-col items-center justify-start overflow-y-auto rounded-xl bg-white p-6 text-start shadow transition-all dark:bg-gray-800 lg:w-1/2 ${
           openEdit ? 'scale-100 opacity-100' : 'scale-125 opacity-0'
         }`}
       >
-        {/* close button */}
         <button
           onClick={onClose}
           className='absolute end-4 top-4 rounded-lg p-1 text-gray-400 hover:text-red-500 dark:hover:text-white'
@@ -179,7 +172,6 @@ const EditPopUp = ({
           <FaTimes />
         </button>
 
-        {/* edit form */}
         <form
           onSubmit={handleSubmit(handleForm)}
           className='grid w-full grid-cols-1 gap-4'
@@ -192,18 +184,11 @@ const EditPopUp = ({
             <input
               type='text'
               {...register('name', {
-                required: true,
+                required: t('validation_required', {ns: 'common', field: t('product-name') }) as string,
               })}
               className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
             />
-            {/* name error message */}
-            <p
-              className={`text-xs text-rose-400 ${
-                errors.name ? 'visible' : 'invisible'
-              }`}
-            >
-              {t('product-name-input-error')}
-            </p>
+            {errors.name && <p className="text-xs text-rose-400">{errors.name.message as string}</p>}
           </div>
           <div className='grid grid-cols-3 gap-4'>
             {/* Product Price */}
@@ -212,21 +197,16 @@ const EditPopUp = ({
                 {t('product-price')} :
               </label>
               <input
-                type='text'
+                type='number'
+                step="0.01"
                 {...register('price', {
-                  required: true,
-                  pattern: /^[0-9]+$/,
+                  required: t('validation_required', {ns: 'common', field: t('product-price') }) as string,
+                  valueAsNumber: true,
+                  pattern: {value: /^\d+(\.\d{1,2})?$/, message: t('validation_number_pattern', {ns: 'common'})}
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* price error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.price ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-price-input-error')}
-              </p>
+              {errors.price && <p className="text-xs text-rose-400">{errors.price.message as string}</p>}
             </div>
             {/* Product Discount Percentage */}
             <div className='flex flex-col'>
@@ -234,23 +214,17 @@ const EditPopUp = ({
                 {t('product-discount-percentage')} :
               </label>
               <input
-                type='text'
+                type='number'
                 {...register('discountPercentage', {
-                  required: true,
-                  pattern: /^[0-9]+$/,
-                  maxLength: 3,
-                  minLength: 1,
+                  required: t('validation_required', {ns: 'common', field: t('product-discount-percentage') }) as string,
+                  valueAsNumber: true,
+                  min: { value: 0, message: t('validation_min_value', {ns: 'common', min: 0 }) },
+                  max: { value: 100, message: t('validation_max_value', {ns: 'common', max: 100 }) },
+                  pattern: {value: /^[0-9]+$/, message: t('validation_number_pattern', {ns: 'common'})}
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* discount percentage error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.discountPercentage ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-discount-percentage-input-error')}
-              </p>
+              {errors.discountPercentage && <p className="text-xs text-rose-400">{errors.discountPercentage.message as string}</p>}
             </div>
             {/* Product Quantity */}
             <div className='flex flex-col'>
@@ -258,21 +232,16 @@ const EditPopUp = ({
                 {t('product-quantity')} :
               </label>
               <input
-                type='text'
+                type='number'
                 {...register('quantity', {
-                  required: true,
-                  pattern: /^[0-9]+$/,
+                  required: t('validation_required', {ns: 'common', field: t('product-quantity') }) as string,
+                  valueAsNumber: true,
+                  min: {value: 0, message: t('validation_min_value', {ns: 'common', min: 0})},
+                  pattern: {value: /^[0-9]+$/, message: t('validation_number_pattern', {ns: 'common'})}
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* quantity error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.quantity ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-quantity-input-error')}
-              </p>
+              {errors.quantity && <p className="text-xs text-rose-400">{errors.quantity.message as string}</p>}
             </div>
           </div>
           {/* Product Brand & Category & Sub Category */}
@@ -285,19 +254,11 @@ const EditPopUp = ({
               <input
                 type='text'
                 {...register('brand', {
-                  required: true,
-                  pattern: /^[a-zA-Z0-9 ]+$/,
+                  required: t('validation_required', {ns: 'common', field: t('product-brand') }) as string,
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* brand error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.brand ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-brand-input-error')}
-              </p>
+              {errors.brand && <p className="text-xs text-rose-400">{errors.brand.message as string}</p>}
             </div>
             {/* Product Category */}
             <div className='flex flex-col'>
@@ -305,24 +266,19 @@ const EditPopUp = ({
                 {t('product-category')} :
               </label>
               <select
-                {...register('category', { required: true })}
-                onChange={(e) => filteredList(e.target.value)}
+                {...register('category', { required: t('validation_required', {ns: 'common', field: t('product-category') }) as string })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+                // value={selectedCategoryId} // Controlled by react-hook-form register
+                // onChange={(e) => setSelectedCategoryId(e.target.value)} // Handled by watch
               >
-                {categories?.data.categories.map((category) => (
+                <option value="">{t('select_category', {ns: 'common'})}</option>
+                {categories.map((category) => (
                   <option key={category._id} value={category._id}>
                     {category.name}
                   </option>
                 ))}
               </select>
-              {/* category error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.category ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-category-input-error')}
-              </p>
+              {errors.category && <p className="text-xs text-rose-400">{errors.category.message as string}</p>}
             </div>
             {/* Product Sub Category */}
             <div className='flex flex-col'>
@@ -330,24 +286,18 @@ const EditPopUp = ({
                 {t('product-sub-category')} :
               </label>
               <select
-                {...register('subcategory', { required: true })}
+                {...register('subcategory', { required: t('validation_required', {ns: 'common', field: t('product-sub-category') }) as string })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+                disabled={currentCategorySubcategories.length === 0}
               >
-                {productCategory &&
-                  subCategories?.data.subcategories.map((subCategory) => (
+                <option value="">{t('select_subcategory', {ns: 'common'})}</option>
+                {currentCategorySubcategories.map((subCategory) => (
                     <option key={subCategory._id} value={subCategory._id}>
                       {subCategory.name}
                     </option>
                   ))}
               </select>
-              {/* subcategory error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.subcategory ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-sub-category-input-error')}
-              </p>
+              {errors.subcategory && <p className="text-xs text-rose-400">{errors.subcategory.message as string}</p>}
             </div>
           </div>
           {/* Product Description */}
@@ -359,56 +309,37 @@ const EditPopUp = ({
               theme='snow'
               value={description}
               onChange={setDescription}
-              style={{
-                height: 100,
-                maxHeight: 100,
-              }}
+              style={{ height: 100, maxHeight: 100 }}
+              modules={{ toolbar: [[{ 'header': [1, 2, 3, false] }], ['bold', 'italic', 'underline']] }}
             />
-            {/* description error message */}
-            <p
-              className={`text-xs text-rose-400 ${
-                errors.description ? 'visible' : 'invisible'
-              }`}
-            >
-              {t('product-description-input-error')}
+          </div>
+          {/* Product Image Management for existing images (URLs) */}
+          <label className='mb-2 dark:text-gray-300'>
+            {t('product-images-current')} :
+          </label>
+          <div className='flex flex-wrap gap-2 border p-2 rounded dark:border-gray-600'>
+            {currentImageUrls.map((url, index) => (
+              <div key={index} className="relative h-20 w-20">
+                <Image src={`http://${url}`} alt={`Product image ${index + 1}`} layout="fill" className="object-cover rounded" />
+                <button
+                  type="button"
+                  onClick={() => handleDeleteExistingImage(url)}
+                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs"
+                >
+                  X
+                </button>
+              </div>
+            ))}
+            {currentImageUrls.length === 0 && <p className="text-xs text-gray-500">{t('no_images_available', {ns: 'common'})}</p>}
+          </div>
+          {/* Image upload for new images is disabled for local store as File objects are not persisted. */}
+          {/* If this were a real backend, DragDropImageUploader for new files would be here. */}
+          <div className="my-2 p-2 border border-dashed border-gray-400 rounded dark:border-gray-600">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {t('image_upload_disabled_local', {ns: 'common'})}
             </p>
           </div>
-          {/* Product Image */}
-          <div className='flex flex-col lg:hidden'>
-            <label className='mb-2 dark:text-gray-300'>
-              {t('product-image')} :
-            </label>
-            <input
-              type='file'
-              className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
-              onChange={handleImageChange}
-            />
-            <div className='mt-3 flex h-auto max-h-52 w-full flex-wrap items-center justify-start overflow-y-auto'>
-              {images.map((image, index) => (
-                <div className='relative mb-2 mr-1 h-20 w-20' key={index}>
-                  <span
-                    className='absolute -end-2 -top-[2px] z-50 cursor-pointer text-xl text-axLightPurple dark:text-violet-400'
-                    onClick={() => deleteImage(index)}
-                  >
-                    &times;
-                  </span>
-                  <Image
-                    className='rounded-md object-cover'
-                    src={URL.createObjectURL(image)}
-                    alt={image.name}
-                    fill
-                    sizes='80px'
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-          <DragDropImageUploader
-            images={images}
-            setImages={setImages}
-            deleteImage={deleteImage}
-          />
-          {/* Add Product Button */}
+
           <button
             type='submit'
             className='w-full rounded bg-purple-700 py-2 text-white hover:bg-purple-800 dark:bg-purple-900 dark:hover:bg-purple-800'

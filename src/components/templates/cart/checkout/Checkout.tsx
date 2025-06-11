@@ -2,6 +2,7 @@ import Loading from '@/src/components/shared/loading/Loading';
 import { MainRoutes } from '@/src/constant/routes';
 import { useUserContext } from '@/src/context/authContext';
 import { ShoppingCartItem } from '@/src/store/checkout/checkout.type';
+import type { ProductType } from '@/src/api/product/product.type'; // Added
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -14,12 +15,14 @@ const CartCard = dynamic(
 
 type CheckoutPropsType = {
   shoppingCartInfo: ShoppingCartItem[];
+  allProducts: ProductType[]; // Added
   paymentName: string;
   paymentMethodSelected: number | null;
 };
 
 const Checkout = ({
   shoppingCartInfo,
+  allProducts, // Added
   paymentName,
   paymentMethodSelected,
 }: CheckoutPropsType) => {
@@ -62,15 +65,22 @@ const Checkout = ({
         {/* cart items */}
         <div className='max-h-[300px] space-y-3 overflow-y-auto p-3'>
           {shoppingCartInfo
-            ?.filter((item) => item?.userId === state.userId)
-            ?.map((item) => (
-              <CartCard
-                key={item?._id}
-                product={item}
-                setOutOfStock={setOutOfStock}
-                outOfStock={outOfStock}
-              />
-            ))}
+            ?.filter((cartItem) => cartItem?.userId === state.userId)
+            ?.map((cartItem) => {
+              const fullProduct = allProducts.find(p => p._id === cartItem._id);
+              // If fullProduct is not found, CartCard should handle it gracefully
+              // or we can show a placeholder/error for that specific item.
+              // For now, CartCard will receive fullProduct which might be undefined.
+              return (
+                <CartCard
+                  key={cartItem?._id}
+                  cartItem={cartItem} // Pass original cart item
+                  fullProduct={fullProduct} // Pass looked-up full product
+                  setOutOfStock={setOutOfStock}
+                  outOfStock={outOfStock}
+                />
+              );
+            })}
         </div>
 
         {/* prices */}

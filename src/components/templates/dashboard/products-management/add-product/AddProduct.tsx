@@ -1,14 +1,15 @@
-import {
-  useGetCategories,
-  useGetSubCategories,
-} from '@/src/api/category/category.queries';
-import { useAddProduct } from '@/src/api/product/product.queries';
 import Loading from '@/src/components/shared/loading/Loading';
 import dynamic from 'next/dynamic';
 import { Suspense, useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import 'react-quill/dist/quill.snow.css';
+import { useProductStore } from '@/src/store/product/product.store';
+import { useCategoryStore } from '@/src/store/category/category.store';
+import type { ProductType } from '@/src/api/product/product.type'; // For product type used in addProduct
+import type { CategoryType, SubCategoryType } from '@/src/api/category/category.type';
+import { toast } from 'sonner';
+
 
 // dynamic import components
 const DragDropImageUploader = dynamic(
@@ -30,80 +31,93 @@ function AddProduct() {
     handleSubmit,
     reset,
     formState: { errors },
+    watch, // To watch category changes for subcategory update
   } = useForm();
 
   // states
-  const [images, setImages] = useState<File[]>([]);
+  const [localImages, setLocalImages] = useState<File[]>([]); // Renamed to avoid conflict
   const [description, setDescription] = useState<string>('');
-  const [productCategory, setProductCategory] = useState<string>('');
+  // const [productCategory, setProductCategory] = useState<string>(''); // Now derived from form or store
 
-  // mutations
-  const { mutate: addNewProduct } = useAddProduct();
+  // Zustand Stores
+  const { addProduct: storeAddProduct } = useProductStore((state) => ({ // Renamed to avoid conflict
+    addProduct: state.addProduct,
+  }));
+  const {
+    categories,
+    currentCategorySubcategories,
+    fetchAllCategories,
+    fetchSubcategoriesByCategory
+  } = useCategoryStore((state) => ({
+    categories: state.categories, // Use the main categories list
+    currentCategorySubcategories: state.currentCategorySubcategories,
+    fetchAllCategories: state.fetchAllCategories,
+    fetchSubcategoriesByCategory: state.fetchSubcategoriesByCategory,
+  }));
 
-  // queries
-  const { data: categories } = useGetCategories();
-  const { data: subCategories, refetch } = useGetSubCategories({
-    category: productCategory,
-  });
+  const selectedCategoryId = watch('category');
+
   useEffect(() => {
-    if (categories) {
-      setProductCategory(categories.data.categories[0]._id);
+    if (categories.length === 0) {
+      fetchAllCategories(); // Fetch all categories if not already present
     }
-  }, [categories]);
+  }, [categories, fetchAllCategories]);
 
   useEffect(() => {
-    refetch();
-  }, [productCategory]);
+    if (selectedCategoryId) {
+      fetchSubcategoriesByCategory({ category: selectedCategoryId });
+    }
+  }, [selectedCategoryId, fetchSubcategoriesByCategory]);
+
 
   // functions
-  const filteredList = (id: string) => {
-    setProductCategory(id);
-  };
-
   const deleteImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    setLocalImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // handle mage change on mobile and tablets
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImages((prev) => [...prev, file]);
+      setLocalImages((prev) => [...prev, file]);
     }
   };
 
   function handleForm(data: FieldValues) {
-    const FD = new FormData();
-    FD.append('name', data.name);
-    FD.append('price', data.price);
-    FD.append('discountPercentage', data.discountPercentage);
-    FD.append('quantity', data.quantity);
-    FD.append('brand', data.brand);
-    FD.append('category', data.category);
-    FD.append('subcategory', data.subcategory);
-    FD.append('description', description);
-    if (images && images.length > 0) {
-      images.forEach((image) => {
-        FD.append('images', image);
-      });
+    // Find full category and subcategory objects
+    const selectedCategoryObj = categories.find(c => c._id === data.category) as CategoryType | undefined;
+    const selectedSubCategoryObj = currentCategorySubcategories.find(sc => sc._id === data.subcategory) as SubCategoryType | undefined;
+
+    if (!selectedCategoryObj || !selectedSubCategoryObj) {
+        toast.error(t('category_or_subcategory_not_found_error', {ns: 'common'}));
+        return;
     }
-    addNewProduct(FD, {
-      onSuccess: (data) => {
-        if (data.status === 'success') {
-          reset();
-          setImages([]);
-        }
-      },
-    });
+
+    const newProductData: Omit<ProductType, '_id' | 'slugname' | 'priceAfterDiscount'> = {
+      name: data.name,
+      price: parseFloat(data.price),
+      discountPercentage: parseInt(data.discountPercentage, 10),
+      quantity: parseInt(data.quantity, 10),
+      brand: data.brand,
+      category: selectedCategoryObj,
+      subcategory: selectedSubCategoryObj,
+      description: description,
+      // Images are not handled by local store; pass empty or placeholder strings
+      thumbnail: '', // e.g., localImages.length > 0 ? 'placeholder.jpg' : ''
+      images: [],    // e.g., localImages.map(f => 'placeholder.jpg')
+    };
+
+    storeAddProduct(newProductData);
+    toast.success(t('product_added_successfully', {ns: 'common'}));
+    reset();
+    setLocalImages([]);
+    setDescription('');
   }
 
   return (
     <div className='flex min-h-screen w-2/3 select-none flex-col items-center justify-center space-y-5'>
-      {/* Add Product Title */}
       <h4 className='text-4xl font-black uppercase dark:text-white'>
         {t('add-product')}
       </h4>
-      {/* Add Product Form */}
       <div className='w-full max-w-3xl rounded bg-white p-6 shadow-md dark:bg-gray-800'>
         <form
           onSubmit={handleSubmit(handleForm)}
@@ -117,18 +131,11 @@ function AddProduct() {
             <input
               type='text'
               {...register('name', {
-                required: true,
+                required: t('validation_required', {ns: 'common', field: t('product-name') }) as string,
               })}
               className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
             />
-            {/* name error message */}
-            <p
-              className={`text-xs text-rose-400 ${
-                errors.name ? 'visible' : 'invisible'
-              }`}
-            >
-              {t('product-name-input-error')}
-            </p>
+            {errors.name && <p className="text-xs text-rose-400">{errors.name.message as string}</p>}
           </div>
           <div className='grid grid-cols-3 gap-4'>
             {/* Product Price */}
@@ -137,21 +144,16 @@ function AddProduct() {
                 {t('product-price')} :
               </label>
               <input
-                type='text'
+                type='number' // Changed to number
+                step="0.01" // For decimal prices
                 {...register('price', {
-                  required: true,
-                  pattern: /^[0-9]+$/,
+                  required: t('validation_required', {ns: 'common', field: t('product-price') }) as string,
+                  valueAsNumber: true,
+                  pattern: { value: /^\d+(\.\d{1,2})?$/, message: t('validation_number_pattern', {ns: 'common'})}
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* price error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.price ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-price-input-error')}
-              </p>
+              {errors.price && <p className="text-xs text-rose-400">{errors.price.message as string}</p>}
             </div>
             {/* Product Discount Percentage */}
             <div className='flex flex-col'>
@@ -159,23 +161,17 @@ function AddProduct() {
                 {t('product-discount-percentage')} :
               </label>
               <input
-                type='text'
+                type='number' // Changed to number
                 {...register('discountPercentage', {
-                  required: true,
-                  pattern: /^[0-9]+$/,
-                  maxLength: 3,
-                  minLength: 1,
+                  required: t('validation_required', {ns: 'common', field: t('product-discount-percentage') }) as string,
+                  valueAsNumber: true,
+                  min: { value: 0, message: t('validation_min_value', {ns: 'common', min: 0 }) },
+                  max: { value: 100, message: t('validation_max_value', {ns: 'common', max: 100 }) },
+                  pattern: { value: /^[0-9]+$/, message: t('validation_number_pattern', {ns: 'common'})}
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* discount percentage error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.discountPercentage ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-discount-percentage-input-error')}
-              </p>
+              {errors.discountPercentage && <p className="text-xs text-rose-400">{errors.discountPercentage.message as string}</p>}
             </div>
             {/* Product Quantity */}
             <div className='flex flex-col'>
@@ -183,21 +179,16 @@ function AddProduct() {
                 {t('product-quantity')} :
               </label>
               <input
-                type='text'
+                type='number' // Changed to number
                 {...register('quantity', {
-                  required: true,
-                  pattern: /^[0-9]+$/,
+                  required: t('validation_required', {ns: 'common', field: t('product-quantity') }) as string,
+                  valueAsNumber: true,
+                  min: {value: 0, message: t('validation_min_value', {ns: 'common', min: 0})},
+                  pattern: { value: /^[0-9]+$/, message: t('validation_number_pattern', {ns: 'common'})}
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* quantity error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.quantity ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-quantity-input-error')}
-              </p>
+              {errors.quantity && <p className="text-xs text-rose-400">{errors.quantity.message as string}</p>}
             </div>
           </div>
           {/* Product Brand & Category & Sub Category */}
@@ -210,19 +201,11 @@ function AddProduct() {
               <input
                 type='text'
                 {...register('brand', {
-                  required: true,
-                  pattern: /^[a-zA-Z0-9 ]+$/,
+                  required: t('validation_required', {ns: 'common', field: t('product-brand') }) as string,
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* brand error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.brand ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-brand-input-error')}
-              </p>
+              {errors.brand && <p className="text-xs text-rose-400">{errors.brand.message as string}</p>}
             </div>
             {/* Product Category */}
             <div className='flex flex-col'>
@@ -230,50 +213,38 @@ function AddProduct() {
                 {t('product-category')} :
               </label>
               <select
-                {...register('category', { required: true })}
-                onChange={(e) => filteredList(e.target.value)}
+                {...register('category', { required: t('validation_required', {ns: 'common', field: t('product-category') }) as string })}
+                // onChange is handled by watch('category') for subcategory fetching
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               >
-                {categories?.data.categories.map((category) => (
+                <option value="">{t('select_category', {ns: 'common'})}</option>
+                {categories.map((category) => (
                   <option key={category._id} value={category._id}>
                     {category.name}
                   </option>
                 ))}
               </select>
-              {/* category error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.category ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-category-input-error')}
-              </p>
+              {errors.category && <p className="text-xs text-rose-400">{errors.category.message as string}</p>}
             </div>
             {/* Product Sub Category */}
-            {productCategory && (
+            {selectedCategoryId && (
               <div className='flex flex-col'>
                 <label className='mb-2 dark:text-gray-300'>
                   {t('product-sub-category')} :
                 </label>
                 <select
-                  {...register('subcategory', { required: true })}
+                  {...register('subcategory', { required: t('validation_required', {ns: 'common', field: t('product-sub-category') }) as string })}
                   className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+                  disabled={currentCategorySubcategories.length === 0}
                 >
-                  {productCategory &&
-                    subCategories?.data.subcategories.map((subCategory) => (
+                  <option value="">{t('select_subcategory', {ns: 'common'})}</option>
+                  {currentCategorySubcategories.map((subCategory) => (
                       <option key={subCategory._id} value={subCategory._id}>
                         {subCategory.name}
                       </option>
                     ))}
                 </select>
-                {/* subcategory error message */}
-                <p
-                  className={`text-xs text-rose-400 ${
-                    errors.subcategory ? 'visible' : 'invisible'
-                  }`}
-                >
-                  {t('product-sub-category-input-error')}
-                </p>
+                {errors.subcategory && <p className="text-xs text-rose-400">{errors.subcategory.message as string}</p>}
               </div>
             )}
           </div>
@@ -291,16 +262,10 @@ function AddProduct() {
                   height: 100,
                   maxHeight: 100,
                 }}
+                modules={{ toolbar: [[{ 'header': [1, 2, 3, false] }], ['bold', 'italic', 'underline']] }}
               />
             </Suspense>
-            {/* description error message */}
-            <p
-              className={`text-xs text-rose-400 ${
-                errors.description ? 'visible' : 'invisible'
-              }`}
-            >
-              {t('product-description-input-error')}
-            </p>
+            {/* Description validation can be added here if needed */}
           </div>
           {/* Product Image */}
           <div className='flex flex-col lg:hidden'>
@@ -313,8 +278,8 @@ function AddProduct() {
           </div>
           <Suspense fallback={<Loading />}>
             <DragDropImageUploader
-              images={images}
-              setImages={setImages}
+              images={localImages}
+              setImages={setLocalImages}
               deleteImage={deleteImage}
             />
           </Suspense>

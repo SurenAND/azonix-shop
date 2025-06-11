@@ -1,15 +1,13 @@
-import {
-  useGetCategories,
-  useGetSubCategories,
-} from '@/src/api/category/category.queries';
-import { useGetProducts } from '@/src/api/product/product.queries';
 import ProductSkeleton from '@/src/components/shared/skeletons/product-skeleton/ProductSkeleton';
 import SubCategorySkeleton from '@/src/components/shared/skeletons/sub-category-skeleton/SubCategorySkeleton';
-import { MainRoutes } from '@/src/constant/routes';
+// Note: MainRoutes import might be unnecessary if redirection logic is handled by parent page
+// import { MainRoutes } from '@/src/constant/routes';
 import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { MouseEvent, useEffect, useMemo } from 'react';
+import { MouseEvent } from 'react'; // Removed useEffect, useMemo
+import type { ProductType } from '@/src/api/product/product.type';
+import type { CategoryType, SubCategoryType } from '@/src/api/category/category.type';
 
 // Dynamic load components
 const Products = dynamic(
@@ -21,111 +19,120 @@ const SubCategories = dynamic(
   { loading: () => <SubCategorySkeleton /> },
 );
 
-type CategoryTemplateProps = {
-  categorySlug: string;
-};
+export interface CategoryTemplateProps {
+  categorySlug?: string; // Keep slug for URL generation if needed
+  currentCategory: CategoryType | null;
+  products: ProductType[];
+  subcategories: SubCategoryType[];
+  categories: CategoryType[]; // Full list of categories for sidebar/nav (not used in current JSX)
+  isLoading: boolean;
+  error?: string | null;
+  currentPage: number;
+  totalPages: number;
+}
 
-const CategoryTemplate = ({ categorySlug }: CategoryTemplateProps) => {
+const CategoryTemplate = ({
+  categorySlug,
+  currentCategory,
+  products,
+  subcategories,
+  // categories, // Not directly used in this template's JSX structure currently
+  isLoading,
+  error,
+  currentPage,
+  totalPages,
+}: CategoryTemplateProps) => {
   // libraries
-  const { push: pushRouter } = useRouter();
+  const { push: pushRouter } = useRouter(); // Renamed to avoid conflict if router object is needed
   const searchParams = useSearchParams();
-
-  // search params
-  const page = searchParams.get('p') || '1';
-  const subcategory = searchParams.get('sc') || '';
   const params = new URLSearchParams(searchParams);
 
-  // get categories
-  const { data: categories, refetch: refetchCategories } = useGetCategories({
-    slugname: categorySlug,
-  });
-  useEffect(() => {
-    refetchCategories();
-  }, [categorySlug, refetchCategories]);
-
-  // get sub categories
-  const { data: subCategories, isFetching: subCategoryFetching } =
-    useGetSubCategories({
-      category: categories?.data.categories[0]?._id,
-    });
-
-  // get products
-  const newParams = useMemo(
-    () => ({
-      page: +page,
-      limit: 9,
-      category: categories?.data.categories[0]._id,
-      subcategory,
-    }),
-    [page, categories, subcategory],
-  );
-  const {
-    data: products,
-    isFetching: productFetching,
-    refetch,
-  } = useGetProducts(newParams);
-
-  // refetch products
-  useEffect(() => {
-    refetch();
-  }, [newParams]);
-
   // ------------ Filter by subcategory -----------
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleSubcategoryClick = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLButtonElement;
     const value = target.value;
-    params.set('sc', value);
-    params.set('p', '1');
-    pushRouter({
-      pathname: '/shop/[category]',
-      query: { category: categorySlug, ...Object.fromEntries(params) },
-    });
+    params.set('sc', value); // 'sc' for subcategory
+    params.set('p', '1'); // Reset to page 1 when subcategory changes
+    // Parent page listens to URL changes and re-fetches products
+    pushRouter(
+      {
+        pathname: `/shop/${categorySlug}`, // Keep existing category slug in path
+        query: Object.fromEntries(params),
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
-  // ----------- Pagination -----------
-  const setPage = (page: number) => {
+  // ----------- Pagination for Products -----------
+  const setProductPage = (page: number) => {
     params.set('p', page.toString());
-    pushRouter({
-      pathname: '/shop/[category]',
-      query: { category: categorySlug, ...Object.fromEntries(params) },
-    });
+    // Parent page listens to URL changes and re-fetches products
+    pushRouter(
+      {
+        pathname: `/shop/${categorySlug}`,
+        query: Object.fromEntries(params),
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
-  // ----------- Redirect to 404 if category not found -----------
-  if (categories && categories?.status !== 'success') {
-    pushRouter(MainRoutes.NOTFOUND);
+  // TODO: Add controls for other filters like price, sort if needed.
+  // These would similarly update URL params for the parent page to handle.
+
+  if (isLoading && !currentCategory) {
+    // Initial load, showing full page skeleton might be too much if some data is there
+    // For now, a simple loading text or rely on individual component skeletons
+    return (
+      <div className='mx-auto my-20 flex max-w-6xl flex-col gap-10 text-center'>
+        Loading category details...
+        <SubCategorySkeleton />
+        <ProductSkeleton />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-red-500 text-center p-8">Error: {error}</div>;
+  }
+
+  if (!currentCategory) {
+    // This case should be handled by the parent page (e.g. redirect to 404)
+    // Or if parent passes loading=false and no currentCategory, then it's truly not found
+    return <div className="text-center p-8">Category not found.</div>;
   }
 
   return (
     <div className='mx-auto my-20 flex max-w-6xl flex-col gap-10'>
       {/* ----------- Category title ----------- */}
       <h2 className='mx-20 border-b-2 border-gray-400 pb-5 text-center text-5xl font-bold uppercase'>
-        {categories?.data.categories[0].name}
+        {currentCategory.name}
       </h2>
 
       {/* ----------- Subcategories ----------- */}
-      <div className='flex justify-center text-center'>
-        {!subCategoryFetching ? (
+      {isLoading && subcategories.length === 0 ? (
+        <SubCategorySkeleton />
+      ) : subcategories.length > 0 ? (
+        <div className='flex justify-center text-center'>
           <SubCategories
-            handleClick={handleClick}
-            show={true}
-            subCategories={subCategories?.data.subcategories || []}
+            handleClick={handleSubcategoryClick}
+            show={true} // Always show if available for this category page
+            subCategories={subcategories}
           />
-        ) : (
-          <SubCategorySkeleton />
-        )}
-      </div>
+        </div>
+      ) : null /* No subcategories to display */}
 
       {/* ----------- Products ----------- */}
-      {!productFetching ? (
-        <Products
-          products={products?.data.products || []}
-          totalPages={products?.total_pages || 1}
-          page={+page}
-          setPage={setPage}
-        />
-      ) : (
+      {isLoading && products.length === 0 ? (
         <ProductSkeleton />
+      ) : (
+        <Products
+          products={products}
+          totalPages={totalPages}
+          page={currentPage}
+          setPage={setProductPage}
+        />
       )}
     </div>
   );

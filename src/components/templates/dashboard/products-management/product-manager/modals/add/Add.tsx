@@ -1,8 +1,3 @@
-import {
-  useGetCategories,
-  useGetSubCategories,
-} from '@/src/api/category/category.queries';
-import { useAddProduct } from '@/src/api/product/product.queries';
 import DragDropImageUploader from '@/src/components/shared/dragdrop-image-uploader/DragDropImageUploader';
 import MyFileInput from '@/src/components/shared/file-input/FileInput';
 import dynamic from 'next/dynamic';
@@ -11,6 +6,12 @@ import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { FaTimes } from 'react-icons/fa';
 import 'react-quill/dist/quill.snow.css';
+import { useProductStore } from '@/src/store/product/product.store';
+import { useCategoryStore } from '@/src/store/category/category.store';
+import type { ProductType } from '@/src/api/product/product.type';
+import type { CategoryType, SubCategoryType } from '@/src/api/category/category.type';
+import { toast } from 'sonner';
+
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 type AddModalProps = {
@@ -19,97 +20,100 @@ type AddModalProps = {
 };
 
 const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
-  // libraries
   const { t } = useTranslation();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, reset, formState: { errors }, watch } = useForm();
 
-  // states
-  const [images, setImages] = useState<File[]>([]);
+  const [localImages, setLocalImages] = useState<File[]>([]);
   const [description, setDescription] = useState<string>('');
-  const [productCategory, setProductCategory] = useState<string>('');
 
-  // queries
-  const { data: categories } = useGetCategories();
-  const { data: subCategories, refetch } = useGetSubCategories({
-    category: productCategory,
-  });
+  const { addProduct: storeAddProduct } = useProductStore((state) => ({
+    addProduct: state.addProduct,
+  }));
+
+  const {
+    categories,
+    currentCategorySubcategories,
+    fetchAllCategories,
+    fetchSubcategoriesByCategory
+  } = useCategoryStore((state) => ({
+    categories: state.categories,
+    currentCategorySubcategories: state.currentCategorySubcategories,
+    fetchAllCategories: state.fetchAllCategories,
+    fetchSubcategoriesByCategory: state.fetchSubcategoriesByCategory,
+  }));
+
+  const selectedCategoryId = watch('category');
+
   useEffect(() => {
-    if (categories) {
-      setProductCategory(categories.data.categories[0]._id);
+    if (openAdd && categories.length === 0) { // Fetch only when modal opens and categories are not loaded
+      fetchAllCategories();
     }
-  }, [categories]);
+  }, [openAdd, categories.length, fetchAllCategories]);
 
   useEffect(() => {
-    refetch();
-  }, [productCategory]);
+    if (selectedCategoryId) {
+      fetchSubcategoriesByCategory({ category: selectedCategoryId });
+    }
+  }, [selectedCategoryId, fetchSubcategoriesByCategory]);
 
-  // mutations
-  const { mutate: addNewProduct } = useAddProduct();
-
-  // functions
-  const filteredList = (id: string) => {
-    setProductCategory(id);
-  };
 
   const deleteImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    setLocalImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // handle mage change on mobile and tablets
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImages((prev) => [...prev, file]);
+      setLocalImages((prev) => [...prev, file]);
     }
   };
 
   function handleForm(data: FieldValues) {
-    const FD = new FormData();
-    FD.append('name', data.name);
-    FD.append('price', data.price);
-    FD.append('discountPercentage', data.discountPercentage);
-    FD.append('quantity', data.quantity);
-    FD.append('brand', data.brand);
-    FD.append('category', data.category);
-    FD.append('subcategory', data.subcategory);
-    FD.append('description', description);
-    if (images && images.length > 0) {
-      images.forEach((image) => {
-        FD.append('images', image);
-      });
+    const selectedCategoryObj = categories.find(c => c._id === data.category);
+    const selectedSubCategoryObj = currentCategorySubcategories.find(sc => sc._id === data.subcategory);
+
+    if (!selectedCategoryObj || !selectedSubCategoryObj) {
+      toast.error(t('category_or_subcategory_not_found_error', {ns: 'common'}));
+      return;
     }
-    addNewProduct(FD, {
-      onSuccess: (data) => {
-        if (data.status === 'success') {
-          reset();
-          setImages([]);
-          onClose();
-        }
-      },
-    });
+
+    const newProductData: Omit<ProductType, '_id' | 'slugname' | 'priceAfterDiscount'> = {
+      name: data.name,
+      price: parseFloat(data.price),
+      discountPercentage: parseInt(data.discountPercentage, 10),
+      quantity: parseInt(data.quantity, 10),
+      brand: data.brand,
+      category: selectedCategoryObj,
+      subcategory: selectedSubCategoryObj,
+      description: description,
+      thumbnail: '', // Local store doesn't handle file uploads
+      images: [],    // Local store doesn't handle file uploads
+    };
+
+    storeAddProduct(newProductData);
+    toast.success(t('product_added_successfully', { ns: 'common' }));
+    reset();
+    setLocalImages([]);
+    setDescription('');
+    onClose(); // Close modal on success
   }
 
+  if (!openAdd) return null;
+
+
   return (
-    // backdrop
     <div
       onClick={onClose}
       className={`fixed inset-0 z-50 flex items-center justify-center transition-colors ${
         openAdd ? 'visible bg-black/30' : 'invisible'
       }`}
     >
-      {/* modal */}
       <div
         onClick={(e) => e.stopPropagation()}
         className={`relative flex max-h-[95vh] w-2/3 flex-col items-center justify-start overflow-y-auto rounded-xl bg-white p-6 text-start shadow transition-all dark:bg-gray-800 lg:w-1/2 ${
           openAdd ? 'scale-100 opacity-100' : 'scale-125 opacity-0'
         }`}
       >
-        {/* close button */}
         <button
           onClick={onClose}
           className='absolute end-4 top-4 rounded-lg p-1 text-gray-400 hover:text-red-500 dark:hover:text-white'
@@ -117,7 +121,6 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
           <FaTimes />
         </button>
 
-        {/* add form */}
         <form
           onSubmit={handleSubmit(handleForm)}
           className='grid w-full grid-cols-1 gap-4'
@@ -130,18 +133,11 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
             <input
               type='text'
               {...register('name', {
-                required: true,
+                required: t('validation_required', {ns: 'common', field: t('product-name') }) as string,
               })}
               className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
             />
-            {/* name error message */}
-            <p
-              className={`text-xs text-rose-400 ${
-                errors.name ? 'visible' : 'invisible'
-              }`}
-            >
-              {t('product-name-input-error')}
-            </p>
+            {errors.name && <p className="text-xs text-rose-400">{errors.name.message as string}</p>}
           </div>
           <div className='grid grid-cols-3 gap-4'>
             {/* Product Price */}
@@ -150,21 +146,16 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
                 {t('product-price')} :
               </label>
               <input
-                type='text'
+                type='number'
+                step="0.01"
                 {...register('price', {
-                  required: true,
-                  pattern: /^[0-9]+$/,
+                  required: t('validation_required', {ns: 'common', field: t('product-price') }) as string,
+                  valueAsNumber: true,
+                  pattern: { value: /^\d+(\.\d{1,2})?$/, message: t('validation_number_pattern', {ns: 'common'})}
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* price error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.price ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-price-input-error')}
-              </p>
+              {errors.price && <p className="text-xs text-rose-400">{errors.price.message as string}</p>}
             </div>
             {/* Product Discount Percentage */}
             <div className='flex flex-col'>
@@ -172,23 +163,17 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
                 {t('product-discount-percentage')} :
               </label>
               <input
-                type='text'
+                type='number'
                 {...register('discountPercentage', {
-                  required: true,
-                  pattern: /^[0-9]+$/,
-                  maxLength: 3,
-                  minLength: 1,
+                  required: t('validation_required', {ns: 'common', field: t('product-discount-percentage') }) as string,
+                  valueAsNumber: true,
+                  min: { value: 0, message: t('validation_min_value', {ns: 'common', min: 0 }) },
+                  max: { value: 100, message: t('validation_max_value', {ns: 'common', max: 100 }) },
+                  pattern: { value: /^[0-9]+$/, message: t('validation_number_pattern', {ns: 'common'})}
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* discount percentage error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.discountPercentage ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-discount-percentage-input-error')}
-              </p>
+              {errors.discountPercentage && <p className="text-xs text-rose-400">{errors.discountPercentage.message as string}</p>}
             </div>
             {/* Product Quantity */}
             <div className='flex flex-col'>
@@ -196,21 +181,16 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
                 {t('product-quantity')} :
               </label>
               <input
-                type='text'
+                type='number'
                 {...register('quantity', {
-                  required: true,
-                  pattern: /^[0-9]+$/,
+                  required: t('validation_required', {ns: 'common', field: t('product-quantity') }) as string,
+                  valueAsNumber: true,
+                  min: {value: 0, message: t('validation_min_value', {ns: 'common', min: 0})},
+                  pattern: { value: /^[0-9]+$/, message: t('validation_number_pattern', {ns: 'common'})}
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* quantity error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.quantity ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-quantity-input-error')}
-              </p>
+              {errors.quantity && <p className="text-xs text-rose-400">{errors.quantity.message as string}</p>}
             </div>
           </div>
           {/* Product Brand & Category & Sub Category */}
@@ -223,19 +203,11 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
               <input
                 type='text'
                 {...register('brand', {
-                  required: true,
-                  pattern: /^[a-zA-Z0-9 ]+$/,
+                  required: t('validation_required', {ns: 'common', field: t('product-brand') }) as string,
                 })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               />
-              {/* brand error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.brand ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-brand-input-error')}
-              </p>
+              {errors.brand && <p className="text-xs text-rose-400">{errors.brand.message as string}</p>}
             </div>
             {/* Product Category */}
             <div className='flex flex-col'>
@@ -243,24 +215,17 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
                 {t('product-category')} :
               </label>
               <select
-                {...register('category', { required: true })}
-                onChange={(e) => filteredList(e.target.value)}
+                {...register('category', { required: t('validation_required', {ns: 'common', field: t('product-category') }) as string })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
               >
-                {categories?.data.categories.map((category) => (
+                <option value="">{t('select_category', {ns: 'common'})}</option>
+                {categories.map((category) => (
                   <option key={category._id} value={category._id}>
                     {category.name}
                   </option>
                 ))}
               </select>
-              {/* category error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.category ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-category-input-error')}
-              </p>
+              {errors.category && <p className="text-xs text-rose-400">{errors.category.message as string}</p>}
             </div>
             {/* Product Sub Category */}
             <div className='flex flex-col'>
@@ -268,24 +233,18 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
                 {t('product-sub-category')} :
               </label>
               <select
-                {...register('subcategory', { required: true })}
+                {...register('subcategory', { required: t('validation_required', {ns: 'common', field: t('product-sub-category') }) as string })}
                 className='rounded border p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+                disabled={currentCategorySubcategories.length === 0}
               >
-                {productCategory &&
-                  subCategories?.data.subcategories.map((subCategory) => (
+                <option value="">{t('select_subcategory', {ns: 'common'})}</option>
+                {currentCategorySubcategories.map((subCategory) => (
                     <option key={subCategory._id} value={subCategory._id}>
                       {subCategory.name}
                     </option>
                   ))}
               </select>
-              {/* subcategory error message */}
-              <p
-                className={`text-xs text-rose-400 ${
-                  errors.subcategory ? 'visible' : 'invisible'
-                }`}
-              >
-                {t('product-sub-category-input-error')}
-              </p>
+              {errors.subcategory && <p className="text-xs text-rose-400">{errors.subcategory.message as string}</p>}
             </div>
           </div>
           {/* Product Description */}
@@ -297,19 +256,9 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
               theme='snow'
               value={description}
               onChange={setDescription}
-              style={{
-                height: 100,
-                maxHeight: 100,
-              }}
+              style={{ height: 100, maxHeight: 100 }}
+              modules={{ toolbar: [[{ 'header': [1, 2, 3, false] }], ['bold', 'italic', 'underline']] }}
             />
-            {/* description error message */}
-            <p
-              className={`text-xs text-rose-400 ${
-                errors.description ? 'visible' : 'invisible'
-              }`}
-            >
-              {t('product-description-input-error')}
-            </p>
           </div>
           {/* Product Image */}
           <div className='flex flex-col lg:hidden'>
@@ -319,8 +268,8 @@ const AddPopUp = ({ openAdd, onClose }: AddModalProps) => {
             <MyFileInput changeHandler={handleImageChange} />
           </div>
           <DragDropImageUploader
-            images={images}
-            setImages={setImages}
+            images={localImages} // Use localImages state
+            setImages={setLocalImages} // Use localImages state
             deleteImage={deleteImage}
           />
           {/* Add Product Button */}
